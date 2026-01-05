@@ -1,41 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FriendPortal Mini App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>FriendPortal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Telegram WebApp -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1c1f4a, #6a00ff);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #4b1fb8, #6d3cff);
       color: white;
       text-align: center;
-      padding: 40px 20px;
     }
+
+    .container {
+      padding: 24px;
+    }
+
     h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      margin-top: 20px;
+      font-size: 28px;
     }
-    p {
-      font-size: 18px;
-      opacity: 0.9;
-    }
+
     .card {
-      margin-top: 30px;
+      margin-top: 24px;
       padding: 20px;
+      background: rgba(255,255,255,0.12);
       border-radius: 16px;
-      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      margin-top: 14px;
+      padding: 14px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      background: #ffffff;
+      color: #4b1fb8;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.15);
+      color: white;
     }
   </style>
 </head>
 <body>
-  <h1>🚀 FriendPortal</h1>
-  <p>Telegram Referral Bot</p>
 
-  <div class="card">
+  <div class="container">
+    <h1>🚀 FriendPortal</h1>
     <p>Earn TON by inviting users</p>
-    <p>Fast • Secure • Automated</p>
+
+    <div class="card">
+      <p>💎 Referral rewards</p>
+      <p>⚡ Fast & automated payouts</p>
+      <p>🔐 Secure TON payments</p>
+    </div>
+
+    <button class="btn" onclick="invite()">👥 Invite users</button>
+    <button class="btn secondary" onclick="balance()">💰 Balance</button>
+    <button class="btn secondary" onclick="withdraw()">💸 Withdraw</button>
   </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function invite() {
+      tg.showAlert("Invite screen will be here");
+    }
+
+    function balance() {
+      tg.showAlert("Balance screen will be here");
+    }
+
+    function withdraw() {
+      tg.showAlert("Withdraw screen will be here");
+    }
+  </script>
+
 </body>
 </html>
