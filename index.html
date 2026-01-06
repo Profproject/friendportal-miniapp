@@ -78,6 +78,70 @@ h1{
 }
 
 .hidden{display:none}
+/* ===== Referral 3D Scene ===== */
+
+.referral-3d {
+  position: relative;
+  margin: 28px auto;
+  padding: 30px 0 20px;
+  text-align: center;
+  perspective: 800px;
+}
+
+/* мягкое свечение фона */
+.glow-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 180, 255, 0.35),
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(40px);
+  z-index: 0;
+}
+
+/* сама картинка с монетами */
+.coin-flow {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+
+  border-radius: 20px;
+
+  transform-style: preserve-3d;
+  animation: floatCoins 6s ease-in-out infinite;
+
+  filter:
+    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.65))
+    drop-shadow(0 0 25px rgba(0, 160, 255, 0.55));
+}
+
+/* подпись */
+.ref-caption {
+  margin-top: 14px;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 0.4px;
+}
+
+/* ===== АНИМАЦИЯ ===== */
+
+@keyframes floatCoins {
+  0% {
+    transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotateX(6deg) rotateZ(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
+  }
+}
+  
 </style>
 </head>
 
