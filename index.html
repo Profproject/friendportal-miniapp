@@ -5,163 +5,141 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FriendPortal</title>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-:root{
-  --bg1:#6d49ff;
-  --bg2:#4726d8;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-*{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  height:100%;
+/* === ФОН === */
+body {
+  background: url("bg.png") no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
 }
 
-body{
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:#fff;
-}
-
-.app{
-  max-width:480px;
-  margin:0 auto;
-  padding:16px;
-}
-
-/* ===== HEADER ===== */
-.header{
-  text-align:center;
-  margin-bottom:10px;
-}
-
-/* ПЕРЛАМУТРОВЫЙ 3D */
-.logo{
-  font-size:32px;
-  font-weight:900;
-  letter-spacing:.6px;
-  background:linear-gradient(
-    120deg,
-    #ffffff,
-    #9ad7ff,
-    #c3a6ff,
-    #ffffff
+/* затемнение чтобы кнопки читались */
+.app {
+  min-height: 100vh;
+  background: linear-gradient(
+    rgba(90,60,200,0.88),
+    rgba(120,80,220,0.92)
   );
-  background-size:300% 300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:shine 6s infinite linear;
-  text-shadow:
-    0 2px 6px rgba(0,0,0,.35),
-    0 0 24px rgba(170,200,255,.6);
+  padding-bottom: 40px;
 }
 
-@keyframes shine{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+/* === ЗАГОЛОВОК === */
+.header {
+  text-align: center;
+  padding: 24px 16px 8px;
 }
 
-.desc{
-  margin-top:6px;
-  font-size:15px;
-  line-height:1.35;
-  opacity:.95;
+.logo {
+  font-size: 34px;
+  font-weight: 900;
+  background: linear-gradient(90deg,#fff,#aef,#fff);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
 }
 
-/* ===== COINS BLOCK ===== */
-.coins-wrap{
-  position:relative;
-  height:86px;              /* компактно */
-  margin:12px 0 18px;
-  border-radius:22px;
-  background:radial-gradient(circle at top,#7f66ff,#4a2fd6);
-  box-shadow:inset 0 0 24px rgba(255,255,255,.15);
-  overflow:hidden;
+@keyframes shine {
+  0% {background-position:0%}
+  100% {background-position:300%}
 }
 
-/* ===== COINS ===== */
-.coin{
-  position:absolute;
-  width:160px;             /* БОЛЬШЕ */
-  top:10px;                /* ВЫШЕ */
-  filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));
+.subtitle {
+  margin-top: 6px;
+  font-size: 16px;
 }
 
-/* LEFT */
-.coin1{
-  left:-8px;
-  animation:flyLeft 7s infinite ease-in-out;
+.features {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
-/* CENTER */
-.coin13{
-  left:50%;
-  transform:translateX(-50%);
-  animation:flyCenter 9s infinite ease-in-out;
+/* === ЗОНА МОНЕТ (ФИКС ПРОБЛЕМЫ) === */
+.coins-box {
+  position: relative;
+  margin: 16px auto 10px;
+  width: 92%;
+  max-width: 420px;
+  height: 170px;           /* ВАЖНО: невысокая */
+  border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;        /* МОНЕТЫ НЕ ВЫЛАЗЯТ */
 }
 
-/* RIGHT */
-.coin94{
-  right:-8px;
-  animation:flyRight 8s infinite ease-in-out;
+/* === МОНЕТЫ === */
+.coin {
+  position: absolute;
+  width: 90px;             /* увеличены */
+  pointer-events: none;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes flyLeft{
-  0%{transform:translate(0,0)}
-  50%{transform:translate(26px,-14px)}
-  100%{transform:translate(0,0)}
+/* ВЫСОТА ОГРАНИЧЕНА */
+@keyframes float1 {
+  0%   {transform: translate(0,0)}
+  100% {transform: translate(30px,-25px)}
 }
-@keyframes flyCenter{
-  0%{transform:translate(-50%,0)}
-  50%{transform:translate(-50%,-16px)}
-  100%{transform:translate(-50%,0)}
+@keyframes float2 {
+  0%   {transform: translate(0,0)}
+  100% {transform: translate(-25px,-20px)}
 }
-@keyframes flyRight{
-  0%{transform:translate(0,0)}
-  50%{transform:translate(-26px,-14px)}
-  100%{transform:translate(0,0)}
+@keyframes float3 {
+  0%   {transform: translate(0,0)}
+  100% {transform: translate(20px,-30px)}
 }
 
-/* ===== BUTTONS ===== */
-.btn{
-  width:100%;
-  border:none;
-  border-radius:18px;
-  padding:15px;
-  margin-bottom:12px;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
+/* конкретные позиции */
+.coin1 {
+  left: 20px;
+  bottom: 20px;
+  animation: float1 4.5s infinite;
+}
+.coin13 {
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  animation: float2 5.2s infinite;
+}
+.coin94 {
+  right: 20px;
+  bottom: 25px;
+  animation: float3 4.8s infinite;
 }
 
-.btn-main{
-  background:#fff;
-  color:#4b2bd6;
-  box-shadow:0 10px 20px rgba(0,0,0,.35);
+/* === КНОПКИ === */
+.buttons {
+  width: 92%;
+  max-width: 420px;
+  margin: 0 auto;
 }
 
-.btn-sec{
-  background:linear-gradient(145deg,#7a64ff,#4b2bd6);
-  color:#fff;
-  box-shadow:
-    inset 0 0 14px rgba(255,255,255,.15),
-    0 8px 18px rgba(0,0,0,.35);
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3),
+              0 6px 16px rgba(0,0,0,0.25);
 }
 
-.btn:active{transform:scale(.97)}
-
-.how{
-  display:none;
-  background:rgba(0,0,0,.25);
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:14px;
-  font-size:14px;
+.btn.main {
+  background: #fff;
+  color: #5b3df0;
 }
 </style>
 </head>
@@ -169,55 +147,33 @@ body{
 <body>
 <div class="app">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">🚀 FriendPortal</div>
-    <div class="desc">
-      💎 Earn TON by inviting users<br>
+    <div class="subtitle">💎 Earn TON by inviting users</div>
+    <div class="features">
       ⚡ Fast payouts<br>
       🔒 Secure TON payments
     </div>
   </div>
 
-  <div class="coins-wrap">
+  <!-- COINS -->
+  <div class="coins-box">
     <img src="coin1.png" class="coin coin1">
     <img src="coin13.png" class="coin coin13">
     <img src="coin94.png" class="coin coin94">
   </div>
 
-  <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
-  <button class="btn btn-sec">💰 Balance</button>
-  <button class="btn btn-sec">💸 Withdraw</button>
-  <button class="btn btn-sec">📊 Statistics</button>
-
-  <button class="btn btn-sec" onclick="toggleHow()">ℹ️ How it works</button>
-
-  <div id="how" class="how">
-    <b>How it works</b><br><br>
-    Invite users → they activate → you earn TON → withdraw anytime
+  <!-- BUTTONS -->
+  <div class="buttons">
+    <button class="btn main">👥 Invite users</button>
+    <button class="btn">💰 Balance</button>
+    <button class="btn">💸 Withdraw</button>
+    <button class="btn">📊 Statistics</button>
+    <button class="btn">ℹ️ How it works</button>
+    <button class="btn">🔓 Activate access</button>
   </div>
 
-  <button class="btn btn-sec">🔓 Activate access</button>
-
 </div>
-
-<script>
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();   // ВЕСЬ ЭКРАН
-
-function invite(){
-  const uid = tg.initDataUnsafe?.user?.id || "";
-  const link = `https://t.me/FriendPortalBot?start=${uid}`;
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(link)}`
-  );
-}
-
-function toggleHow(){
-  const el = document.getElementById("how");
-  el.style.display = el.style.display === "block" ? "none" : "block";
-}
-</script>
-
 </body>
 </html>
