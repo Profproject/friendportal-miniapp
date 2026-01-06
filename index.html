@@ -1,113 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FriendPortal</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 * {
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Inter, Roboto, sans-serif;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
   background: url("bg.png") center / cover no-repeat fixed;
 }
 
-/* основной контейнер */
 .app {
   min-height: 100vh;
   padding: 22px 16px 30px;
-  background: rgba(90, 60, 210, 0.28); /* ↓ уменьшена прозрачность */
+  background: rgba(90, 60, 210, 0.30);
 }
 
 /* ===== HEADER ===== */
 .header {
   text-align: center;
-  margin-bottom: 12px;
 }
 
 .title {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 900;
-  color: #eaffff;
-  text-shadow:
-    0 2px 4px rgba(0,0,0,.3),
-    0 0 14px rgba(160,255,255,.9);
-  background: linear-gradient(90deg,#ffffff,#9ff,#ffffff);
+  background: linear-gradient(90deg,#ff4d4d,#ff9f1a,#ffe066,#9b5cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.4);
 }
 
-.subtitle {
-  margin-top: 6px;
+.subtitle, .subline {
+  color: #fff;
   font-size: 15px;
-  color: #ffffff;
-  font-weight: 500;
-}
-
-.subline {
   margin-top: 4px;
-  font-size: 14px;
-  color: #ffffff;
 }
 
-/* ===== COINS AREA ===== */
+/* ===== COINS ===== */
 .coins-box {
   position: relative;
-  height: 170px;           /* ↓ ниже блок */
+  height: 170px;
   margin: 16px 0 20px;
   border-radius: 22px;
-  background: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.12);
   overflow: hidden;
 }
 
 .coin {
   position: absolute;
-  width: 92px;             /* ↑ увеличены */
-  animation-iteration-count: infinite;
+  width: 125px;
   animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
-.coin1 {
-  left: 6%;
-  top: 60px;
-  animation: move1 5.5s infinite;
-}
+.coin1 { left: 6%; top: 52px; animation: c1 5.5s infinite; }
+.coin13 { left: 38%; top: 30px; animation: c2 6.2s infinite; }
+.coin94 { right: 10%; top: 48px; animation: c3 5.8s infinite; }
 
-.coin13 {
-  left: 38%;
-  top: 38px;
-  animation: move2 6.2s infinite;
-}
-
-.coin94 {
-  right: 10%;              /* ↓ ограничено вправо */
-  top: 58px;
-  animation: move3 5.8s infinite;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes move1 {
-  0%   { transform: translate(0,0); }
-  50%  { transform: translate(22px,-28px); }
-  100% { transform: translate(0,0); }
-}
-
-@keyframes move2 {
-  0%   { transform: translate(0,0); }
-  50%  { transform: translate(-18px,-34px); }
-  100% { transform: translate(0,0); }
-}
-
-@keyframes move3 {
-  0%   { transform: translate(0,0); }
-  50%  { transform: translate(-20px,-26px); } /* ↓ меньше вправо */
-  100% { transform: translate(0,0); }
-}
+@keyframes c1 { 50% { transform: translate(24px,-30px); } }
+@keyframes c2 { 50% { transform: translate(-20px,-36px); } }
+@keyframes c3 { 50% { transform: translate(-22px,-28px); } }
 
 /* ===== BUTTONS ===== */
 .btn {
@@ -131,6 +91,35 @@ body {
   color: #ffffff;
 }
 
+/* ===== MODAL ===== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal {
+  background: #6b5cff;
+  border-radius: 22px;
+  padding: 22px;
+  width: 90%;
+  max-width: 420px;
+  color: #fff;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
 </style>
 </head>
 
@@ -145,18 +134,52 @@ body {
   </div>
 
   <div class="coins-box">
-    <img src="coin1.png"  class="coin coin1">
+    <img src="coin1.png" class="coin coin1">
     <img src="coin13.png" class="coin coin13">
     <img src="coin94.png" class="coin coin94">
   </div>
 
-  <button class="btn btn-main">👥 Invite users</button>
+  <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
   <button class="btn btn-sec">💰 Balance</button>
   <button class="btn btn-sec">💸 Withdraw</button>
   <button class="btn btn-sec">📊 Statistics</button>
-  <button class="btn btn-sec">ℹ️ How it works</button>
+  <button class="btn btn-sec" onclick="openHow()">ℹ️ How it works</button>
   <button class="btn btn-sec">🔒 Activate access</button>
 
 </div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="howModal">
+  <div class="modal">
+    <div class="close" onclick="closeHow()">✖</div>
+    <h2>How FriendPortal works</h2>
+    <p>💎 Invite users to FriendPortal</p>
+    <p>⚡ When your friend activates access — you earn TON</p>
+    <p>👥 Multi-level referral system</p>
+    <p>🔒 Secure & automated payouts</p>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+function invite() {
+  const text = encodeURIComponent(
+    "🚀 Join FriendPortal and earn TON with me!\n\n💎 Multi-level referrals\n⚡ Fast payouts\n🔒 Secure TON payments"
+  );
+  const url = "https://t.me/share/url?text=" + text;
+  tg.openTelegramLink(url);
+}
+
+function openHow() {
+  document.getElementById("howModal").style.display = "flex";
+}
+
+function closeHow() {
+  document.getElementById("howModal").style.display = "none";
+}
+</script>
+
 </body>
 </html>
