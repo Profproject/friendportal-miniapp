@@ -81,34 +81,30 @@
 </div>
 
 <script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
 
-  function send(action) {
-    tg.sendData(action);
-  }
+// ===== SEND DATA TO BOT =====
+function send(action) {
+  tg.sendData(action);
+}
 
-  function invite() {
-    const uid = tg.initDataUnsafe?.user?.id || "0";
-    const link = `https://t.me/FriendPortalBot?start=${uid}`;
+// ===== INVITE =====
+function invite() {
+  const uid = tg.initDataUnsafe?.user?.id || "0";
+  const link = `https://t.me/FriendPortalBot?start=${uid}`;
 
-    tg.openTelegramLink(
-      `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Earn TON with me 🚀`
-    );
-  }
+  tg.openTelegramLink(
+    `https://t.me/share/url?url=${encodeURIComponent(link)}`
+  );
+}
 
-  function toggleHow() {
-    document.getElementById("how").classList.toggle("hidden");
-  }
+// ===== HOW IT WORKS =====
+function toggleHow() {
+  document.getElementById("how").classList.toggle("hidden");
+}
 </script>
 
 </body>
 </html>
-<script>
-const tg = window.Telegram.WebApp;
-tg.ready();
-
-function send(action) {
-    tg.sendData(action);
-}
-</script>
