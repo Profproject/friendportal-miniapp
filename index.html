@@ -32,9 +32,10 @@ html, body {
 
 .coin {
   position: absolute;
-  width: 130px;   /* ⬅️ увеличено ~2.5x */
-  height: 130px;
-  will-change: transform;
+  width: 130px;
+  aspect-ratio: 1 / 1;   /* 🔥 ГЛАВНОЕ */
+  height: auto;          /* 🔥 */
+  object-fit: contain;   /* 🔥 */
 }
 
 /* ================= BUTTONS ================= */
@@ -120,8 +121,8 @@ const SCREEN_H = window.innerHeight;
 const coinsData = coins.map(() => ({
   x: Math.random() * (SCREEN_W - 150),
   y: Math.random() * (SCREEN_H * 0.45), // летают ВЕРХНЯЯ ЧАСТЬ
-  vx: (Math.random() * 2 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vx: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
 }));
 
 function animate() {
