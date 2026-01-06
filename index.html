@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
 <title>FriendPortal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Telegram WebApp API -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  background: url("bg.png") no-repeat center center / cover;
+  background: url("bg.png") center/cover no-repeat;
 }
 
-/* ================= COINS ================= */
+/* ===== COINS ===== */
 .coin {
   position: absolute;
-  width: 150px;
-  height: auto;
+  width: 140px;        /* круглые, не тянутся */
+  height: 140px;
   pointer-events: none;
   z-index: 2;
 }
 
-/* ================= BUTTONS ================= */
+/* ===== BUTTONS ===== */
 .buttons {
   position: absolute;
   top: 38%;
@@ -43,13 +43,14 @@ body {
 }
 
 .btn {
-  width: 65%;
+  width: 45%;
   padding: 14px 0;
   border-radius: 14px;
   text-align: center;
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
+  user-select: none;
 }
 
 .btn.white {
@@ -62,45 +63,35 @@ body {
   color: #fff;
 }
 
-/* ================= MODAL ================= */
+/* ===== MODAL ===== */
 .modal {
+  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
-  display: none;
-  align-items: center;
-  justify-content: center;
+  background: rgba(0,0,0,0.6);
   z-index: 10;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
+  background: #111;
+  color: #fff;
+  padding: 22px;
+  border-radius: 14px;
   width: 85%;
   max-width: 420px;
-  background: #1c1f3a;
-  color: #fff;
-  padding: 20px;
-  border-radius: 16px;
 }
 
 .modal-content h2 {
+  margin-top: 0;
+}
+
+.close {
+  margin-top: 14px;
   text-align: center;
-  margin-bottom: 12px;
-}
-
-.modal-content p {
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.modal-content button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #6c6cff;
-  color: #fff;
-  font-weight: 600;
+  color: #6c6cff;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -108,9 +99,9 @@ body {
 <body>
 
 <!-- COINS -->
-<img src="coin1.png" class="coin">
-<img src="coin13.png" class="coin">
-<img src="coin94.png" class="coin">
+<img src="coin1.png"   class="coin">
+<img src="coin13.png"  class="coin">
+<img src="coin94.png"  class="coin">
 <img src="coin108.png" class="coin">
 <img src="coin216.png" class="coin">
 
@@ -123,7 +114,6 @@ body {
   <div class="btn blue" onclick="send('stats')">📊 Statistics</div>
 
   <div class="btn blue" id="howBtn">ℹ️ How it works</div>
-
   <div class="btn blue" onclick="send('activate')">🔒 Activate access</div>
   <div class="btn blue" onclick="send('ads')">📣 For advertisers</div>
 </div>
@@ -133,55 +123,35 @@ body {
   <div class="modal-content">
     <h2>ℹ️ How FriendPortal works</h2>
 
-    <p>🚀 Invite users and earn TON automatically.</p>
+    <p>Invite users and earn TON automatically.</p>
 
-    <p>
-      👥 <b>Level 1 referral</b><br>
-      +0.5 TON for each invited user
-    </p>
+    <p><b>Level 1 referral</b><br>
+    +0.5 TON for each invited user</p>
 
-    <p>
-      🌐 <b>Level 2 referral</b><br>
-      +0.25 TON when your referral invites someone
-    </p>
+    <p><b>Level 2 referral</b><br>
+    +0.25 TON when your referral invites someone</p>
 
-    <p>
-      🔐 <b>Activation (1 TON)</b><br>
-      Protects against multi-accounts and unlocks withdrawals
-    </p>
+    <p><b>Activation (1 TON)</b><br>
+    Required to protect against multi-accounts and enable withdrawals.</p>
 
-    <p>💎 Minimum withdrawal: 5 TON</p>
-
-    <button id="closeHow">Close</button>
+    <div class="close" id="closeHow">Close</div>
   </div>
 </div>
 
 <script>
-/* ================= TELEGRAM ================= */
-const tg = window.Telegram.WebApp;
-tg.ready();
+/* ===== TELEGRAM ===== */
+Telegram.WebApp.ready();
 
-const BOT_USERNAME = "friendportal_bot";
-const userId = tg.initDataUnsafe?.user?.id || "guest";
-const REF_LINK = `https://t.me/${BOT_USERNAME}?start=ref_${userId}`;
+function send(action) {
+  Telegram.WebApp.sendData(action);
+}
 
-document.getElementById("inviteBtn").onclick = () => {
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(REF_LINK)}&text=${encodeURIComponent(
-      "🚀 Join FriendPortal and earn TON together with me!"
-    )}`
-  );
-};
-
-/* ================= HOW MODAL ================= */
-const howBtn = document.getElementById("howBtn");
+/* ===== HOW MODAL ===== */
 const howModal = document.getElementById("howModal");
-const closeHow = document.getElementById("closeHow");
+document.getElementById("howBtn").onclick = () => howModal.style.display = "flex";
+document.getElementById("closeHow").onclick = () => howModal.style.display = "none";
 
-howBtn.onclick = () => howModal.style.display = "flex";
-closeHow.onclick = () => howModal.style.display = "none";
-
-/* ================= COIN ANIMATION (ТВОИ ЗАМЕРЫ) ================= */
+/* ===== COIN ANIMATION (ТВОИ ЗАМЕРЫ) ===== */
 const coins = document.querySelectorAll(".coin");
 
 const SCREEN_W = window.innerWidth;
@@ -218,11 +188,6 @@ function animate() {
 
 animate();
 </script>
-<script>
-  function send(action) {
-    Telegram.WebApp.sendData(action);
-  }
-</script>  
 
 </body>
 </html>
