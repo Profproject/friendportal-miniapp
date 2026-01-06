@@ -2,212 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 :root {
-  --bg1:#4b1fb8;
-  --bg2:#7b4cff;
-  --card:rgba(255,255,255,.14);
-  --btn:#ffffff;
-  --btnText:#4b1fb8;
+  --bg1: #5b2fd6;
+  --bg2: #3b1fa3;
+  --card: rgba(255,255,255,0.12);
+  --btn: linear-gradient(145deg,#ffffff,#e6e6ff);
+  --btn-dark: linear-gradient(145deg,#6a4cff,#4a2fd6);
 }
 
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:#fff;
-  text-align:center;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg,var(--bg1),var(--bg2));
+  color: #fff;
+  overflow-x: hidden;
 }
 
-.container{
-  padding:24px;
+.app {
+  padding: 18px;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-h1{
-  font-size:30px;
-  margin:20px 0 6px;
-  background:linear-gradient(90deg,#fff,#ffd6ff,#fff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:glow 3s infinite;
-}
-
-@keyframes glow{
-  0%{opacity:.7}
-  50%{opacity:1}
-  100%{opacity:.7}
-}
-
-.subtitle{
-  opacity:.9;
-  margin-bottom:18px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:18px;
-  backdrop-filter:blur(10px);
-}
-
-.btn{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  font-size:16px;
-  font-weight:600;
-  margin-top:12px;
-  cursor:pointer;
-}
-
-.btn-main{
-  background:var(--btn);
-  color:var(--btnText);
-}
-
-.btn-sec{
-  background:rgba(255,255,255,.18);
-  color:#fff;
-}
-
-.hidden{display:none}
-/* ===== Referral 3D Scene ===== */
-
-.referral-3d {
-  position: relative;
-  margin: 28px auto;
-  padding: 30px 0 20px;
+/* HEADER */
+.header {
   text-align: center;
-  perspective: 800px;
+  margin-bottom: 18px;
 }
 
-/* мягкое свечение фона */
-.glow-bg {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(0, 180, 255, 0.35),
-    rgba(0, 0, 0, 0) 70%
-  );
-  filter: blur(40px);
-  z-index: 0;
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  animation: glow 3s infinite alternate;
 }
 
-/* сама картинка с монетами */
-.coin-flow {
-  position: relative;
-  z-index: 1;
-
-  width: 100%;
-  max-width: 360px;
-  height: auto;
-
-  border-radius: 20px;
-
-  transform-style: preserve-3d;
-  animation: floatCoins 6s ease-in-out infinite;
-
-  filter:
-    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.65))
-    drop-shadow(0 0 25px rgba(0, 160, 255, 0.55));
-}
-
-/* подпись */
-.ref-caption {
-  margin-top: 14px;
-  font-size: 14px;
+.subtitle {
   opacity: 0.85;
-  letter-spacing: 0.4px;
+  margin-top: 4px;
+  font-size: 14px;
 }
 
-/* ===== АНИМАЦИЯ ===== */
-
-@keyframes floatCoins {
-  0% {
-    transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
-  }
-  50% {
-    transform: translateY(-14px) rotateX(6deg) rotateZ(-1deg);
-  }
-  100% {
-    transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
-  }
+/* COIN ZONE */
+.coin-zone {
+  position: relative;
+  height: 230px;
+  margin: 20px 0;
+  border-radius: 22px;
+  background: radial-gradient(circle at top,#6f4cff,#4527c7);
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(255,255,255,0.15);
 }
-  
+
+/* COINS */
+.coin {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 18px rgba(0,0,0,0.45));
+}
+
+/* === ANIMATIONS === */
+.coin1 {
+  left: 10%;
+  top: 40%;
+  animation: floatLeft 7s infinite ease-in-out;
+}
+
+.coin13 {
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  animation: floatCenter 9s infinite ease-in-out;
+}
+
+.coin94 {
+  right: 10%;
+  top: 45%;
+  animation: floatRight 8s infinite ease-in-out;
+}
+
+@keyframes floatLeft {
+  0% { transform: translate(0,0) rotate(0deg); }
+  50% { transform: translate(-18px,22px) rotate(-8deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
+}
+
+@keyframes floatCenter {
+  0% { transform: translate(-50%,0) rotate(0deg); }
+  50% { transform: translate(-50%,30px) rotate(6deg); }
+  100% { transform: translate(-50%,0) rotate(0deg); }
+}
+
+@keyframes floatRight {
+  0% { transform: translate(0,0) rotate(0deg); }
+  50% { transform: translate(20px,-25px) rotate(10deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
+}
+
+/* INFO */
+.info {
+  margin: 14px 0 20px;
+  text-align: center;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* BUTTONS */
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 15px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.btn-main {
+  background: var(--btn);
+  color: #3b2bd6;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.btn-main:active {
+  transform: scale(0.97);
+}
+
+.btn-sec {
+  background: var(--btn-dark);
+  color: #fff;
+  box-shadow: inset 0 0 12px rgba(255,255,255,0.15),
+              0 8px 18px rgba(0,0,0,0.35);
+}
+
+.btn-sec:active {
+  transform: scale(0.97);
+}
+
+/* GLOW */
+@keyframes glow {
+  from { text-shadow: 0 0 6px #fff; }
+  to { text-shadow: 0 0 16px #9f8bff; }
+}
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<h1>🚀 FriendPortal</h1>
-<div class="subtitle">Earn TON by inviting users</div>
+<div class="app">
 
-<div class="card">
-  💎 Referral rewards<br>
-<div class="referral-3d">
-  <div class="glow-bg"></div>
-
-  <img src="referral.png" class="coin-flow" alt="Referral rewards">
-
-  <div class="ref-caption">
-    Earn TON with multi-level referrals
+  <div class="header">
+    <div class="logo">🚀 FriendPortal</div>
+    <div class="subtitle">Earn TON by inviting users</div>
   </div>
-</div>
 
+  <div class="coin-zone">
+    <!-- ЕСЛИ У ТЕБЯ МОНЕТКИ В assets/ → assets/coin1.png -->
+    <img src="coin1.png" class="coin coin1" />
+    <img src="coin13.png" class="coin coin13" />
+    <img src="coin94.png" class="coin coin94" />
+  </div>
 
-  ⚡ Fast payouts<br>
-  🔒 Secure TON payments
-</div>
+  <div class="info">
+    ⚡ Fast payouts<br>
+    🔒 Secure TON payments
+  </div>
 
-<button class="btn btn-main" onclick="invite()">👥 Invite users</button>
-<button class="btn btn-sec" onclick="send('balance')">💰 Balance</button>
-<button class="btn btn-sec" onclick="send('withdraw')">💸 Withdraw</button>
-<button class="btn btn-sec" onclick="send('activate')">🔓 Activate access (1 TON)</button>
-<button class="btn btn-sec" onclick="send('stats')">📊 Statistics</button>
-<button class="btn btn-sec" onclick="toggleHow()">ℹ️ How it works</button>
+  <button class="btn btn-main">👥 Invite users</button>
+  <button class="btn btn-sec">💰 Balance</button>
+  <button class="btn btn-sec">💸 Withdraw</button>
+  <button class="btn btn-sec">📊 Statistics</button>
+  <button class="btn btn-sec">ℹ️ How it works</button>
 
-<div class="card hidden" id="how">
-<b>How FriendPortal works</b><br><br>
-• Activate access for 1 TON<br>
-• Invite friends → earn 0.5 TON<br>
-• 2nd level → 0.25 TON<br><br>
-✅ Stable payouts<br>
-✅ No fake rewards<br>
-✅ Withdraw anytime
-</div>
+  <!-- АКТИВАЦИЯ В САМОМ НИЗУ -->
+  <button class="btn btn-sec">🔓 Activate access</button>
 
 </div>
-
-<script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
-
-function send(action){
-  tg.sendData(action);
-}
-
-function invite(){
-  const uid = tg.initDataUnsafe?.user?.id || 0;
-  const link = `https://t.me/FriendPortalBot?start=${uid}`;
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join FriendPortal 🚀`
-  );
-}
-
-function toggleHow(){
-  document.getElementById("how").classList.toggle("hidden");
-}
-</script>
 
 </body>
 </html>
