@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FriendPortal</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
@@ -21,171 +19,136 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
-  background: url("bg.png") no-repeat center top;
-  background-size: cover;
+  background: url("bg.png") center top / cover no-repeat;
 }
 
-/* ===== COINS ===== */
+/* ================= COINS ================= */
+.coin-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5; /* ВАЖНО: выше кнопок */
+  pointer-events: none;
+}
+
 .coin {
   position: absolute;
-  width: 104px; /* +30% */
-  height: 104px;
-  pointer-events: none;
-  user-select: none;
+  width: 90px;
+  height: 90px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  animation: float linear infinite;
 }
 
-.coin img {
-  width: 100%;
-  height: 100%;
+@keyframes float {
+  from {
+    transform: translate(var(--x1), var(--y1));
+  }
+  to {
+    transform: translate(var(--x2), var(--y2));
+  }
 }
 
-/* ===== BUTTONS ===== */
+/* ================= BUTTONS ================= */
 .buttons {
   position: absolute;
-  bottom: 40px;
+  top: 38%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  z-index: 3;
 }
 
 .btn {
-  width: 70%;
-  max-width: 340px;
-  padding: 14px;
+  width: 65%; /* ← уже на ~35% */
+  padding: 14px 0;
   border-radius: 14px;
+  text-align: center;
   font-size: 17px;
   font-weight: 600;
-  text-align: center;
   cursor: pointer;
 }
 
 .btn.white {
   background: #fff;
-  color: #000;
+  color: #222;
 }
 
-.btn.purple {
-  background: #6f6cf6;
+.btn.blue {
+  background: #6c6cff;
   color: #fff;
-}
-
-/* ===== MODAL ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-content {
-  background: #1c1c1e;
-  color: #fff;
-  padding: 22px;
-  width: 80%;
-  border-radius: 16px;
-  font-size: 15px;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-}
-
-.modal button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 600;
 }
 </style>
 </head>
 
 <body>
-<div class="app" id="app">
+<div class="app">
 
-  <!-- Coins -->
-  <div class="coin"><img src="coin1.png"></div>
-  <div class="coin"><img src="coin13.png"></div>
-  <div class="coin"><img src="coin94.png"></div>
-  <div class="coin"><img src="coin108.png"></div>
-  <div class="coin"><img src="coin216.png"></div>
+  <!-- MONETS -->
+  <div class="coin-layer" id="coins"></div>
 
-  <!-- Buttons -->
+  <!-- BUTTONS -->
   <div class="buttons">
-    <div class="btn white" id="invite">👥 Invite users</div>
-    <div class="btn purple">💰 Balance</div>
-    <div class="btn purple">💸 Withdraw</div>
-    <div class="btn purple">📊 Statistics</div>
-    <div class="btn purple" id="how">ℹ️ How it works</div>
-    <div class="btn purple">🔐 Activate access</div>
-    <div class="btn purple">📢 For advertisers</div>
+    <div class="btn white" onclick="invite()">👥 Invite users</div>
+    <div class="btn blue">💰 Balance</div>
+    <div class="btn blue">💸 Withdraw</div>
+    <div class="btn blue">📊 Statistics</div>
+    <div class="btn blue">ℹ️ How it works</div>
+    <div class="btn blue">🔐 Activate access</div>
+    <div class="btn blue">📣 For advertisers</div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>How it works</h3>
-    <p>
-      Invite users and earn TON rewards.<br><br>
-      • You get <b>+0.5 TON</b> for each invited user.<br>
-      • If your referral invites another user, you earn <b>0.25 TON</b> (2nd level).<br><br>
-      To withdraw funds, activation is required.<br>
-      Activation costs <b>1 TON</b> and protects the system from multi-accounts
-      and abuse. It also unlocks withdrawals.
-    </p>
-    <button onclick="closeModal()">Close</button>
-  </div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-/* ===== INVITE ===== */
-document.getElementById("invite").onclick = () => {
-  const link = "https://t.me/friendportal_bot";
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(link)}`
-  );
-};
-
-/* ===== MODAL ===== */
-document.getElementById("how").onclick = () => {
-  document.getElementById("modal").style.display = "flex";
-};
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+/* ================= INVITE ================= */
+function invite() {
+  const bot = "friendportal_bot";
+  const text = "Join FriendPortal and earn TON 💎";
+  const url = `https://t.me/${bot}`;
+  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
 }
 
-/* ===== COIN ANIMATION ===== */
-const coins = document.querySelectorAll(".coin");
+/* ================= COINS LOGIC ================= */
+const coinImages = [
+  "coin1.png",
+  "coin13.png",
+  "coin94.png",
+  "coin108.png",
+  "coin216.png"
+];
+
+const layer = document.getElementById("coins");
 const W = window.innerWidth;
-const H = window.innerHeight * 0.55; // ABOVE BUTTONS
+const H = window.innerHeight;
 
-coins.forEach(coin => {
-  let x = Math.random() * (W - 120);
-  let y = Math.random() * (H - 120);
-  let vx = (Math.random() * 1.4 + 0.4) * (Math.random() > 0.5 ? 1 : -1);
-  let vy = (Math.random() * 1.4 + 0.4) * (Math.random() > 0.5 ? 1 : -1);
+coinImages.forEach(src => {
+  const coin = document.createElement("img");
+  coin.src = src;
+  coin.className = "coin";
 
-  function move() {
-    x += vx;
-    y += vy;
+  const startX = Math.random() * (W - 100);
+  const startY = Math.random() * (H * 0.6);
 
-    if (x < 0 || x > W - 110) vx *= -1;
-    if (y < 0 || y > H - 110) vy *= -1;
+  const endX = Math.random() * (W - 100);
+  const endY = Math.random() * (H * 0.6);
 
-    coin.style.transform = `translate(${x}px, ${y}px)`;
-    requestAnimationFrame(move);
-  }
-  move();
+  const duration = 12 + Math.random() * 10;
+
+  coin.style.left = startX + "px";
+  coin.style.top = startY + "px";
+
+  coin.style.setProperty("--x1", "0px");
+  coin.style.setProperty("--y1", "0px");
+  coin.style.setProperty("--x2", (endX - startX) + "px");
+  coin.style.setProperty("--y2", (endY - startY) + "px");
+
+  coin.style.animationDuration = duration + "s";
+  coin.style.animationDirection = "alternate";
+  coin.style.animationIterationCount = "infinite";
+
+  layer.appendChild(coin);
 });
 </script>
 </body>
