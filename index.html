@@ -1,162 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+:root {
+  --purple: #6a4df4;
+  --button: #6f63ff;
+}
+
 * {
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, Inter, Roboto, sans-serif;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
   margin: 0;
-  background: url("bg.png") center / cover no-repeat fixed;
-}
-
-.app {
   min-height: 100vh;
-  padding: 22px 16px 30px;
-  background: rgba(90, 60, 210, 0.30);
+  background:
+    linear-gradient(rgba(90,60,200,0.55), rgba(90,60,200,0.55)),
+    url('bg.png') center / cover no-repeat;
+  color: white;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header {
   text-align: center;
+  padding: 22px 16px 10px;
 }
 
 .title {
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 900;
-  background: linear-gradient(90deg,#ff4d4d,#ff9f1a,#ffe066,#9b5cff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  text-shadow:
+    0 2px 0 #ff9800,
+    0 4px 12px rgba(0,0,0,.4);
 }
 
-.subtitle, .subline {
-  color: #fff;
-  font-size: 15px;
+.subtitle {
+  margin-top: 6px;
+  font-size: 16px;
+}
+
+.info {
   margin-top: 4px;
+  font-size: 14px;
 }
 
-/* ===== COINS ===== */
-.coins-box {
+/* COINS */
+.coins {
   position: relative;
-  height: 170px;
-  margin: 16px 0 20px;
-  border-radius: 22px;
-  background: rgba(255,255,255,0.12);
-  overflow: hidden;
+  height: 180px;
+  margin-top: 10px;
 }
 
 .coin {
   position: absolute;
-  width: 125px;
-  animation-timing-function: ease-in-out;
+  width: 130px;
   animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
 }
 
-.coin1 { left: 6%; top: 52px; animation: c1 5.5s infinite; }
-.coin13 { left: 38%; top: 30px; animation: c2 6.2s infinite; }
-.coin94 { right: 10%; top: 48px; animation: c3 5.8s infinite; }
+/* trajectories */
+.coin1 {
+  left: 6%;
+  top: 10px;
+  animation: fly1 3.8s infinite;
+}
 
-@keyframes c1 { 50% { transform: translate(24px,-30px); } }
-@keyframes c2 { 50% { transform: translate(-20px,-36px); } }
-@keyframes c3 { 50% { transform: translate(-22px,-28px); } }
+.coin13 {
+  left: 36%;
+  top: 0px;
+  animation: fly2 3.2s infinite;
+}
 
-/* ===== BUTTONS ===== */
+.coin94 {
+  left: 68%;
+  top: 18px;
+  animation: fly3 4.2s infinite;
+}
+
+/* animations */
+@keyframes fly1 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, -35px); }
+}
+
+@keyframes fly2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-18px, -40px); }
+}
+
+@keyframes fly3 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(25px, -30px); }
+}
+
+/* BUTTONS */
+.buttons {
+  padding: 12px;
+}
+
 .btn {
   width: 100%;
-  border: none;
-  border-radius: 18px;
   padding: 16px;
-  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: var(--button);
+  color: white;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 12px;
-  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
 
-.btn-main {
-  background: #ffffff;
-  color: #5a3bd4;
+.btn.white {
+  background: white;
+  color: #4b3cff;
 }
 
-.btn-sec {
-  background: #6b5cff;
-  color: #ffffff;
-}
-
-/* ===== MODAL ===== */
-.modal-bg {
+/* MODAL */
+.modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,.6);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10;
 }
 
-.modal {
-  background: #6b5cff;
-  border-radius: 22px;
-  padding: 22px;
+.modal-box {
+  background: #fff;
+  color: #333;
+  border-radius: 16px;
+  padding: 20px;
   width: 90%;
-  max-width: 420px;
-  color: #fff;
+  max-width: 360px;
 }
 
-.modal h2 {
+.modal-box h3 {
   margin-top: 0;
-}
-
-.close {
-  float: right;
-  font-size: 20px;
-  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-  <div class="header">
-    <div class="title">🚀 FriendPortal</div>
-    <div class="subtitle">💎 Earn TON by inviting users</div>
-    <div class="subline">⚡ Fast payouts</div>
-    <div class="subline">🔒 Secure TON payments</div>
-  </div>
-
-  <div class="coins-box">
-    <img src="coin1.png" class="coin coin1">
-    <img src="coin13.png" class="coin coin13">
-    <img src="coin94.png" class="coin coin94">
-  </div>
-
-  <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
-  <button class="btn btn-sec">💰 Balance</button>
-  <button class="btn btn-sec">💸 Withdraw</button>
-  <button class="btn btn-sec">📊 Statistics</button>
-  <button class="btn btn-sec" onclick="openHow()">ℹ️ How it works</button>
-  <button class="btn btn-sec">🔒 Activate access</button>
-
+<div class="header">
+  <div class="title">🚀 FriendPortal</div>
+  <div class="subtitle">💎 Earn TON by inviting users</div>
+  <div class="info">⚡ Fast payouts</div>
+  <div class="info">🔒 Secure TON payments</div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-bg" id="howModal">
-  <div class="modal">
-    <div class="close" onclick="closeHow()">✖</div>
-    <h2>How FriendPortal works</h2>
-    <p>💎 Invite users to FriendPortal</p>
-    <p>⚡ When your friend activates access — you earn TON</p>
-    <p>👥 Multi-level referral system</p>
-    <p>🔒 Secure & automated payouts</p>
+<div class="coins">
+  <img src="coin1.png" class="coin coin1">
+  <img src="coin13.png" class="coin coin13">
+  <img src="coin94.png" class="coin coin94">
+</div>
+
+<div class="buttons">
+  <div class="btn white" onclick="invite()">👥 Invite users</div>
+  <div class="btn">💰 Balance</div>
+  <div class="btn">💸 Withdraw</div>
+  <div class="btn">📊 Statistics</div>
+  <div class="btn" onclick="openHow()">ℹ️ How it works</div>
+  <div class="btn">🔓 Activate access</div>
+</div>
+
+<!-- HOW IT WORKS MODAL -->
+<div class="modal" id="howModal" onclick="closeHow()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <h3>How it works</h3>
+    <p>Invite friends → they join → you earn TON.</p>
+    <p>Multi-level system increases rewards.</p>
+    <div class="btn" onclick="closeHow()">Close</div>
   </div>
 </div>
 
@@ -165,19 +188,17 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 
 function invite() {
-  const text = encodeURIComponent(
-    "🚀 Join FriendPortal and earn TON with me!\n\n💎 Multi-level referrals\n⚡ Fast payouts\n🔒 Secure TON payments"
+  tg.openTelegramLink(
+    `https://t.me/share/url?url=${encodeURIComponent('https://t.me/YourBot')}`
   );
-  const url = "https://t.me/share/url?text=" + text;
-  tg.openTelegramLink(url);
 }
 
 function openHow() {
-  document.getElementById("howModal").style.display = "flex";
+  document.getElementById('howModal').style.display = 'flex';
 }
 
 function closeHow() {
-  document.getElementById("howModal").style.display = "none";
+  document.getElementById('howModal').style.display = 'none';
 }
 </script>
 
