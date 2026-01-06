@@ -1,104 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FriendPortal</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-:root {
-  --purple: #6a4df4;
-  --button: #6f63ff;
-}
-
 * {
   box-sizing: border-box;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(rgba(90,60,200,0.55), rgba(90,60,200,0.55)),
+    linear-gradient(rgba(90,60,200,.55), rgba(90,60,200,.55)),
     url('bg.png') center / cover no-repeat;
-  color: white;
+  color: #fff;
+  overflow-x: hidden;
 }
 
 /* HEADER */
 .header {
   text-align: center;
-  padding: 22px 16px 10px;
+  padding: 22px 16px 8px;
 }
 
 .title {
   font-size: 34px;
   font-weight: 900;
   text-shadow:
-    0 2px 0 #ff9800,
-    0 4px 12px rgba(0,0,0,.4);
+    0 3px 0 #ff9800,
+    0 6px 18px rgba(0,0,0,.45);
 }
 
-.subtitle {
-  margin-top: 6px;
-  font-size: 16px;
-}
+.subtitle { font-size: 16px; margin-top: 6px; }
+.info { font-size: 14px; margin-top: 4px; }
 
-.info {
-  margin-top: 4px;
-  font-size: 14px;
-}
-
-/* COINS */
+/* COINS ZONE */
 .coins {
   position: relative;
-  height: 180px;
+  height: 190px;
   margin-top: 10px;
+  overflow: hidden;
 }
 
 .coin {
   position: absolute;
-  width: 130px;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-timing-function: ease-in-out;
-}
-
-/* trajectories */
-.coin1 {
-  left: 6%;
-  top: 10px;
-  animation: fly1 3.8s infinite;
-}
-
-.coin13 {
-  left: 36%;
-  top: 0px;
-  animation: fly2 3.2s infinite;
-}
-
-.coin94 {
-  left: 68%;
-  top: 18px;
-  animation: fly3 4.2s infinite;
-}
-
-/* animations */
-@keyframes fly1 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(20px, -35px); }
-}
-
-@keyframes fly2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-18px, -40px); }
-}
-
-@keyframes fly3 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(25px, -30px); }
+  width: 140px;
+  will-change: transform;
+  transition: transform linear;
 }
 
 /* BUTTONS */
@@ -111,8 +65,7 @@ body {
   padding: 16px;
   margin-bottom: 10px;
   border-radius: 14px;
-  background: var(--button);
-  color: white;
+  background: #6f63ff;
   font-size: 17px;
   font-weight: 600;
   text-align: center;
@@ -120,7 +73,7 @@ body {
 }
 
 .btn.white {
-  background: white;
+  background: #fff;
   color: #4b3cff;
 }
 
@@ -142,10 +95,6 @@ body {
   width: 90%;
   max-width: 360px;
 }
-
-.modal-box h3 {
-  margin-top: 0;
-}
 </style>
 </head>
 
@@ -158,10 +107,10 @@ body {
   <div class="info">🔒 Secure TON payments</div>
 </div>
 
-<div class="coins">
-  <img src="coin1.png" class="coin coin1">
-  <img src="coin13.png" class="coin coin13">
-  <img src="coin94.png" class="coin coin94">
+<div class="coins" id="coinArea">
+  <img src="coin1.png" class="coin" id="coin1">
+  <img src="coin13.png" class="coin" id="coin13">
+  <img src="coin94.png" class="coin" id="coin94">
 </div>
 
 <div class="buttons">
@@ -173,33 +122,57 @@ body {
   <div class="btn">🔓 Activate access</div>
 </div>
 
-<!-- HOW IT WORKS MODAL -->
 <div class="modal" id="howModal" onclick="closeHow()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <h3>How it works</h3>
     <p>Invite friends → they join → you earn TON.</p>
-    <p>Multi-level system increases rewards.</p>
+    <p>Multi-level referral rewards.</p>
     <div class="btn" onclick="closeHow()">Close</div>
   </div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
+const tg = Telegram.WebApp;
 tg.expand();
 
+/* INVITE */
 function invite() {
   tg.openTelegramLink(
     `https://t.me/share/url?url=${encodeURIComponent('https://t.me/YourBot')}`
   );
 }
 
+/* MODAL */
 function openHow() {
   document.getElementById('howModal').style.display = 'flex';
 }
-
 function closeHow() {
   document.getElementById('howModal').style.display = 'none';
 }
+
+/* ===== REAL RANDOM MOTION ===== */
+const area = document.getElementById('coinArea');
+
+function randomMove(el, config) {
+  const maxX = area.clientWidth - el.offsetWidth;
+  const maxY = area.clientHeight - el.offsetHeight - 20;
+
+  function move() {
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    const duration = config.min + Math.random() * config.range;
+
+    el.style.transitionDuration = duration + 'ms';
+    el.style.transform = `translate(${x}px, ${y}px)`;
+
+    setTimeout(move, duration);
+  }
+  move();
+}
+
+randomMove(document.getElementById('coin1'),  { min: 2200, range: 1800 });
+randomMove(document.getElementById('coin13'), { min: 1800, range: 1600 });
+randomMove(document.getElementById('coin94'), { min: 2600, range: 2000 });
 </script>
 
 </body>
