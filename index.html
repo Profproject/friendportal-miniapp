@@ -9,16 +9,18 @@
 
 <style>
 :root{
-  --bg1:#6b43ff;
-  --bg2:#4b2bd6;
-  --card:rgba(255,255,255,.14);
-  --white:#fff;
+  --bg1:#6d49ff;
+  --bg2:#4726d8;
 }
 
 *{box-sizing:border-box}
 
-body{
+html,body{
   margin:0;
+  height:100%;
+}
+
+body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
   color:#fff;
@@ -33,86 +35,96 @@ body{
 /* ===== HEADER ===== */
 .header{
   text-align:center;
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
 
+/* ПЕРЛАМУТРОВЫЙ 3D */
 .logo{
-  font-size:30px;
+  font-size:32px;
   font-weight:900;
-  letter-spacing:.5px;
+  letter-spacing:.6px;
+  background:linear-gradient(
+    120deg,
+    #ffffff,
+    #9ad7ff,
+    #c3a6ff,
+    #ffffff
+  );
+  background-size:300% 300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 6s infinite linear;
   text-shadow:
-    0 0 10px rgba(255,255,255,.6),
-    0 0 26px rgba(180,150,255,.9);
-  animation:pulse 3s infinite alternate;
+    0 2px 6px rgba(0,0,0,.35),
+    0 0 24px rgba(170,200,255,.6);
+}
+
+@keyframes shine{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 .desc{
   margin-top:6px;
   font-size:15px;
-  line-height:1.3;
+  line-height:1.35;
   opacity:.95;
 }
 
 /* ===== COINS BLOCK ===== */
 .coins-wrap{
   position:relative;
-  height:120px;              /* ⬅ ниже */
-  margin:12px 0 16px;
+  height:86px;              /* компактно */
+  margin:12px 0 18px;
   border-radius:22px;
   background:radial-gradient(circle at top,#7f66ff,#4a2fd6);
-  box-shadow:inset 0 0 28px rgba(255,255,255,.15);
+  box-shadow:inset 0 0 24px rgba(255,255,255,.15);
   overflow:hidden;
 }
 
 /* ===== COINS ===== */
 .coin{
   position:absolute;
-  width:150px;               /* ⬅ крупнее */
-  filter:drop-shadow(0 12px 18px rgba(0,0,0,.45));
+  width:160px;             /* БОЛЬШЕ */
+  top:10px;                /* ВЫШЕ */
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));
 }
 
 /* LEFT */
 .coin1{
-  left:-6px;
-  top:38px;
+  left:-8px;
   animation:flyLeft 7s infinite ease-in-out;
 }
 
 /* CENTER */
 .coin13{
   left:50%;
-  top:18px;
   transform:translateX(-50%);
   animation:flyCenter 9s infinite ease-in-out;
 }
 
 /* RIGHT */
 .coin94{
-  right:-6px;
-  top:40px;
+  right:-8px;
   animation:flyRight 8s infinite ease-in-out;
 }
 
 /* ===== ANIMATIONS ===== */
 @keyframes flyLeft{
   0%{transform:translate(0,0)}
-  50%{transform:translate(24px,-18px)}
+  50%{transform:translate(26px,-14px)}
   100%{transform:translate(0,0)}
 }
 @keyframes flyCenter{
   0%{transform:translate(-50%,0)}
-  50%{transform:translate(-50%,-22px)}
+  50%{transform:translate(-50%,-16px)}
   100%{transform:translate(-50%,0)}
 }
 @keyframes flyRight{
   0%{transform:translate(0,0)}
-  50%{transform:translate(-24px,-20px)}
+  50%{transform:translate(-26px,-14px)}
   100%{transform:translate(0,0)}
-}
-
-@keyframes pulse{
-  from{text-shadow:0 0 10px #fff}
-  to{text-shadow:0 0 24px #cdbbff}
 }
 
 /* ===== BUTTONS ===== */
@@ -134,7 +146,7 @@ body{
 }
 
 .btn-sec{
-  background:linear-gradient(145deg,#735cff,#4b2bd6);
+  background:linear-gradient(145deg,#7a64ff,#4b2bd6);
   color:#fff;
   box-shadow:
     inset 0 0 14px rgba(255,255,255,.15),
@@ -143,7 +155,6 @@ body{
 
 .btn:active{transform:scale(.97)}
 
-/* ===== HOW ===== */
 .how{
   display:none;
   background:rgba(0,0,0,.25);
@@ -151,7 +162,6 @@ body{
   padding:14px;
   margin-bottom:14px;
   font-size:14px;
-  line-height:1.4;
 }
 </style>
 </head>
@@ -162,7 +172,7 @@ body{
   <div class="header">
     <div class="logo">🚀 FriendPortal</div>
     <div class="desc">
-      🚀 Earn TON by inviting users<br>
+      💎 Earn TON by inviting users<br>
       ⚡ Fast payouts<br>
       🔒 Secure TON payments
     </div>
@@ -175,7 +185,6 @@ body{
   </div>
 
   <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
-
   <button class="btn btn-sec">💰 Balance</button>
   <button class="btn btn-sec">💸 Withdraw</button>
   <button class="btn btn-sec">📊 Statistics</button>
@@ -183,11 +192,8 @@ body{
   <button class="btn btn-sec" onclick="toggleHow()">ℹ️ How it works</button>
 
   <div id="how" class="how">
-    <b>How FriendPortal works</b><br><br>
-    1 Invite friends using your referral link<br>
-    2 Friend activates access<br>
-    3 You receive TON rewards instantly<br>
-    4 Withdraw anytime
+    <b>How it works</b><br><br>
+    Invite users → they activate → you earn TON → withdraw anytime
   </div>
 
   <button class="btn btn-sec">🔓 Activate access</button>
@@ -197,6 +203,7 @@ body{
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
+tg.expand();   // ВЕСЬ ЭКРАН
 
 function invite(){
   const uid = tg.initDataUnsafe?.user?.id || "";
