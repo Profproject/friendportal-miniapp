@@ -1,161 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
 
 <style>
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
 }
 
 body {
+  margin: 0;
   min-height: 100vh;
-  background:
-    linear-gradient(rgba(90,60,200,0.85), rgba(90,60,200,0.9)),
-    url("bg.png") center / cover no-repeat;
-  color: #fff;
+  background: url("bg.png") center / cover no-repeat fixed;
 }
 
-/* ---------- HEADER ---------- */
+/* основной контейнер */
+.app {
+  min-height: 100vh;
+  padding: 22px 16px 30px;
+  background: rgba(90, 60, 210, 0.28); /* ↓ уменьшена прозрачность */
+}
+
+/* ===== HEADER ===== */
 .header {
   text-align: center;
-  padding: 26px 20px 10px;
+  margin-bottom: 12px;
 }
 
-.logo {
-  font-size: 36px;
+.title {
+  font-size: 34px;
   font-weight: 900;
-  background: linear-gradient(90deg,#ffffff,#c6d8ff,#ffffff);
+  color: #eaffff;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,.3),
+    0 0 14px rgba(160,255,255,.9);
+  background: linear-gradient(90deg,#ffffff,#9ff,#ffffff);
   -webkit-background-clip: text;
-  color: transparent;
-  animation: shine 4s linear infinite;
-}
-
-@keyframes shine {
-  0% { background-position: 0%; }
-  100% { background-position: 200%; }
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   margin-top: 6px;
-  font-size: 16px;
-}
-
-.features {
-  margin-top: 6px;
   font-size: 15px;
-  line-height: 1.3;
+  color: #ffffff;
+  font-weight: 500;
 }
 
-/* ---------- COINS ZONE ---------- */
+.subline {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* ===== COINS AREA ===== */
 .coins-box {
   position: relative;
-  height: 200px;          /* ВАЖНО: ограничение зоны */
-  margin: 14px 16px;
+  height: 170px;           /* ↓ ниже блок */
+  margin: 16px 0 20px;
   border-radius: 22px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.10);
   overflow: hidden;
 }
 
-/* Общий стиль монет */
 .coin {
   position: absolute;
-  width: 120px;           /* УВЕЛИЧЕНЫ */
-  pointer-events: none;
+  width: 92px;             /* ↑ увеличены */
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
-/* Левая +1 */
 .coin1 {
   left: 6%;
-  top: 70px;
-  animation: coin1move 4.2s ease-in-out infinite alternate;
+  top: 60px;
+  animation: move1 5.5s infinite;
 }
 
-/* Центр +13 */
 .coin13 {
-  left: 36%;
-  top: 50px;
-  animation: coin13move 5.4s ease-in-out infinite alternate;
+  left: 38%;
+  top: 38px;
+  animation: move2 6.2s infinite;
 }
 
-/* Правая +94 */
 .coin94 {
-  right: 6%;
-  top: 75px;
-  animation: coin94move 3.6s ease-in-out infinite alternate;
+  right: 10%;              /* ↓ ограничено вправо */
+  top: 58px;
+  animation: move3 5.8s infinite;
 }
 
-/* ---------- АНИМАЦИИ ---------- */
-@keyframes coin1move {
-  from { transform: translate(0,0) rotate(0deg); }
-  to   { transform: translate(-45px,-70px) rotate(-12deg); }
+/* ===== ANIMATIONS ===== */
+@keyframes move1 {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(22px,-28px); }
+  100% { transform: translate(0,0); }
 }
 
-@keyframes coin13move {
-  from { transform: translate(0,0) rotate(0deg); }
-  to   { transform: translate(-10px,-90px) rotate(6deg); }
+@keyframes move2 {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(-18px,-34px); }
+  100% { transform: translate(0,0); }
 }
 
-@keyframes coin94move {
-  from { transform: translate(0,0) rotate(0deg); }
-  to   { transform: translate(55px,-65px) rotate(14deg); }
+@keyframes move3 {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(-20px,-26px); } /* ↓ меньше вправо */
+  100% { transform: translate(0,0); }
 }
 
-/* ---------- BUTTONS ---------- */
-.buttons {
-  padding: 10px 16px 28px;
-}
-
+/* ===== BUTTONS ===== */
 .btn {
   width: 100%;
-  padding: 16px;
-  margin-bottom: 12px;
-  border-radius: 18px;
   border: none;
-  font-size: 17px;
-  font-weight: 700;
-  background: #ffffff;
-  color: #4b3bd6;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  border-radius: 18px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  cursor: pointer;
 }
 
-.btn.secondary {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
+.btn-main {
+  background: #ffffff;
+  color: #5a3bd4;
 }
+
+.btn-sec {
+  background: #6b5cff;
+  color: #ffffff;
+}
+
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<div class="header">
-  <div class="logo">🚀 FriendPortal</div>
-  <div class="subtitle">💎 Earn TON by inviting users</div>
-  <div class="features">
-    ⚡ Fast payouts<br>
-    🔒 Secure TON payments
+  <div class="header">
+    <div class="title">🚀 FriendPortal</div>
+    <div class="subtitle">💎 Earn TON by inviting users</div>
+    <div class="subline">⚡ Fast payouts</div>
+    <div class="subline">🔒 Secure TON payments</div>
   </div>
-</div>
 
-<div class="coins-box">
-  <img src="coin1.png" class="coin coin1">
-  <img src="coin13.png" class="coin coin13">
-  <img src="coin94.png" class="coin coin94">
-</div>
+  <div class="coins-box">
+    <img src="coin1.png"  class="coin coin1">
+    <img src="coin13.png" class="coin coin13">
+    <img src="coin94.png" class="coin coin94">
+  </div>
 
-<div class="buttons">
-  <button class="btn">👥 Invite users</button>
-  <button class="btn secondary">💰 Balance</button>
-  <button class="btn secondary">💸 Withdraw</button>
-  <button class="btn secondary">📊 Statistics</button>
-  <button class="btn secondary">ℹ️ How it works</button>
-  <button class="btn secondary">🔒 Activate access</button>
-</div>
+  <button class="btn btn-main">👥 Invite users</button>
+  <button class="btn btn-sec">💰 Balance</button>
+  <button class="btn btn-sec">💸 Withdraw</button>
+  <button class="btn btn-sec">📊 Statistics</button>
+  <button class="btn btn-sec">ℹ️ How it works</button>
+  <button class="btn btn-sec">🔒 Activate access</button>
 
+</div>
 </body>
 </html>
