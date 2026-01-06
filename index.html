@@ -18,7 +18,7 @@ html, body {
 /* ===== HEADER ===== */
 .header {
   text-align: center;
-  padding: 26px 16px 8px;
+  padding: 18px 16px 4px; /* ⬅️ УМЕНЬШИЛ */
   color: white;
 }
 
@@ -39,13 +39,12 @@ html, body {
 }
 
 .subtitle {
-  margin-top: 6px;
+  margin-top: 4px; /* ⬅️ ближе */
   font-size: 15px;
-  opacity: 0.95;
 }
 
 .features {
-  margin-top: 6px;
+  margin-top: 4px; /* ⬅️ ближе */
   font-size: 14px;
   line-height: 1.4;
 }
@@ -53,20 +52,20 @@ html, body {
 /* ===== COINS AREA ===== */
 #coinArea {
   position: relative;
-  height: 200px;
-  margin-top: 10px;
+  height: 170px; /* ⬅️ БЫЛО 210 */
+  margin-top: 0; /* ⬅️ УБРАЛ ПУСТОТУ */
 }
 
 .coin {
   position: absolute;
-  width: 96px;
+  width: 120px; /* ⬅️ УВЕЛИЧИЛ ×1.2 */
   pointer-events: none;
   will-change: transform;
 }
 
 /* ===== BUTTONS ===== */
 .buttons {
-  padding: 12px 16px 30px;
+  padding: 10px 16px 30px;
 }
 
 .btn {
@@ -134,14 +133,13 @@ html, body {
   <button class="btn">🔒 Activate access</button>
 </div>
 
-<!-- HOW IT WORKS -->
 <div class="modal" id="howModal" onclick="this.style.display='none'">
   <div class="modal-content" onclick="event.stopPropagation()">
     <h3>How it works</h3>
     <p>
       Invite friends using your referral link.<br>
       They join → you earn TON rewards.<br>
-      More levels → more income.
+      Multi-level system increases profit.
     </p>
   </div>
 </div>
@@ -154,12 +152,14 @@ function animateCoin(el, zone, speedMin, speedVar) {
   const areaH = area.clientHeight;
 
   function move() {
-    const x = zone.from * areaW + Math.random() * (zone.to - zone.from) * areaW;
-    const y = 20 + Math.random() * (areaH - 60);
+    const minY = 0;                 // ⬅️ СРАЗУ ПОД ТЕКСТОМ
+    const maxY = areaH - 120;       // ⬅️ НЕ ТОНУТ ВНИЗ
 
+    const y = minY + Math.random() * (maxY - minY);
+    const x = zone.from * areaW + Math.random() * (zone.to - zone.from) * areaW;
     const duration = speedMin + Math.random() * speedVar;
 
-    el.style.transition = `transform ${duration}ms ease-in-out`;
+    el.style.transition = `transform ${duration}ms cubic-bezier(.4,0,.2,1)`;
     el.style.transform = `translate(${x}px, ${y}px)`;
 
     setTimeout(move, duration);
@@ -167,23 +167,19 @@ function animateCoin(el, zone, speedMin, speedVar) {
   move();
 }
 
-/* зоны полёта */
-animateCoin(coin1,  {from:0.05, to:0.30}, 1800, 1200);
-animateCoin(coin13, {from:0.35, to:0.60}, 1400, 1000);
-animateCoin(coin94, {from:0.65, to:0.90}, 2000, 1500);
+/* зоны — не кучкуются */
+animateCoin(coin1,  {from:0.04, to:0.28}, 1600, 1200);
+animateCoin(coin13, {from:0.36, to:0.58}, 1300, 1000);
+animateCoin(coin94, {from:0.66, to:0.92}, 1800, 1400);
 
-/* actions */
 function openHow() {
   document.getElementById("howModal").style.display = "flex";
 }
 
 function invite() {
   if (window.Telegram?.WebApp) {
-    Telegram.WebApp.shareUrl(
-      Telegram.WebApp.initDataUnsafe?.user?.username
-        ? `https://t.me/${Telegram.WebApp.initDataUnsafe.user.username}`
-        : location.href,
-      "Join FriendPortal and earn TON!"
+    Telegram.WebApp.openTelegramLink(
+      "https://t.me/share/url?text=Join%20FriendPortal%20and%20earn%20TON!"
     );
   } else {
     alert("Open inside Telegram");
