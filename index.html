@@ -5,15 +5,14 @@
   <title>FriendPortal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #4b1fb8, #6d3cff);
-      color: white;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+      background: linear-gradient(135deg, #5a2fd6, #7b4cff);
+      color: #fff;
       text-align: center;
     }
 
@@ -21,70 +20,87 @@
       padding: 24px;
     }
 
-    h1 {
-      margin-top: 20px;
-      font-size: 28px;
-    }
-
     .card {
-      margin-top: 24px;
-      padding: 20px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.15);
       border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
     .btn {
-      margin-top: 14px;
-      padding: 14px;
       width: 100%;
-      font-size: 16px;
+      padding: 14px;
+      margin-top: 12px;
       border-radius: 12px;
       border: none;
-      background: #ffffff;
-      color: #4b1fb8;
-      font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    .btn.secondary {
-      background: rgba(255,255,255,0.15);
-      color: white;
+    .btn-main {
+      background: #fff;
+      color: #5a2fd6;
+      font-weight: bold;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
+
 <body>
+<div class="container">
 
-  <div class="container">
-    <h1>🚀 FriendPortal</h1>
-    <p>Earn TON by inviting users</p>
+  <h1 id="title">🚀 FriendPortal</h1>
+  <p id="subtitle">Earn TON by inviting users</p>
 
-    <div class="card">
-      <p>💎 Referral rewards</p>
-      <p>⚡ Fast & automated payouts</p>
-      <p>🔐 Secure TON payments</p>
-    </div>
-
-    <button class="btn" onclick="invite()">👥 Invite users</button>
-    <button class="btn secondary" onclick="balance()">💰 Balance</button>
-    <button class="btn secondary" onclick="withdraw()">💸 Withdraw</button>
+  <div class="card" id="features">
+    <p>💎 Referral rewards</p>
+    <p>⚡ Fast & automated payouts</p>
+    <p>🔐 Secure TON payments</p>
   </div>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+  <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
+  <button class="btn btn-secondary" onclick="send('balance')">💰 Balance</button>
+  <button class="btn btn-secondary" onclick="send('withdraw')">💸 Withdraw</button>
+  <button class="btn btn-secondary" onclick="send('stats')">📊 Statistics</button>
+  <button class="btn btn-secondary" onclick="toggleHow()">ℹ️ How it works</button>
 
-    function invite() {
-      tg.showAlert("Invite screen will be here");
-    }
+  <div class="card hidden" id="how">
+    <p>1️⃣ Invite users via your referral link</p>
+    <p>2️⃣ Earn TON for each activation</p>
+    <p>3️⃣ Withdraw anytime</p>
+  </div>
 
-    function balance() {
-      tg.showAlert("Balance screen will be here");
-    }
+</div>
 
-    function withdraw() {
-      tg.showAlert("Withdraw screen will be here");
-    }
-  </script>
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+
+  function send(action) {
+    tg.sendData(action);
+  }
+
+  function invite() {
+    const uid = tg.initDataUnsafe?.user?.id || "0";
+    const link = `https://t.me/FriendPortalBot?start=${uid}`;
+
+    tg.openTelegramLink(
+      `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Earn TON with me 🚀`
+    );
+  }
+
+  function toggleHow() {
+    document.getElementById("how").classList.toggle("hidden");
+  }
+</script>
 
 </body>
 </html>
