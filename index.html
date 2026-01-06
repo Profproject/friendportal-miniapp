@@ -24,7 +24,7 @@ body {
 /* ================= COINS ================= */
 .coin {
   position: absolute;
-  width: 260px;              /* ТВОЙ РАЗМЕР */
+  width: 260px;
   height: 260px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
@@ -41,12 +41,12 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  z-index: 5;
+  z-index: 10;
 }
 
 .btn {
   width: 75%;
-  padding: 25px 0;
+  padding: 24px 0;
   border-radius: 16px;
   text-align: center;
   font-size: 18px;
@@ -73,7 +73,7 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 20;
 }
 
 .modal-content {
@@ -84,81 +84,64 @@ body {
   width: 88%;
   max-width: 420px;
 }
-
-.modal-content h2 {
-  margin-top: 0;
-}
-
-.close {
-  margin-top: 14px;
-  text-align: center;
-  cursor: pointer;
-  color: #6c6cff;
-}
 </style>
 </head>
 
 <body>
 
 <!-- ================= COINS ================= -->
-<img src="coin1.png"   class="coin">
-<img src="coin13.png"  class="coin">
-<img src="coin94.png"  class="coin">
+<img src="coin1.png" class="coin">
+<img src="coin13.png" class="coin">
+<img src="coin94.png" class="coin">
 <img src="coin108.png" class="coin">
 <img src="coin216.png" class="coin">
 
 <!-- ================= BUTTONS ================= -->
 <div class="buttons">
-  <div class="btn white" data-action="invite">👥 Invite users</div>
-  <div class="btn blue"  data-action="balance">💰 Balance</div>
-  <div class="btn blue"  data-action="withdraw">💸 Withdraw</div>
-  <div class="btn blue"  data-action="stats">📊 Statistics</div>
-  <div class="btn blue"  id="howBtn">ℹ️ How it works</div>
-  <div class="btn blue"  data-action="activate">🔒 Activate access</div>
-  <div class="btn blue"  data-action="ads">📣 For advertisers</div>
+  <div class="btn white" onclick="invite()">👥 Invite users</div>
+  <div class="btn blue" onclick="send('balance')">💰 Balance</div>
+  <div class="btn blue" onclick="send('withdraw')">💸 Withdraw</div>
+  <div class="btn blue" onclick="send('stats')">📊 Statistics</div>
+  <div class="btn blue" onclick="openHow()">ℹ️ How it works</div>
+  <div class="btn blue" onclick="send('activate')">🔒 Activate access</div>
+  <div class="btn blue">📣 For advertisers</div>
 </div>
 
 <!-- ================= MODAL ================= -->
 <div class="modal" id="howModal">
   <div class="modal-content">
-    <h2>ℹ️ How FriendPortal works</h2>
-
-    <p>Invite users and earn TON automatically.</p>
-
-    <p><b>Level 1 referral</b><br>
-    +0.5 TON for each invited user</p>
-
-    <p><b>Level 2 referral</b><br>
-    +0.25 TON when your referral invites someone</p>
-
-    <div class="close" id="closeHow">Close</div>
+    <h2>How it works</h2>
+    <p>Invite users and earn TON.</p>
+    <p>Level 1: +0.5 TON</p>
+    <p>Level 2: +0.25 TON</p>
+    <div onclick="closeHow()" style="margin-top:12px;color:#6c6cff;text-align:center;">Close</div>
   </div>
 </div>
 
 <script>
-/* ================= TELEGRAM ================= */
 const tg = Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-/* ================= BUTTON EVENTS ================= */
-document.querySelectorAll(".btn").forEach(btn => {
-  const action = btn.dataset.action;
-  if (!action) return;
+/* 🔥 ГЛАВНОЕ ИЗМЕНЕНИЕ */
+function send(action) {
+  tg.sendData(JSON.stringify({ action }));
+}
 
-  btn.addEventListener("click", () => {
-    tg.sendData(action);
-  });
-});
+/* 🔥 INVITE РАБОТАЕТ ЧЕРЕЗ TG */
+function invite() {
+  const link = "https://t.me/friendportal_bot";
+  tg.openTelegramLink(
+    "https://t.me/share/url?url=" + encodeURIComponent(link)
+  );
+}
 
-/* ================= MODAL ================= */
-document.getElementById("howBtn").addEventListener("click", () => {
+function openHow() {
   document.getElementById("howModal").style.display = "flex";
-});
-
-document.getElementById("closeHow").addEventListener("click", () => {
+}
+function closeHow() {
   document.getElementById("howModal").style.display = "none";
-});
+}
 
 /* ================= COIN ANIMATION ================= */
 const coins = document.querySelectorAll(".coin");
@@ -168,32 +151,23 @@ const H = window.innerHeight;
 const data = [...coins].map(() => ({
   x: Math.random() * (W - 260),
   y: Math.random() * (H - 260),
-  vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vx: (Math.random() * 3 + 1) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 3 + 1) * (Math.random() < 0.5 ? -1 : 1),
 }));
 
 function animate() {
   coins.forEach((coin, i) => {
     const d = data[i];
-
     d.x += d.vx;
     d.y += d.vy;
 
-    if (d.x <= -20 || d.x >= W - 260) d.vx *= -1;
-    if (d.y <= -55 || d.y >= H - 260) d.vy *= -1;
-
-    d.vx += (Math.random() - 0.5) * 0.05;
-    d.vy += (Math.random() - 0.5) * 0.05;
-
-    d.vx = Math.max(-5, Math.min(5, d.vx));
-    d.vy = Math.max(-5, Math.min(5, d.vy));
+    if (d.x <= 0 || d.x >= W - 260) d.vx *= -1;
+    if (d.y <= 0 || d.y >= H - 260) d.vy *= -1;
 
     coin.style.transform = `translate(${d.x}px, ${d.y}px)`;
   });
-
   requestAnimationFrame(animate);
 }
-
 animate();
 </script>
 
