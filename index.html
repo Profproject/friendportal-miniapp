@@ -24,7 +24,7 @@ body {
 /* ================= COINS ================= */
 .coin {
   position: absolute;
-  width: 260px;
+  width: 260px;              /* ТВОЙ РАЗМЕР */
   height: 260px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
@@ -52,6 +52,7 @@ body {
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+  user-select: none;
 }
 
 .btn.white {
@@ -108,13 +109,13 @@ body {
 
 <!-- ================= BUTTONS ================= -->
 <div class="buttons">
-  <div class="btn white" onclick="send('invite')">👥 Invite users</div>
-  <div class="btn blue"  onclick="send('balance')">💰 Balance</div>
-  <div class="btn blue"  onclick="send('withdraw')">💸 Withdraw</div>
-  <div class="btn blue"  onclick="send('stats')">📊 Statistics</div>
-  <div class="btn blue"  onclick="openHow()">ℹ️ How it works</div>
-  <div class="btn blue"  onclick="send('activate')">🔒 Activate access</div>
-  <div class="btn blue"  onclick="send('ads')">📣 For advertisers</div>
+  <div class="btn white" data-action="invite">👥 Invite users</div>
+  <div class="btn blue"  data-action="balance">💰 Balance</div>
+  <div class="btn blue"  data-action="withdraw">💸 Withdraw</div>
+  <div class="btn blue"  data-action="stats">📊 Statistics</div>
+  <div class="btn blue"  id="howBtn">ℹ️ How it works</div>
+  <div class="btn blue"  data-action="activate">🔒 Activate access</div>
+  <div class="btn blue"  data-action="ads">📣 For advertisers</div>
 </div>
 
 <!-- ================= MODAL ================= -->
@@ -130,26 +131,34 @@ body {
     <p><b>Level 2 referral</b><br>
     +0.25 TON when your referral invites someone</p>
 
-    <div class="close" onclick="closeHow()">Close</div>
+    <div class="close" id="closeHow">Close</div>
   </div>
 </div>
 
 <script>
+/* ================= TELEGRAM ================= */
 const tg = Telegram.WebApp;
 tg.ready();
+tg.expand();
 
-/* SEND TO BOT */
-function send(action) {
-  tg.sendData(action);
-}
+/* ================= BUTTON EVENTS ================= */
+document.querySelectorAll(".btn").forEach(btn => {
+  const action = btn.dataset.action;
+  if (!action) return;
 
-/* MODAL */
-function openHow() {
+  btn.addEventListener("click", () => {
+    tg.sendData(action);
+  });
+});
+
+/* ================= MODAL ================= */
+document.getElementById("howBtn").addEventListener("click", () => {
   document.getElementById("howModal").style.display = "flex";
-}
-function closeHow() {
+});
+
+document.getElementById("closeHow").addEventListener("click", () => {
   document.getElementById("howModal").style.display = "none";
-}
+});
 
 /* ================= COIN ANIMATION ================= */
 const coins = document.querySelectorAll(".coin");
