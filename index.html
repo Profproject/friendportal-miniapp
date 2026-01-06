@@ -2,101 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
 }
 
 .app {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: url("bg.png") center top / cover no-repeat;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url("bg.png") no-repeat center top;
+  background-size: cover;
 }
 
-/* === COINS === */
+/* ===== COINS ===== */
 .coin {
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    pointer-events: none;
-    will-change: transform;
+  position: absolute;
+  width: 104px; /* +30% */
+  height: 104px;
+  pointer-events: none;
+  user-select: none;
 }
 
-/* === BUTTONS === */
+.coin img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== BUTTONS ===== */
 .buttons {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 92%;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 .btn {
-    height: 56px;
-    border-radius: 14px;
-    border: none;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
+  width: 70%;
+  max-width: 340px;
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
 }
 
-.btn.invite {
-    background: #fff;
-    color: #333;
+.btn.white {
+  background: #fff;
+  color: #000;
 }
 
-.btn.main {
-    background: #6f6af8;
-    color: #fff;
+.btn.purple {
+  background: #6f6cf6;
+  color: #fff;
 }
 
-/* === MODAL === */
+/* ===== MODAL ===== */
 .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
 .modal-content {
-    width: 86%;
-    background: #15152a;
-    border-radius: 18px;
-    padding: 20px;
-    color: #fff;
+  background: #1c1c1e;
+  color: #fff;
+  padding: 22px;
+  width: 80%;
+  border-radius: 16px;
+  font-size: 15px;
 }
 
-.modal-content h2 {
-    margin-top: 0;
+.modal-content h3 {
+  margin-top: 0;
 }
 
-.modal-content button {
-    margin-top: 16px;
-    width: 100%;
-    height: 44px;
-    border-radius: 10px;
-    border: none;
-    background: #6f6af8;
-    color: #fff;
-    font-size: 16px;
+.modal button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -104,89 +109,84 @@ html, body {
 <body>
 <div class="app" id="app">
 
-    <!-- COINS -->
-    <img src="coin1.png" class="coin">
-    <img src="coin13.png" class="coin">
-    <img src="coin94.png" class="coin">
-    <img src="coin108.png" class="coin">
-    <img src="coin216.png" class="coin">
+  <!-- Coins -->
+  <div class="coin"><img src="coin1.png"></div>
+  <div class="coin"><img src="coin13.png"></div>
+  <div class="coin"><img src="coin94.png"></div>
+  <div class="coin"><img src="coin108.png"></div>
+  <div class="coin"><img src="coin216.png"></div>
 
-    <!-- BUTTONS -->
-    <div class="buttons">
-        <button class="btn invite" id="inviteBtn">👥 Invite users</button>
-        <button class="btn main">💰 Balance</button>
-        <button class="btn main">💸 Withdraw</button>
-        <button class="btn main">📊 Statistics</button>
-        <button class="btn main" id="howBtn">ℹ️ How it works</button>
-        <button class="btn main">🔒 Activate access</button>
-    </div>
+  <!-- Buttons -->
+  <div class="buttons">
+    <div class="btn white" id="invite">👥 Invite users</div>
+    <div class="btn purple">💰 Balance</div>
+    <div class="btn purple">💸 Withdraw</div>
+    <div class="btn purple">📊 Statistics</div>
+    <div class="btn purple" id="how">ℹ️ How it works</div>
+    <div class="btn purple">🔐 Activate access</div>
+    <div class="btn purple">📢 For advertisers</div>
+  </div>
 </div>
 
-<!-- HOW IT WORKS MODAL -->
-<div class="modal" id="howModal">
-    <div class="modal-content">
-        <h2>How it works</h2>
-        <p>
-            Invite users and earn TON rewards.<br><br>
-            🔹 Level 1 referral: <b>+0.5 TON</b><br>
-            🔹 Level 2 referral: <b>+0.25 TON</b><br><br>
-            Activation is required to protect the system from multi-accounts and to enable successful withdrawals.<br><br>
-            Minimum withdrawal: <b>5 TON</b>
-        </p>
-        <button onclick="closeHow()">OK</button>
-    </div>
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>How it works</h3>
+    <p>
+      Invite users and earn TON rewards.<br><br>
+      • You get <b>+0.5 TON</b> for each invited user.<br>
+      • If your referral invites another user, you earn <b>0.25 TON</b> (2nd level).<br><br>
+      To withdraw funds, activation is required.<br>
+      Activation costs <b>1 TON</b> and protects the system from multi-accounts
+      and abuse. It also unlocks withdrawals.
+    </p>
+    <button onclick="closeModal()">Close</button>
+  </div>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-/* === INVITE === */
-document.getElementById("inviteBtn").onclick = () => {
-    tg.openTelegramLink(
-        `https://t.me/share/url?url=${encodeURIComponent("https://t.me/friendportal_bot")}&text=Join%20FriendPortal%20and%20earn%20TON`
-    );
+/* ===== INVITE ===== */
+document.getElementById("invite").onclick = () => {
+  const link = "https://t.me/friendportal_bot";
+  tg.openTelegramLink(
+    `https://t.me/share/url?url=${encodeURIComponent(link)}`
+  );
 };
 
-/* === HOW IT WORKS === */
-const howModal = document.getElementById("howModal");
-document.getElementById("howBtn").onclick = () => howModal.style.display = "flex";
-function closeHow() { howModal.style.display = "none"; }
-
-/* === COIN PHYSICS === */
-const coins = document.querySelectorAll(".coin");
-const app = document.getElementById("app");
-
-const coinData = [];
-
-coins.forEach(coin => {
-    coinData.push({
-        el: coin,
-        x: Math.random() * (window.innerWidth - 100),
-        y: Math.random() * (window.innerHeight * 0.6),
-        vx: (Math.random() * 1.2 + 0.4) * (Math.random() > 0.5 ? 1 : -1),
-        vy: (Math.random() * 1.2 + 0.4) * (Math.random() > 0.5 ? 1 : -1)
-    });
-});
-
-function animate() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-
-    coinData.forEach(c => {
-        c.x += c.vx;
-        c.y += c.vy;
-
-        if (c.x <= 0 || c.x >= w - 90) c.vx *= -1;
-        if (c.y <= 0 || c.y >= h - 90) c.vy *= -1;
-
-        c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
-    });
-
-    requestAnimationFrame(animate);
+/* ===== MODAL ===== */
+document.getElementById("how").onclick = () => {
+  document.getElementById("modal").style.display = "flex";
+};
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
 
-animate();
+/* ===== COIN ANIMATION ===== */
+const coins = document.querySelectorAll(".coin");
+const W = window.innerWidth;
+const H = window.innerHeight * 0.55; // ABOVE BUTTONS
+
+coins.forEach(coin => {
+  let x = Math.random() * (W - 120);
+  let y = Math.random() * (H - 120);
+  let vx = (Math.random() * 1.4 + 0.4) * (Math.random() > 0.5 ? 1 : -1);
+  let vy = (Math.random() * 1.4 + 0.4) * (Math.random() > 0.5 ? 1 : -1);
+
+  function move() {
+    x += vx;
+    y += vy;
+
+    if (x < 0 || x > W - 110) vx *= -1;
+    if (y < 0 || y > H - 110) vy *= -1;
+
+    coin.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(move);
+  }
+  move();
+});
 </script>
 </body>
 </html>
