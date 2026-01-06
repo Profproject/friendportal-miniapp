@@ -1,153 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body {
+html, body {
   margin: 0;
-  background: url("bg.png") center top / cover no-repeat fixed;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+  background: url("bg.jpg") no-repeat top center;
+  background-size: cover;
+  overflow-x: hidden;
   color: #fff;
 }
 
-/* ===== MAIN WRAPPER ===== */
 .app {
-  max-width: 480px;
-  margin: 0 auto;
-  padding-top: 190px; /* под надпись FriendPortal в картинке */
-}
-
-/* ===== TEXTS ===== */
-.info {
-  text-align: center;
-  margin-bottom: 6px;
-  font-weight: 700;
-}
-
-.info .line {
-  font-size: 18px;
-  margin: 4px 0;
-}
-
-.line.earn { color: #6fd3ff; }
-.line.fast { color: #ffd86f; }
-.line.secure { color: #8dff9c; }
-
-.line span {
-  font-size: 20px;
-  margin-right: 6px;
+  padding: 20px;
 }
 
 /* ===== COINS ===== */
-.coins {
-  position: relative;
-  height: 170px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.coins-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 260px; /* ВЕРХНЯЯ ЗОНА */
   pointer-events: none;
+  overflow: hidden;
 }
 
 .coin {
   position: absolute;
-  width: 110px; /* увеличено */
-  will-change: transform;
+  width: 90px;
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(40px, -30px); }
+  50%  { transform: translate(-30px, 20px); }
+  75%  { transform: translate(30px, 40px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* ===== BUTTONS ===== */
+.buttons {
+  margin-top: 280px;
+}
+
 .btn {
-  width: calc(100% - 32px);
-  margin: 10px 16px;
-  padding: 14px;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 14px;
   border-radius: 16px;
   border: none;
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.primary {
+.btn.primary {
   background: #ffffff;
-  color: #4b4bff;
+  color: #333;
 }
 
-.secondary {
-  background: #6c63ff;
+.btn.secondary {
+  background: #6b63ff;
   color: #fff;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background: #1b1b2b;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  color: #fff;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.close {
+  margin-top: 16px;
+  background: #6b63ff;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 12px;
+  width: 100%;
 }
 </style>
 </head>
 
 <body>
+<div class="coins-layer">
+  <img src="coin1.png" class="coin" style="top:40px; left:10%; animation-duration:14s;">
+  <img src="coin13.png" class="coin" style="top:90px; left:45%; animation-duration:18s;">
+  <img src="coin94.png" class="coin" style="top:50px; left:75%; animation-duration:16s;">
+</div>
+
 <div class="app">
-
-  <!-- TEXT -->
-  <div class="info">
-    <div class="line earn"><span>💎</span>Earn TON by inviting users</div>
-    <div class="line fast"><span>⚡</span>Fast payouts</div>
-    <div class="line secure"><span>🔒</span>Secure TON payments</div>
+  <div class="buttons">
+    <button class="btn primary" onclick="inviteUsers()">👥 Invite users</button>
+    <button class="btn secondary">💰 Balance</button>
+    <button class="btn secondary">💸 Withdraw</button>
+    <button class="btn secondary">📊 Statistics</button>
+    <button class="btn secondary" onclick="openHow()">ℹ️ How it works</button>
+    <button class="btn secondary">🔒 Activate access</button>
   </div>
+</div>
 
-  <!-- COINS ABOVE TITLE -->
-  <div class="coins">
-    <img src="coin1.png" class="coin" id="c1">
-    <img src="coin13.png" class="coin" id="c13">
-    <img src="coin94.png" class="coin" id="c94">
+<!-- MODAL -->
+<div class="modal" id="howModal">
+  <div class="modal-content">
+    <h2>How FriendPortal works</h2>
+
+    <p><strong>Invite users and earn TON automatically.</strong></p>
+
+    <ul>
+      <li>🔹 <strong>+0.5 TON</strong> for every direct referral</li>
+      <li>🔹 <strong>+0.25 TON</strong> for second-level referrals</li>
+    </ul>
+
+    <p><strong>Why activation is required?</strong></p>
+    <ul>
+      <li>✔ Protection against multi-account abuse</li>
+      <li>✔ Confirms a real TON wallet</li>
+      <li>✔ Required for successful withdrawals</li>
+    </ul>
+
+    <p>Activation cost: <strong>1 TON (one-time)</strong></p>
+
+    <button class="close" onclick="closeHow()">Close</button>
   </div>
-
-  <!-- BUTTONS -->
-  <button class="btn primary" onclick="invite()">👥 Invite users</button>
-  <button class="btn secondary">💰 Balance</button>
-  <button class="btn secondary">💸 Withdraw</button>
-  <button class="btn secondary">📊 Statistics</button>
-  <button class="btn secondary" onclick="howItWorks()">ℹ️ How it works</button>
-  <button class="btn secondary">🔒 Activate access</button>
-
 </div>
 
 <script>
-const tg = Telegram.WebApp;
-tg.ready();
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-/* ===== INVITE ===== */
-function invite() {
-  tg.openTelegramLink(
-    "https://t.me/share/url?url=https://t.me/YOUR_BOT&text=Join FriendPortal and earn TON"
-  );
+function inviteUsers() {
+  const link = "https://t.me/share/url?url=https://t.me/YOUR_BOT_USERNAME&text=Join%20FriendPortal%20and%20earn%20TON!";
+  tg.openTelegramLink(link);
 }
 
-/* ===== HOW IT WORKS ===== */
-function howItWorks() {
-  tg.showPopup({
-    title: "How it works",
-    message: "Invite users, earn TON rewards, fast payouts and secure payments.",
-    buttons: [{type: "ok"}]
-  });
+function openHow() {
+  document.getElementById("howModal").style.display = "flex";
 }
 
-/* ===== RANDOM COIN MOTION ===== */
-const coins = [
-  { el: c1, x: 30, y: 40, vx: 0.25, vy: 0.2 },
-  { el: c13, x: 150, y: 20, vx: -0.22, vy: 0.26 },
-  { el: c94, x: 260, y: 50, vx: 0.2, vy: -0.24 }
-];
-
-function animate() {
-  coins.forEach(c => {
-    c.x += c.vx;
-    c.y += c.vy;
-
-    if (c.x < 0 || c.x > 300) c.vx *= -1;
-    if (c.y < 0 || c.y > 90) c.vy *= -1; // ограничили ВЫСОТУ
-
-    c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
-  });
-  requestAnimationFrame(animate);
+function closeHow() {
+  document.getElementById("howModal").style.display = "none";
 }
-
-animate();
 </script>
 </body>
 </html>
