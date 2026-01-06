@@ -169,8 +169,9 @@ tg.ready();
 
 /* SEND DATA TO BOT */
 function send(action) {
-  tg.sendData(action);
+  tg.sendData(JSON.stringify({ action: action }));
 }
+
 
 /* INVITE */
 function invite() {
