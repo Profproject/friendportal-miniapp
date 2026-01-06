@@ -186,7 +186,7 @@ const SCREEN_H = window.innerHeight;
 
 const coinsData = Array.from(coins).map(() => ({
   x: Math.random() * (SCREEN_W - 150),
-  y: Math.random() * (SCREEN_H * 0.75),
+  y: Math.random() * (SCREEN_H * 0.5),
   vx: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
   vy: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
 }));
@@ -198,8 +198,8 @@ function animate() {
     d.x += d.vx;
     d.y += d.vy;
 
-    if (d.x <= 0 || d.x >= SCREEN_W - 130) d.vx *= -1;
-    if (d.y <= -20 || d.y >= SCREEN_H - 150) d.vy *= -1;
+    if (d.x <= -20 || d.x >= SCREEN_W - 130) d.vx *= -1;
+    if (d.y <= -50 || d.y >= SCREEN_H - 150) d.vy *= -1;
 
     d.vx += (Math.random() - 0.5) * 0.05;
     d.vy += (Math.random() - 0.5) * 0.05;
