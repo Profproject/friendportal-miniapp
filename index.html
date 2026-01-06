@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FriendPortal</title>
 
 <style>
@@ -10,9 +10,8 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #000;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .app {
@@ -23,51 +22,43 @@ html, body {
 }
 
 /* ================= COINS ================= */
-.coin-layer {
+
+.coins-layer {
   position: absolute;
   inset: 0;
-  z-index: 5; /* ВАЖНО: выше кнопок */
+  z-index: 2; /* НАД кнопками */
   pointer-events: none;
 }
 
 .coin {
   position: absolute;
-  width: 90px;
-  height: 90px;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  animation: float linear infinite;
-}
-
-@keyframes float {
-  from {
-    transform: translate(var(--x1), var(--y1));
-  }
-  to {
-    transform: translate(var(--x2), var(--y2));
-  }
+  width: 130px;   /* ⬅️ увеличено ~2.5x */
+  height: 130px;
+  will-change: transform;
 }
 
 /* ================= BUTTONS ================= */
+
 .buttons {
   position: absolute;
-  top: 38%;
+  top: 42%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  z-index: 3;
+  z-index: 1;
 }
 
 .btn {
-  width: 65%; /* ← уже на ~35% */
+  width: 45%;              /* ⬅️ как ты просил */
   padding: 14px 0;
   border-radius: 14px;
   text-align: center;
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
+  user-select: none;
 }
 
 .btn.white {
@@ -85,17 +76,23 @@ html, body {
 <body>
 <div class="app">
 
-  <!-- MONETS -->
-  <div class="coin-layer" id="coins"></div>
+  <!-- COINS -->
+  <div class="coins-layer" id="coinsLayer">
+    <img src="coin1.png" class="coin">
+    <img src="coin13.png" class="coin">
+    <img src="coin94.png" class="coin">
+    <img src="coin108.png" class="coin">
+    <img src="coin216.png" class="coin">
+  </div>
 
   <!-- BUTTONS -->
   <div class="buttons">
-    <div class="btn white" onclick="invite()">👥 Invite users</div>
+    <div class="btn white" id="inviteBtn">👥 Invite users</div>
     <div class="btn blue">💰 Balance</div>
     <div class="btn blue">💸 Withdraw</div>
     <div class="btn blue">📊 Statistics</div>
     <div class="btn blue">ℹ️ How it works</div>
-    <div class="btn blue">🔐 Activate access</div>
+    <div class="btn blue">🔒 Activate access</div>
     <div class="btn blue">📣 For advertisers</div>
   </div>
 
@@ -103,53 +100,56 @@ html, body {
 
 <script>
 /* ================= INVITE ================= */
-function invite() {
+document.getElementById("inviteBtn").onclick = () => {
   const bot = "friendportal_bot";
-  const text = "Join FriendPortal and earn TON 💎";
-  const url = `https://t.me/${bot}`;
-  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
-}
+  const url = `https://t.me/${bot}?start=ref`;
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.openTelegramLink(url);
+  } else {
+    window.open(url, "_blank");
+  }
+};
 
 /* ================= COINS LOGIC ================= */
-const coinImages = [
-  "coin1.png",
-  "coin13.png",
-  "coin94.png",
-  "coin108.png",
-  "coin216.png"
-];
 
-const layer = document.getElementById("coins");
-const W = window.innerWidth;
-const H = window.innerHeight;
+const coins = [...document.querySelectorAll(".coin")];
 
-coinImages.forEach(src => {
-  const coin = document.createElement("img");
-  coin.src = src;
-  coin.className = "coin";
+const SCREEN_W = window.innerWidth;
+const SCREEN_H = window.innerHeight;
 
-  const startX = Math.random() * (W - 100);
-  const startY = Math.random() * (H * 0.6);
+const coinsData = coins.map(() => ({
+  x: Math.random() * (SCREEN_W - 150),
+  y: Math.random() * (SCREEN_H * 0.45), // летают ВЕРХНЯЯ ЧАСТЬ
+  vx: (Math.random() * 2 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 2 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+}));
 
-  const endX = Math.random() * (W - 100);
-  const endY = Math.random() * (H * 0.6);
+function animate() {
+  coins.forEach((coin, i) => {
+    const d = coinsData[i];
 
-  const duration = 12 + Math.random() * 10;
+    d.x += d.vx;
+    d.y += d.vy;
 
-  coin.style.left = startX + "px";
-  coin.style.top = startY + "px";
+    /* отражение от границ */
+    if (d.x <= 0 || d.x >= SCREEN_W - 130) d.vx *= -1;
+    if (d.y <= 0 || d.y >= SCREEN_H * 0.45) d.vy *= -1;
 
-  coin.style.setProperty("--x1", "0px");
-  coin.style.setProperty("--y1", "0px");
-  coin.style.setProperty("--x2", (endX - startX) + "px");
-  coin.style.setProperty("--y2", (endY - startY) + "px");
+    /* микро-рандом для "живости" */
+    d.vx += (Math.random() - 0.5) * 0.05;
+    d.vy += (Math.random() - 0.5) * 0.05;
 
-  coin.style.animationDuration = duration + "s";
-  coin.style.animationDirection = "alternate";
-  coin.style.animationIterationCount = "infinite";
+    /* ограничиваем скорость */
+    d.vx = Math.max(-4, Math.min(4, d.vx));
+    d.vy = Math.max(-4, Math.min(4, d.vy));
 
-  layer.appendChild(coin);
-});
+    coin.style.transform = `translate(${d.x}px, ${d.y}px)`;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
 </script>
 </body>
 </html>
