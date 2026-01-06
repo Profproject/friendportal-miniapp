@@ -1,173 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FriendPortal</title>
+  <meta charset="UTF-8" />
+  <title>FriendPortal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: url("bg.png") center top / cover no-repeat fixed;
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: url("bg.png") center / cover no-repeat fixed;
-  color: #fff;
-}
+    .content {
+      padding: 220px 16px 24px; /* место под надпись на картинке */
+      max-width: 480px;
+      margin: 0 auto;
+    }
 
-.container {
-  padding: 14px;
-}
+    .info {
+      text-align: center;
+      margin-bottom: 12px;
+      line-height: 1.35;
+      font-size: 15px;
+      font-weight: 500;
+    }
 
-/* ===== HEADER ===== */
-.header {
-  text-align: center;
-  margin-bottom: 4px; /* 🔽 меньше пустоты */
-}
+    .info div {
+      margin: 2px 0;
+    }
 
-.title {
-  font-size: 36px;
-  font-weight: 900;
-}
+    /* === MONETS === */
+    .coins-area {
+      position: relative;
+      height: 180px;
+      margin-bottom: 16px;
+      pointer-events: none;
+    }
 
-.rocket {
-  margin-right: 6px;
-  filter: none !important;
-  text-shadow: none !important;
-}
+    .coin {
+      position: absolute;
+      width: 84px; /* +20% */
+      will-change: transform;
+    }
 
-.brand {
-  background: linear-gradient(90deg,#ffcc66,#ff8844,#ffd27d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
+    /* === BUTTONS === */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-.subtitle {
-  margin-top: 2px;
-  font-size: 14px;
-  opacity: 0.95;
-}
+    .btn.primary {
+      background: #ffffff;
+      color: #4b4bff;
+    }
 
-.info {
-  margin-top: 4px;
-  font-size: 13px;
-}
+    .btn.secondary {
+      background: #6c63ff;
+      color: #fff;
+    }
 
-/* ===== COINS AREA ===== */
-.coins-area {
-  position: relative;
-  height: 150px; /* 🔽 срезано сверху */
-  margin: 6px 0 10px;
-  overflow: hidden;
-}
-
-/* ===== COINS ===== */
-.coin {
-  position: absolute;
-  width: 90px; /* ↑ увеличены */
-  pointer-events: none;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-/* Индивидуальные траектории */
-.coin1 {
-  left: 12%;
-  top: 30px;
-  animation: move1 7s infinite alternate;
-}
-
-.coin13 {
-  left: 38%;
-  top: 20px;
-  animation: move2 9s infinite alternate;
-}
-
-.coin94 {
-  left: 62%; /* ❌ не улетает вправо */
-  top: 35px;
-  animation: move3 8s infinite alternate;
-}
-
-/* ===== RANDOM BUT CONTROLLED ===== */
-@keyframes move1 {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(-30px, -25px); }
-}
-
-@keyframes move2 {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(25px, -30px); }
-}
-
-@keyframes move3 {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(20px, -20px); }
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  width: 100%;
-  padding: 14px;
-  margin: 8px 0;
-  border-radius: 14px;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  background: #6c63ff;
-}
-
-.btn.primary {
-  background: #fff;
-  color: #333;
-}
-</style>
+    .btn.lock {
+      background: #7a7a7a;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
 
-  <div class="header">
-    <div class="title">
-      <span class="rocket">🚀</span>
-      <span class="brand">FriendPortal</span>
+  <div class="content">
+
+    <!-- TEXT UNDER IMAGE TITLE -->
+    <div class="info">
+      <div>💎 Earn TON by inviting users</div>
+      <div>⚡ Fast payouts</div>
+      <div>🔒 Secure TON payments</div>
     </div>
 
-    <div class="subtitle">💎 Earn TON by inviting users</div>
-    <div class="info">⚡ Fast payouts</div>
-    <div class="info">🔒 Secure TON payments</div>
+    <!-- COINS -->
+    <div class="coins-area" id="coins">
+      <img src="coin1.png" class="coin" id="coin1">
+      <img src="coin13.png" class="coin" id="coin13">
+      <img src="coin94.png" class="coin" id="coin94">
+    </div>
+
+    <!-- BUTTONS -->
+    <button class="btn primary" onclick="invite()">👥 Invite users</button>
+    <button class="btn secondary">💰 Balance</button>
+    <button class="btn secondary">💸 Withdraw</button>
+    <button class="btn secondary">📊 Statistics</button>
+    <button class="btn secondary" onclick="howItWorks()">ℹ️ How it works</button>
+    <button class="btn lock">🔒 Activate access</button>
+
   </div>
-
-  <!-- COINS -->
-  <div class="coins-area">
-    <img src="coin1.png" class="coin coin1">
-    <img src="coin13.png" class="coin coin13">
-    <img src="coin94.png" class="coin coin94">
-  </div>
-
-  <!-- BUTTONS -->
-  <button class="btn primary" onclick="invite()">👥 Invite users</button>
-  <button class="btn">💰 Balance</button>
-  <button class="btn">💸 Withdraw</button>
-  <button class="btn">📊 Statistics</button>
-  <button class="btn">ℹ️ How it works</button>
-  <button class="btn">🔒 Activate access</button>
-
-</div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+  const tg = window.Telegram.WebApp;
+  tg.ready();
 
-function invite() {
-  tg.openTelegramLink(
-    "https://t.me/share/url?url=https://t.me/YOUR_BOT_USERNAME&text=Join%20FriendPortal%20and%20earn%20TON"
-  );
-}
+  function invite() {
+    tg.openTelegramLink(
+      `https://t.me/share/url?url=${encodeURIComponent("https://t.me/YOUR_BOT")}&text=${encodeURIComponent("Join FriendPortal and earn TON!")}`
+    );
+  }
+
+  function howItWorks() {
+    tg.showPopup({
+      title: "How it works",
+      message: "Invite friends, earn TON rewards, fast payouts, secure payments.",
+      buttons: [{type: "ok"}]
+    });
+  }
+
+  /* === RANDOM MOTION ENGINE === */
+  const coins = [
+    { el: document.getElementById("coin1"), x: 40, y: 80, vx: 0.3, vy: 0.25 },
+    { el: document.getElementById("coin13"), x: 160, y: 60, vx: -0.25, vy: 0.35 },
+    { el: document.getElementById("coin94"), x: 260, y: 90, vx: 0.2, vy: -0.3 }
+  ];
+
+  function animate() {
+    coins.forEach(c => {
+      c.x += c.vx;
+      c.y += c.vy;
+
+      if (c.x < 0 || c.x > 300) c.vx *= -1;
+      if (c.y < 20 || c.y > 140) c.vy *= -1;
+
+      c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 </script>
+
 </body>
 </html>
