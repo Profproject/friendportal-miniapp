@@ -24,10 +24,10 @@ body {
 /* ================= COINS ================= */
 .coin {
   position: absolute;
-  width: 260px;              /* 🔥 КРУПНЫЕ */
+  width: 260px;
   height: 260px;
-  aspect-ratio: 1 / 1;       /* 🔥 КРУГ */
-  object-fit: contain;       /* 🔥 НЕ ТЯНЕТ */
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
   pointer-events: none;
   z-index: 2;
 }
@@ -45,7 +45,7 @@ body {
 }
 
 .btn {
-  width: 75%;                /* 🔥 МЕНЮ КРУПНЕЕ */
+  width: 75%;
   padding: 25px 0;
   border-radius: 16px;
   text-align: center;
@@ -136,8 +136,9 @@ body {
 
 <script>
 const tg = Telegram.WebApp;
-tg.ready(); // 🔥 БЕЗ ЭТОГО КНОПКИ НЕ РАБОТАЮТ
+tg.ready();
 
+/* SEND TO BOT */
 function send(action) {
   tg.sendData(action);
 }
