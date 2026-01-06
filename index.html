@@ -104,3 +104,11 @@
 
 </body>
 </html>
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready();
+
+function send(action) {
+    tg.sendData(action);
+}
+</script>
