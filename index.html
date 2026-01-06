@@ -134,7 +134,7 @@ function animate() {
 
     /* отражение от границ */
     if (d.x <= 0 || d.x >= SCREEN_W - 130) d.vx *= -1;
-    if (d.y <= 0 || d.y >= SCREEN_H * 0.45) d.vy *= -1;
+    if (d.y <= 0 || d.y >= SCREEN_H - 150) d.vy *= -1;
 
     /* микро-рандом для "живости" */
     d.vx += (Math.random() - 0.5) * 0.05;
