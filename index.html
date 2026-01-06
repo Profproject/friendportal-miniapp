@@ -186,7 +186,7 @@ const SCREEN_H = window.innerHeight;
 
 const coinsData = Array.from(coins).map(() => ({
   x: Math.random() * (SCREEN_W - 150),
-  y: Math.random() * (SCREEN_H * 0.45),
+  y: Math.random() * (SCREEN_H * 0.75),
   vx: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
   vy: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
 }));
