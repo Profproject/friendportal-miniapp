@@ -2,64 +2,54 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FriendPortal</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
   height: 100%;
   overflow: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.app {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: url("bg.png") center top / cover no-repeat;
+body {
+  background: url("bg.png") no-repeat center center / cover;
 }
 
 /* ================= COINS ================= */
-
-.coins-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 2; /* НАД кнопками */
-  pointer-events: none;
-}
-
 .coin {
   position: absolute;
-  width: 130px;
-  aspect-ratio: 1 / 1;   /* 🔥 ГЛАВНОЕ */
-  height: auto;          /* 🔥 */
-  object-fit: contain;   /* 🔥 */
+  width: 150px;
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* ================= BUTTONS ================= */
-
 .buttons {
   position: absolute;
-  top: 42%;
+  top: 38%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  z-index: 1;
+  z-index: 3;
 }
 
 .btn {
-  width: 45%;              /* ⬅️ как ты просил */
+  width: 65%;
   padding: 14px 0;
   border-radius: 14px;
   text-align: center;
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
-  user-select: none;
 }
 
 .btn.white {
@@ -71,56 +61,132 @@ html, body {
   background: #6c6cff;
   color: #fff;
 }
+
+/* ================= MODAL ================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-content {
+  width: 85%;
+  max-width: 420px;
+  background: #1c1f3a;
+  color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.modal-content p {
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.modal-content button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #6c6cff;
+  color: #fff;
+  font-weight: 600;
+}
 </style>
 </head>
 
 <body>
-<div class="app">
 
-  <!-- COINS -->
-  <div class="coins-layer" id="coinsLayer">
-    <img src="coin1.png" class="coin">
-    <img src="coin13.png" class="coin">
-    <img src="coin94.png" class="coin">
-    <img src="coin108.png" class="coin">
-    <img src="coin216.png" class="coin">
+<!-- COINS -->
+<img src="coin1.png" class="coin">
+<img src="coin13.png" class="coin">
+<img src="coin94.png" class="coin">
+<img src="coin108.png" class="coin">
+<img src="coin216.png" class="coin">
+
+<!-- BUTTONS -->
+<div class="buttons">
+  <div class="btn white" id="inviteBtn">👥 Invite users</div>
+  <div class="btn blue">💰 Balance</div>
+  <div class="btn blue">💸 Withdraw</div>
+  <div class="btn blue">📊 Statistics</div>
+  <div class="btn blue" id="howBtn">ℹ️ How it works</div>
+  <div class="btn blue">🔐 Activate access</div>
+  <div class="btn blue">📣 For advertisers</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="howModal">
+  <div class="modal-content">
+    <h2>ℹ️ How FriendPortal works</h2>
+
+    <p>🚀 Invite users and earn TON automatically.</p>
+
+    <p>
+      👥 <b>Level 1 referral</b><br>
+      +0.5 TON for each invited user
+    </p>
+
+    <p>
+      🌐 <b>Level 2 referral</b><br>
+      +0.25 TON when your referral invites someone
+    </p>
+
+    <p>
+      🔐 <b>Activation (1 TON)</b><br>
+      Protects against multi-accounts and unlocks withdrawals
+    </p>
+
+    <p>💎 Minimum withdrawal: 5 TON</p>
+
+    <button id="closeHow">Close</button>
   </div>
-
-  <!-- BUTTONS -->
-  <div class="buttons">
-    <div class="btn white" id="inviteBtn">👥 Invite users</div>
-    <div class="btn blue">💰 Balance</div>
-    <div class="btn blue">💸 Withdraw</div>
-    <div class="btn blue">📊 Statistics</div>
-    <div class="btn blue">ℹ️ How it works</div>
-    <div class="btn blue">🔒 Activate access</div>
-    <div class="btn blue">📣 For advertisers</div>
-  </div>
-
 </div>
 
 <script>
-/* ================= INVITE ================= */
+/* ================= TELEGRAM ================= */
+const tg = window.Telegram.WebApp;
+tg.ready();
+
+const BOT_USERNAME = "friendportal_bot";
+const userId = tg.initDataUnsafe?.user?.id || "guest";
+const REF_LINK = `https://t.me/${BOT_USERNAME}?start=ref_${userId}`;
+
 document.getElementById("inviteBtn").onclick = () => {
-  const bot = "friendportal_bot";
-  const url = `https://t.me/${bot}?start=ref`;
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.openTelegramLink(url);
-  } else {
-    window.open(url, "_blank");
-  }
+  tg.openTelegramLink(
+    `https://t.me/share/url?url=${encodeURIComponent(REF_LINK)}&text=${encodeURIComponent(
+      "🚀 Join FriendPortal and earn TON together with me!"
+    )}`
+  );
 };
 
-/* ================= COINS LOGIC ================= */
+/* ================= HOW MODAL ================= */
+const howBtn = document.getElementById("howBtn");
+const howModal = document.getElementById("howModal");
+const closeHow = document.getElementById("closeHow");
 
-const coins = [...document.querySelectorAll(".coin")];
+howBtn.onclick = () => howModal.style.display = "flex";
+closeHow.onclick = () => howModal.style.display = "none";
+
+/* ================= COIN ANIMATION (ТВОИ ЗАМЕРЫ) ================= */
+const coins = document.querySelectorAll(".coin");
 
 const SCREEN_W = window.innerWidth;
 const SCREEN_H = window.innerHeight;
 
-const coinsData = coins.map(() => ({
+const coinsData = Array.from(coins).map(() => ({
   x: Math.random() * (SCREEN_W - 150),
-  y: Math.random() * (SCREEN_H * 0.45), // летают ВЕРХНЯЯ ЧАСТЬ
+  y: Math.random() * (SCREEN_H * 0.45),
   vx: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
   vy: (Math.random() * 1.2 + 0.6) * (Math.random() < 0.5 ? -1 : 1),
 }));
@@ -132,15 +198,12 @@ function animate() {
     d.x += d.vx;
     d.y += d.vy;
 
-    /* отражение от границ */
     if (d.x <= 0 || d.x >= SCREEN_W - 130) d.vx *= -1;
     if (d.y <= 0 || d.y >= SCREEN_H - 150) d.vy *= -1;
 
-    /* микро-рандом для "живости" */
     d.vx += (Math.random() - 0.5) * 0.05;
     d.vy += (Math.random() - 0.5) * 0.05;
 
-    /* ограничиваем скорость */
     d.vx = Math.max(-4, Math.min(4, d.vx));
     d.vy = Math.max(-4, Math.min(4, d.vy));
 
@@ -152,5 +215,6 @@ function animate() {
 
 animate();
 </script>
+
 </body>
 </html>
