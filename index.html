@@ -24,10 +24,10 @@ body {
 /* ================= COINS ================= */
 .coin {
   position: absolute;
-  width: 110px;
-  height: 110px;
-  aspect-ratio: 1 / 1;       /* 🔥 КРУГЛЫЕ */
-  object-fit: contain;       /* 🔥 НЕ ТЯНУТЬ */
+  width: 260px;              /* 🔥 КРУПНЫЕ */
+  height: 260px;
+  aspect-ratio: 1 / 1;       /* 🔥 КРУГ */
+  object-fit: contain;       /* 🔥 НЕ ТЯНЕТ */
   pointer-events: none;
   z-index: 2;
 }
@@ -35,21 +35,21 @@ body {
 /* ================= BUTTONS ================= */
 .buttons {
   position: absolute;
-  top: 36%;
+  top: 32%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   z-index: 5;
 }
 
 .btn {
-  width: 45%;
-  padding: 14px 0;
-  border-radius: 14px;
+  width: 55%;                /* 🔥 МЕНЮ КРУПНЕЕ */
+  padding: 16px 0;
+  border-radius: 16px;
   text-align: center;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -68,7 +68,7 @@ body {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   display: none;
   align-items: center;
   justify-content: center;
@@ -78,10 +78,10 @@ body {
 .modal-content {
   background: #111;
   color: #fff;
-  padding: 20px;
-  border-radius: 14px;
-  width: 85%;
-  max-width: 400px;
+  padding: 22px;
+  border-radius: 16px;
+  width: 88%;
+  max-width: 420px;
 }
 
 .modal-content h2 {
@@ -89,7 +89,7 @@ body {
 }
 
 .close {
-  margin-top: 12px;
+  margin-top: 14px;
   text-align: center;
   cursor: pointer;
   color: #6c6cff;
@@ -134,16 +134,15 @@ body {
   </div>
 </div>
 
-<!-- ================= SCRIPTS ================= -->
 <script>
 const tg = Telegram.WebApp;
+tg.ready(); // 🔥 БЕЗ ЭТОГО КНОПКИ НЕ РАБОТАЮТ
 
-/* ===== SEND TO BOT ===== */
 function send(action) {
   tg.sendData(action);
 }
 
-/* ===== HOW IT WORKS ===== */
+/* MODAL */
 function openHow() {
   document.getElementById("howModal").style.display = "flex";
 }
@@ -157,10 +156,10 @@ const W = window.innerWidth;
 const H = window.innerHeight;
 
 const data = [...coins].map(() => ({
-  x: Math.random() * (W - 120),
-  y: Math.random() * (H - 120),
-  vx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
+  x: Math.random() * (W - 260),
+  y: Math.random() * (H - 260),
+  vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
 }));
 
 function animate() {
@@ -170,14 +169,14 @@ function animate() {
     d.x += d.vx;
     d.y += d.vy;
 
-    if (d.x <= 20 || d.x >= W - 120) d.vx *= -1;
-    if (d.y <= -55 || d.y >= H - 120) d.vy *= -1;
+    if (d.x <= -20 || d.x >= W - 260) d.vx *= -1;
+    if (d.y <= -55 || d.y >= H - 260) d.vy *= -1;
 
-    d.vx += (Math.random() - 0.5) * 0.03;
-    d.vy += (Math.random() - 0.5) * 0.03;
+    d.vx += (Math.random() - 0.5) * 0.05;
+    d.vy += (Math.random() - 0.5) * 0.05;
 
-    d.vx = Math.max(-4, Math.min(4, d.vx));
-    d.vy = Math.max(-4, Math.min(4, d.vy));
+    d.vx = Math.max(-5, Math.min(5, d.vx));
+    d.vy = Math.max(-5, Math.min(5, d.vy));
 
     coin.style.transform = `translate(${d.x}px, ${d.y}px)`;
   });
