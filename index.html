@@ -2,180 +2,191 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>FriendPortal</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .app {
-  min-height: 100vh;
-  background: url("background.jpg") no-repeat top center;
-  background-size: cover;
-  position: relative;
-  overflow: hidden;
-  padding-top: 300px; /* ⬅ место под картинку */
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url("bg.png") center top / cover no-repeat;
 }
 
-/* ===== COINS ===== */
+/* === COINS === */
 .coin {
-  position: absolute;
-  width: 72px;
-  pointer-events: none;
-  will-change: transform;
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    pointer-events: none;
+    will-change: transform;
 }
 
-/* ===== BUTTONS ===== */
+/* === BUTTONS === */
 .buttons {
-  padding: 20px;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .btn {
-  width: 100%;
-  border: none;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-  font-size: 18px;
-  font-weight: 600;
+    height: 56px;
+    border-radius: 14px;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.btn.white {
-  background: #fff;
-  color: #333;
+.btn.invite {
+    background: #fff;
+    color: #333;
 }
 
-.btn.blue {
-  background: #6f6af8;
-  color: #fff;
+.btn.main {
+    background: #6f6af8;
+    color: #fff;
 }
 
-/* ===== MODAL ===== */
+/* === MODAL === */
 .modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
 }
 
 .modal-content {
-  background: #111;
-  color: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 420px;
+    width: 86%;
+    background: #15152a;
+    border-radius: 18px;
+    padding: 20px;
+    color: #fff;
 }
 
 .modal-content h2 {
-  margin-top: 0;
+    margin-top: 0;
 }
 
-.close {
-  margin-top: 16px;
-  width: 100%;
+.modal-content button {
+    margin-top: 16px;
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    border: none;
+    background: #6f6af8;
+    color: #fff;
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="app" id="app">
 
-  <!-- COINS -->
-  <img src="coin1.png" id="coin1" class="coin">
-  <img src="coin13.png" id="coin2" class="coin">
-  <img src="coin94.png" id="coin3" class="coin">
+    <!-- COINS -->
+    <img src="coin1.png" class="coin">
+    <img src="coin13.png" class="coin">
+    <img src="coin94.png" class="coin">
+    <img src="coin108.png" class="coin">
+    <img src="coin216.png" class="coin">
 
-  <!-- BUTTONS -->
-  <div class="buttons">
-    <button class="btn white" onclick="invite()">👥 Invite users</button>
-    <button class="btn blue">💰 Balance</button>
-    <button class="btn blue">💸 Withdraw</button>
-    <button class="btn blue">📊 Statistics</button>
-    <button class="btn blue" onclick="openHow()">ℹ️ How it works</button>
-    <button class="btn blue">🔒 Activate access</button>
-  </div>
+    <!-- BUTTONS -->
+    <div class="buttons">
+        <button class="btn invite" id="inviteBtn">👥 Invite users</button>
+        <button class="btn main">💰 Balance</button>
+        <button class="btn main">💸 Withdraw</button>
+        <button class="btn main">📊 Statistics</button>
+        <button class="btn main" id="howBtn">ℹ️ How it works</button>
+        <button class="btn main">🔒 Activate access</button>
+    </div>
 </div>
 
-<!-- MODAL -->
+<!-- HOW IT WORKS MODAL -->
 <div class="modal" id="howModal">
-  <div class="modal-content">
-    <h2>How FriendPortal Works</h2>
-    <p>
-      Invite users and earn TON rewards.
-    </p>
-    <ul>
-      <li>+0.5 TON for each direct referral</li>
-      <li>+0.25 TON for second-level referrals</li>
-    </ul>
-    <p>
-      Activation (1 TON) is required to protect the system from multi-accounts
-      and to enable secure withdrawals.
-    </p>
-    <button class="btn blue close" onclick="closeHow()">Close</button>
-  </div>
+    <div class="modal-content">
+        <h2>How it works</h2>
+        <p>
+            Invite users and earn TON rewards.<br><br>
+            🔹 Level 1 referral: <b>+0.5 TON</b><br>
+            🔹 Level 2 referral: <b>+0.25 TON</b><br><br>
+            Activation is required to protect the system from multi-accounts and to enable successful withdrawals.<br><br>
+            Minimum withdrawal: <b>5 TON</b>
+        </p>
+        <button onclick="closeHow()">OK</button>
+    </div>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready();
+tg.expand();
 
-/* ===== INVITE ===== */
-function invite() {
-  const link = "https://t.me/YOUR_BOT_USERNAME?start=ref_" + tg.initDataUnsafe.user.id;
-  tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(link));
+/* === INVITE === */
+document.getElementById("inviteBtn").onclick = () => {
+    tg.openTelegramLink(
+        `https://t.me/share/url?url=${encodeURIComponent("https://t.me/friendportal_bot")}&text=Join%20FriendPortal%20and%20earn%20TON`
+    );
+};
+
+/* === HOW IT WORKS === */
+const howModal = document.getElementById("howModal");
+document.getElementById("howBtn").onclick = () => howModal.style.display = "flex";
+function closeHow() { howModal.style.display = "none"; }
+
+/* === COIN PHYSICS === */
+const coins = document.querySelectorAll(".coin");
+const app = document.getElementById("app");
+
+const coinData = [];
+
+coins.forEach(coin => {
+    coinData.push({
+        el: coin,
+        x: Math.random() * (window.innerWidth - 100),
+        y: Math.random() * (window.innerHeight * 0.6),
+        vx: (Math.random() * 1.2 + 0.4) * (Math.random() > 0.5 ? 1 : -1),
+        vy: (Math.random() * 1.2 + 0.4) * (Math.random() > 0.5 ? 1 : -1)
+    });
+});
+
+function animate() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    coinData.forEach(c => {
+        c.x += c.vx;
+        c.y += c.vy;
+
+        if (c.x <= 0 || c.x >= w - 90) c.vx *= -1;
+        if (c.y <= 0 || c.y >= h - 90) c.vy *= -1;
+
+        c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
+    });
+
+    requestAnimationFrame(animate);
 }
 
-/* ===== HOW MODAL ===== */
-function openHow() {
-  document.getElementById("howModal").style.display = "flex";
-}
-function closeHow() {
-  document.getElementById("howModal").style.display = "none";
-}
-
-/* ===== COIN ANIMATION ===== */
-const coins = [
-  { el: coin1, x: 40,  y: 220, vx: 0.35, vy: 0.25 },
-  { el: coin2, x: 140, y: 250, vx: -0.3, vy: 0.2 },
-  { el: coin3, x: 220, y: 235, vx: 0.25, vy: -0.25 },
-];
-
-const MIN_Y = 200;
-const MAX_Y = 280;
-const MIN_X = 20;
-const MAX_X = window.innerWidth - 100;
-
-function animateCoins() {
-  coins.forEach(c => {
-    c.vx += (Math.random() - 0.5) * 0.02;
-    c.vy += (Math.random() - 0.5) * 0.02;
-
-    c.vx = Math.max(-0.6, Math.min(0.6, c.vx));
-    c.vy = Math.max(-0.5, Math.min(0.5, c.vy));
-
-    c.x += c.vx;
-    c.y += c.vy;
-
-    if (c.x < MIN_X || c.x > MAX_X) c.vx *= -1;
-    if (c.y < MIN_Y || c.y > MAX_Y) c.vy *= -1;
-
-    c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
-  });
-
-  requestAnimationFrame(animateCoins);
-}
-
-animateCoins();
+animate();
 </script>
 </body>
 </html>
