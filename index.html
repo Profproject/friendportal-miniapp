@@ -1,118 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FriendPortal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
-  background: radial-gradient(circle at top, #7b3cff, #3a0ca3);
-  color: white;
-  text-align: center;
+:root {
+  --bg1:#4b1fb8;
+  --bg2:#7b4cff;
+  --card:rgba(255,255,255,.14);
+  --btn:#ffffff;
+  --btnText:#4b1fb8;
 }
 
-.container {
-  padding: 24px;
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  text-align:center;
 }
 
-.logo {
-  font-size: 36px;
-  font-weight: 900;
-  background: linear-gradient(90deg,#fff,#a78bfa,#fff);
-  background-size: 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glow 3s infinite;
+.container{
+  padding:24px;
 }
 
-@keyframes glow {
-  0% { background-position: 0% }
-  100% { background-position: 200% }
+h1{
+  font-size:30px;
+  margin:20px 0 6px;
+  background:linear-gradient(90deg,#fff,#ffd6ff,#fff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glow 3s infinite;
 }
 
-.card {
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 16px;
+@keyframes glow{
+  0%{opacity:.7}
+  50%{opacity:1}
+  100%{opacity:.7}
 }
 
-.btn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+.subtitle{
+  opacity:.9;
+  margin-bottom:18px;
 }
 
-.btn-main {
-  background: white;
-  color: #4c1d95;
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
+  backdrop-filter:blur(10px);
 }
 
-.btn-sec {
-  background: rgba(255,255,255,0.2);
-  color: white;
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  font-size:16px;
+  font-weight:600;
+  margin-top:12px;
+  cursor:pointer;
 }
 
-.hidden {
-  display: none;
+.btn-main{
+  background:var(--btn);
+  color:var(--btnText);
 }
+
+.btn-sec{
+  background:rgba(255,255,255,.18);
+  color:#fff;
+}
+
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<div class="logo">🚀 FriendPortal</div>
-<p>Earn TON by inviting users</p>
+<h1>🚀 FriendPortal</h1>
+<div class="subtitle">Earn TON by inviting users</div>
 
 <div class="card">
-<p>💎 Referral rewards</p>
-<p>⚡ Fast payouts</p>
-<p>🔒 Secure TON payments</p>
+  💎 Referral rewards<br>
+  ⚡ Fast payouts<br>
+  🔒 Secure TON payments
 </div>
 
 <button class="btn btn-main" onclick="invite()">👥 Invite users</button>
 <button class="btn btn-sec" onclick="send('balance')">💰 Balance</button>
 <button class="btn btn-sec" onclick="send('withdraw')">💸 Withdraw</button>
+<button class="btn btn-sec" onclick="send('activate')">🔓 Activate access (1 TON)</button>
 <button class="btn btn-sec" onclick="send('stats')">📊 Statistics</button>
 <button class="btn btn-sec" onclick="toggleHow()">ℹ️ How it works</button>
 
-<div id="how" class="card hidden">
-<p>• Invite users</p>
-<p>• Earn TON</p>
-<p>• Withdraw anytime</p>
+<div class="card hidden" id="how">
+<b>How FriendPortal works</b><br><br>
+• Activate access for 1 TON<br>
+• Invite friends → earn 0.5 TON<br>
+• 2nd level → 0.25 TON<br><br>
+✅ Stable payouts<br>
+✅ No fake rewards<br>
+✅ Withdraw anytime
 </div>
 
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready();
 tg.expand();
+tg.ready();
 
-function send(action) {
+function send(action){
   tg.sendData(action);
 }
 
-function invite() {
+function invite(){
   const uid = tg.initDataUnsafe?.user?.id || 0;
   const link = `https://t.me/FriendPortalBot?start=${uid}`;
   tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(link)}`
+    `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join FriendPortal 🚀`
   );
 }
 
-function toggleHow() {
+function toggleHow(){
   document.getElementById("how").classList.toggle("hidden");
 }
 </script>
