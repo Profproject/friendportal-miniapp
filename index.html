@@ -116,13 +116,16 @@ body {
 
 <!-- BUTTONS -->
 <div class="buttons">
-  <div class="btn white" id="inviteBtn">👥 Invite users</div>
-  <div class="btn blue">💰 Balance</div>
-  <div class="btn blue">💸 Withdraw</div>
-  <div class="btn blue">📊 Statistics</div>
+  <div class="btn white" onclick="send('invite')">👥 Invite users</div>
+
+  <div class="btn blue" onclick="send('balance')">💰 Balance</div>
+  <div class="btn blue" onclick="send('withdraw')">💸 Withdraw</div>
+  <div class="btn blue" onclick="send('stats')">📊 Statistics</div>
+
   <div class="btn blue" id="howBtn">ℹ️ How it works</div>
-  <div class="btn blue">🔐 Activate access</div>
-  <div class="btn blue">📣 For advertisers</div>
+
+  <div class="btn blue" onclick="send('activate')">🔒 Activate access</div>
+  <div class="btn blue" onclick="send('ads')">📣 For advertisers</div>
 </div>
 
 <!-- MODAL -->
@@ -215,6 +218,11 @@ function animate() {
 
 animate();
 </script>
+<script>
+  function send(action) {
+    Telegram.WebApp.sendData(action);
+  }
+</script>  
 
 </body>
 </html>
