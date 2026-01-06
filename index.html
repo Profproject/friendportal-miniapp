@@ -1,191 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FriendPortal</title>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: url("bg.png") center / cover no-repeat fixed;
-  overflow-x: hidden;
+  color: #fff;
+}
+
+.container {
+  padding: 14px;
 }
 
 /* ===== HEADER ===== */
 .header {
   text-align: center;
-  padding: 18px 16px 4px; /* ⬅️ УМЕНЬШИЛ */
-  color: white;
+  margin-bottom: 4px; /* 🔽 меньше пустоты */
 }
 
 .title {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 900;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg,#ff9f1a,#ffd36a,#ff9f1a);
-  background-size: 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 4s linear infinite;
 }
 
-@keyframes shine {
-  0% {background-position:0%}
-  100% {background-position:300%}
+.rocket {
+  margin-right: 6px;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.brand {
+  background: linear-gradient(90deg,#ffcc66,#ff8844,#ffd27d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .subtitle {
-  margin-top: 4px; /* ⬅️ ближе */
-  font-size: 15px;
+  margin-top: 2px;
+  font-size: 14px;
+  opacity: 0.95;
 }
 
-.features {
-  margin-top: 4px; /* ⬅️ ближе */
-  font-size: 14px;
-  line-height: 1.4;
+.info {
+  margin-top: 4px;
+  font-size: 13px;
 }
 
 /* ===== COINS AREA ===== */
-#coinArea {
+.coins-area {
   position: relative;
-  height: 170px; /* ⬅️ БЫЛО 210 */
-  margin-top: 0; /* ⬅️ УБРАЛ ПУСТОТУ */
+  height: 150px; /* 🔽 срезано сверху */
+  margin: 6px 0 10px;
+  overflow: hidden;
 }
 
+/* ===== COINS ===== */
 .coin {
   position: absolute;
-  width: 120px; /* ⬅️ УВЕЛИЧИЛ ×1.2 */
+  width: 90px; /* ↑ увеличены */
   pointer-events: none;
-  will-change: transform;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* Индивидуальные траектории */
+.coin1 {
+  left: 12%;
+  top: 30px;
+  animation: move1 7s infinite alternate;
+}
+
+.coin13 {
+  left: 38%;
+  top: 20px;
+  animation: move2 9s infinite alternate;
+}
+
+.coin94 {
+  left: 62%; /* ❌ не улетает вправо */
+  top: 35px;
+  animation: move3 8s infinite alternate;
+}
+
+/* ===== RANDOM BUT CONTROLLED ===== */
+@keyframes move1 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(-30px, -25px); }
+}
+
+@keyframes move2 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(25px, -30px); }
+}
+
+@keyframes move3 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(20px, -20px); }
 }
 
 /* ===== BUTTONS ===== */
-.buttons {
-  padding: 10px 16px 30px;
-}
-
 .btn {
   width: 100%;
-  border: none;
-  border-radius: 16px;
   padding: 14px;
-  margin-bottom: 10px;
+  margin: 8px 0;
+  border-radius: 14px;
+  border: none;
   font-size: 16px;
   font-weight: 600;
-  color: white;
-  background: linear-gradient(180deg,#7b6cff,#5a4de0);
-  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+  color: #fff;
+  background: #6c63ff;
 }
 
-.btn.main {
-  background: white;
-  color: #5a4de0;
-}
-
-/* ===== MODAL ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
+.btn.primary {
   background: #fff;
   color: #333;
-  padding: 20px;
-  border-radius: 14px;
-  width: 90%;
-  max-width: 420px;
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<div class="header">
-  <div class="title">🚀 FriendPortal</div>
-  <div class="subtitle">💎 Earn TON by inviting users</div>
-  <div class="features">
-    ⚡ Fast payouts<br>
-    🔒 Secure TON payments
+  <div class="header">
+    <div class="title">
+      <span class="rocket">🚀</span>
+      <span class="brand">FriendPortal</span>
+    </div>
+
+    <div class="subtitle">💎 Earn TON by inviting users</div>
+    <div class="info">⚡ Fast payouts</div>
+    <div class="info">🔒 Secure TON payments</div>
   </div>
-</div>
 
-<div id="coinArea">
-  <img src="coin1.png" id="coin1" class="coin">
-  <img src="coin13.png" id="coin13" class="coin">
-  <img src="coin94.png" id="coin94" class="coin">
-</div>
+  <!-- COINS -->
+  <div class="coins-area">
+    <img src="coin1.png" class="coin coin1">
+    <img src="coin13.png" class="coin coin13">
+    <img src="coin94.png" class="coin coin94">
+  </div>
 
-<div class="buttons">
-  <button class="btn main" onclick="invite()">👥 Invite users</button>
+  <!-- BUTTONS -->
+  <button class="btn primary" onclick="invite()">👥 Invite users</button>
   <button class="btn">💰 Balance</button>
   <button class="btn">💸 Withdraw</button>
   <button class="btn">📊 Statistics</button>
-  <button class="btn" onclick="openHow()">ℹ️ How it works</button>
+  <button class="btn">ℹ️ How it works</button>
   <button class="btn">🔒 Activate access</button>
-</div>
 
-<div class="modal" id="howModal" onclick="this.style.display='none'">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <h3>How it works</h3>
-    <p>
-      Invite friends using your referral link.<br>
-      They join → you earn TON rewards.<br>
-      Multi-level system increases profit.
-    </p>
-  </div>
 </div>
 
 <script>
-const area = document.getElementById("coinArea");
-
-function animateCoin(el, zone, speedMin, speedVar) {
-  const areaW = area.clientWidth;
-  const areaH = area.clientHeight;
-
-  function move() {
-    const minY = 0;                 // ⬅️ СРАЗУ ПОД ТЕКСТОМ
-    const maxY = areaH - 120;       // ⬅️ НЕ ТОНУТ ВНИЗ
-
-    const y = minY + Math.random() * (maxY - minY);
-    const x = zone.from * areaW + Math.random() * (zone.to - zone.from) * areaW;
-    const duration = speedMin + Math.random() * speedVar;
-
-    el.style.transition = `transform ${duration}ms cubic-bezier(.4,0,.2,1)`;
-    el.style.transform = `translate(${x}px, ${y}px)`;
-
-    setTimeout(move, duration);
-  }
-  move();
-}
-
-/* зоны — не кучкуются */
-animateCoin(coin1,  {from:0.04, to:0.28}, 1600, 1200);
-animateCoin(coin13, {from:0.36, to:0.58}, 1300, 1000);
-animateCoin(coin94, {from:0.66, to:0.92}, 1800, 1400);
-
-function openHow() {
-  document.getElementById("howModal").style.display = "flex";
-}
+const tg = window.Telegram.WebApp;
+tg.expand();
 
 function invite() {
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.openTelegramLink(
-      "https://t.me/share/url?text=Join%20FriendPortal%20and%20earn%20TON!"
-    );
-  } else {
-    alert("Open inside Telegram");
-  }
+  tg.openTelegramLink(
+    "https://t.me/share/url?url=https://t.me/YOUR_BOT_USERNAME&text=Join%20FriendPortal%20and%20earn%20TON"
+  );
 }
 </script>
-
 </body>
 </html>
