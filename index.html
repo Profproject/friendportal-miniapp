@@ -21,7 +21,7 @@ body {
   background-size: cover;
 }
 
-/* ================= COINS ================= */
+/* ===== COINS ===== */
 .coin {
   position: absolute;
   width: 260px;
@@ -32,7 +32,7 @@ body {
   z-index: 2;
 }
 
-/* ================= BUTTONS ================= */
+/* ===== BUTTONS ===== */
 .buttons {
   position: absolute;
   top: 32%;
@@ -64,7 +64,7 @@ body {
   color: #fff;
 }
 
-/* ================= MODAL ================= */
+/* ===== MODAL ===== */
 .modal {
   position: fixed;
   inset: 0;
@@ -109,50 +109,23 @@ body {
 <!-- BUTTONS -->
 <div class="buttons">
   <div class="btn white" onclick="invite()">👥 Invite users</div>
-  <div class="btn blue" onclick="send('balance')">💰 Balance</div>
-  <div class="btn blue" onclick="send('withdraw')">💸 Withdraw</div>
-  <div class="btn blue" onclick="send('stats')">📊 Statistics</div>
-  <div class="btn blue" onclick="openHow()">ℹ️ How it works</div>
-  <div class="btn blue" onclick="send('activate')">🔒 Activate access</div>
-  <div class="btn blue" onclick="send('ads')">📣 For advertisers</div>
+  <div class="btn blue" onclick="openModal('balance')">💰 Balance</div>
+  <div class="btn blue" onclick="openModal('withdraw')">💸 Withdraw</div>
+  <div class="btn blue" onclick="openModal('stats')">📊 Statistics</div>
+  <div class="btn blue" onclick="openModal('how')">ℹ️ How it works</div>
+  <div class="btn blue" onclick="openModal('activate')">🔒 Activate access</div>
+  <div class="btn blue" onclick="openModal('ads')">📣 For advertisers</div>
 </div>
 
-<!-- HOW IT WORKS -->
-<div class="modal" id="howModal">
-  <div class="modal-content">
-    <h2>ℹ️ How FriendPortal works</h2>
-
-    <p><b>FriendPortal</b> is a referral-based platform built on the TON blockchain.</p>
-
-    <p><b>💎 Referral rewards</b></p>
-    <ul>
-      <li><b>Level 1:</b> +0.5 TON per activated referral</li>
-      <li><b>Level 2:</b> +0.25 TON from your referral’s invite</li>
-    </ul>
-
-    <p><b>⚡ Instant withdrawals</b><br>
-    Withdraw directly to your TON wallet.</p>
-
-    <p><b>📣 Advertising</b></p>
-    <ul>
-      <li>25 TON — one-time broadcast</li>
-      <li>75 TON — top button (7 days)</li>
-      <li>250 TON — top button (30 days)</li>
-    </ul>
-
-    <div class="close" onclick="closeHow()">Close</div>
-  </div>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContent"></div>
 </div>
 
 <script>
 const tg = Telegram.WebApp;
 tg.ready();
 tg.expand();
-
-/* SEND TO BOT */
-function send(action) {
-  tg.sendData(action);
-}
 
 /* INVITE */
 function invite() {
@@ -161,12 +134,41 @@ function invite() {
   );
 }
 
-/* MODAL */
-function openHow() {
-  document.getElementById("howModal").style.display = "flex";
+/* MODALS */
+function openModal(type) {
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modalContent");
+
+  const data = {
+    balance: "<h2>💰 Balance</h2><p>Your balance: <b>0 TON</b></p>",
+    withdraw: "<h2>💸 Withdraw</h2><p>Minimum withdrawal: <b>5 TON</b></p>",
+    stats: "<h2>📊 Statistics</h2><p>Statistics will be available soon.</p>",
+    activate: "<h2>🔒 Activate access</h2><p>One-time payment: <b>1 TON</b></p>",
+    ads: `
+      <h2>📣 Advertising</h2>
+      <ul>
+        <li>25 TON — one-time broadcast</li>
+        <li>75 TON — top button (7 days)</li>
+        <li>250 TON — top placement (30 days)</li>
+      </ul>
+    `,
+    how: `
+      <h2>ℹ️ How FriendPortal works</h2>
+      <p><b>FriendPortal</b> is a referral-based platform on TON.</p>
+      <ul>
+        <li><b>Level 1:</b> +0.5 TON</li>
+        <li><b>Level 2:</b> +0.25 TON</li>
+      </ul>
+      <p>Instant withdrawals to your TON wallet.</p>
+    `
+  };
+
+  content.innerHTML = data[type] + `<div class="close" onclick="closeModal()">Close</div>`;
+  modal.style.display = "flex";
 }
-function closeHow() {
-  document.getElementById("howModal").style.display = "none";
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
 
 /* COIN ANIMATION */
@@ -177,8 +179,8 @@ const H = window.innerHeight;
 const data = [...coins].map(() => ({
   x: Math.random() * (W - 260),
   y: Math.random() * (H - 260),
-  vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
 }));
 
 function animate() {
