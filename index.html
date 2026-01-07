@@ -181,89 +181,75 @@ body {
 </div>
 
 <script>
-/* ================= TELEGRAM ================= */
-const tg = window.Telegram?.WebApp;
-if (tg) {
+  const tg = Telegram.WebApp;
   tg.ready();
   tg.expand();
-}
 
-/* ================= CONFIG ================= */
-// 🔴 ВАЖНО: когда выложишь сервер — поменяешь на HTTPS домен
-const API = "http://127.0.0.1:8000";
-
-/* USER ID
-   - В Telegram берём реальный
-   - В браузере — фейковый для тестов
-*/
-const USER_ID = tg?.initDataUnsafe?.user?.id || 1;
-
-/* ================= INVITE ================= */
-function invite() {
-  const refLink = `https://t.me/FriendPortal_bot?start=ref_${USER_ID}`;
-  tg?.openTelegramLink
-    ? tg.openTelegramLink(
-        `https://t.me/share/url?url=${encodeURIComponent(refLink)}`
-      )
-    : alert("Invite link:\n" + refLink);
-}
-
-/* ================= BALANCE ================= */
-async function getBalance() {
-  try {
-    const r = await fetch(API + "/balance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: USER_ID })
-    });
-    const d = await r.json();
-    alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
-  } catch (e) {
-    alert("Balance error");
-    console.error(e);
+  if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+    alert("Telegram user not detected");
   }
-}
 
-/* ================= STATS ================= */
-async function getStats() {
-  try {
-    const r = await fetch(API + "/stats", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: USER_ID })
-    });
-    const d = await r.json();
+  const USER_ID = tg.initDataUnsafe.user.id;
+
+  // ❗❗❗ ВАЖНО ❗❗❗
+  // ТУТ ДОЛЖЕН БЫТЬ ПУБЛИЧНЫЙ АДРЕС
+  const API = "https://ТВОЙ-ДОМЕН-ИЛИ-IP";
+
+  async function getBalance() {
+    try {
+      const r = await fetch(API + "/balance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: USER_ID })
+      });
+      const d = await r.json();
+      alert("💰 Balance: " + d.balance + " TON");
+    } catch (e) {
+      alert("Balance error");
+    }
+  }
+
+  async function getStats() {
+    try {
+      const r = await fetch(API + "/stats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: USER_ID })
+      });
+      const d = await r.json();
+      alert(
+        "👥 Level 1: " + d.level1 +
+        "\n👥 Level 2: " + d.level2 +
+        "\n💎 Earned: " + d.earned + " TON"
+      );
+    } catch (e) {
+      alert("Stats error");
+    }
+  }
+
+  function withdraw() {
+    alert("💸 Minimum withdrawal: 5 TON");
+  }
+
+  function activate() {
+    alert("🔐 Activation price: 1 TON (one-time)\nTON payment next");
+  }
+
+  function ads() {
     alert(
-      `📊 Statistics\n\n` +
-      `👤 Level 1: ${d.level1}\n` +
-      `👥 Level 2: ${d.level2}\n` +
-      `💎 Earned: ${d.earned} TON`
+      "📣 Advertising packages:\n\n" +
+      "25 TON — one-time broadcast\n" +
+      "75 TON — top button (7 days)\n" +
+      "250 TON — top placement (30 days)"
     );
-  } catch (e) {
-    alert("Stats error");
-    console.error(e);
   }
-}
 
-/* ================= WITHDRAW ================= */
-function withdraw() {
-  alert("💸 Minimum withdrawal: 5 TON");
-}
-
-/* ================= ACTIVATE ================= */
-async function activate() {
-  alert("🔐 Activation price: 1 TON (one-time)\n\nTON payment will be connected next");
-}
-
-/* ================= ADS ================= */
-function ads() {
-  alert(
-    "📣 Advertising packages:\n\n" +
-    "25 TON — one-time broadcast\n" +
-    "75 TON — top button (7 days)\n" +
-    "250 TON — top placement (30 days)"
-  );
-}
+  function invite() {
+    tg.openTelegramLink(
+      "https://t.me/share/url?url=https://t.me/FriendPortal_bot&text=Join%20FriendPortal%20and%20earn%20TON"
+    );
+  }
+</script>
 
 /* ================= MODAL ================= */
 function openHow() {
