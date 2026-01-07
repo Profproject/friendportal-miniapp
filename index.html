@@ -2,107 +2,115 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
 <title>FriendPortal</title>
 
+<!-- Telegram WebApp -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-  background: url("bg.png") no-repeat center center;
-  background-size: cover;
+    background: url("bg.png") no-repeat center center;
+    background-size: cover;
+}
+
+/* LOGO */
+.logo {
+    text-align: center;
+    margin-top: 40px;
+}
+.logo img {
+    max-width: 90%;
 }
 
 /* COINS */
 .coin {
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: 2;
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    pointer-events: none;
+    z-index: 2;
 }
 
 /* BUTTONS */
 .buttons {
-  position: absolute;
-  top: 32%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 5;
+    position: absolute;
+    top: 35%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    z-index: 3;
 }
 
 .btn {
-  width: 78%;
-  padding: 14px;
-  margin: 6px 0;
-  border-radius: 14px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
+    width: 85%;
+    padding: 14px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background: rgba(80,90,200,0.85);
 }
 
 .btn.white {
-  background: #ffffff;
-  color: #000;
-  font-weight: bold;
-}
-
-.btn.blue {
-  background: #5b5bd6;
-  color: #fff;
+    background: rgba(255,255,255,0.9);
+    color: #000;
 }
 
 /* MODAL */
 .modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 20;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
 .modal-content {
-  width: 88%;
-  max-height: 85%;
-  overflow-y: auto;
-  background: #111;
-  color: #fff;
-  padding: 18px;
-  border-radius: 18px;
+    width: 90%;
+    max-height: 85%;
+    overflow-y: auto;
+    background: rgba(20,20,30,0.95);
+    color: #fff;
+    border-radius: 16px;
+    padding: 16px;
 }
 
 .modal-content h2 {
-  margin-top: 0;
+    margin-top: 0;
 }
 
-.modal-content button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #4f6cff;
-  color: #fff;
-  font-size: 16px;
+.close-btn {
+    margin-top: 16px;
+    text-align: center;
+    padding: 12px;
+    background: #4c6fff;
+    border-radius: 12px;
 }
 </style>
 </head>
 
 <body>
+
+<!-- LOGO -->
+<div class="logo">
+    <img src="logo.png" alt="FriendPortal">
+</div>
 
 <!-- COINS -->
 <img src="coin1.png" class="coin">
@@ -113,154 +121,146 @@ body {
 
 <!-- BUTTONS -->
 <div class="buttons">
-  <div class="btn white" onclick="invite()">👥 Invite users</div>
-  <div class="btn blue" onclick="getBalance()">💰 Balance</div>
-  <div class="btn blue" onclick="withdraw()">💸 Withdraw</div>
-  <div class="btn blue" onclick="getStats()">📊 Statistics</div>
-  <div class="btn blue" onclick="openHow()">ℹ️ How it works</div>
-  <div class="btn blue" onclick="activate()">🔐 Activate access</div>
-  <div class="btn blue" onclick="ads()">📣 For advertisers</div>
+    <div class="btn white" onclick="invite()">👥 Invite users</div>
+    <div class="btn" onclick="getBalance()">💰 Balance</div>
+    <div class="btn" onclick="withdraw()">💸 Withdraw</div>
+    <div class="btn" onclick="getStats()">📊 Statistics</div>
+    <div class="btn" onclick="openHow()">ℹ️ How it works</div>
+    <div class="btn" onclick="activate()">🔐 Activate access</div>
+    <div class="btn" onclick="ads()">📣 For advertisers</div>
 </div>
 
 <!-- HOW IT WORKS MODAL -->
 <div class="modal" id="howModal">
-  <div class="modal-content">
-    <h2>ℹ️ How FriendPortal works</h2>
+    <div class="modal-content">
+        <h2>ℹ️ How FriendPortal works</h2>
 
-    <p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.  
-    It allows users to generate real profit by inviting new users who activate access inside the mini app.</p>
+        <p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.</p>
 
-    <p>The system is designed to protect against fake accounts and abuse.  
-    Rewards are credited only after activation, ensuring long-term stability and fair payouts.</p>
+        <p>
+        Users earn TON by inviting new users who activate access.
+        The system protects against abuse and rewards only real activity.
+        </p>
 
-    <p><b>💎 Referral rewards</b></p>
-    <ul>
-      <li><b>Level 1:</b> +0.5 TON for each invited user who activates access</li>
-      <li><b>Level 2:</b> +0.25 TON for each user invited by your referral</li>
-    </ul>
+        <p><b>💎 Referral rewards</b></p>
+        <ul>
+            <li><b>Level 1:</b> +0.5 TON</li>
+            <li><b>Level 2:</b> +0.25 TON</li>
+        </ul>
 
-    <p><b>⚡ Instant withdrawals</b></p>
-    <p>All rewards are credited instantly to your balance.  
-    Once the minimum withdrawal amount is reached, funds can be withdrawn directly to your TON wallet.</p>
+        <p><b>⚡ Instant withdrawals</b><br>
+        Funds are credited instantly once minimum withdrawal is reached.</p>
 
-    <p><b>🔒 Why activation is required</b></p>
-    <ul>
-      <li>Prevents multi-account abuse</li>
-      <li>Ensures fair reward distribution</li>
-      <li>Keeps the ecosystem transparent and sustainable</li>
-    </ul>
+        <p><b>🔒 Why activation is required</b></p>
+        <ul>
+            <li>Prevents fake accounts</li>
+            <li>Ensures fair payouts</li>
+            <li>Protects ecosystem</li>
+        </ul>
 
-    <p><b>📣 Advertising opportunities</b></p>
-    <ul>
-      <li>25 TON — one-time broadcast message</li>
-      <li>75 TON — promoted button for 7 days</li>
-      <li>250 TON — top placement for 30 days</li>
-    </ul>
+        <p><b>📣 Advertising packages</b></p>
+        <ul>
+            <li>25 TON — one-time broadcast</li>
+            <li>75 TON — top button (7 days)</li>
+            <li>250 TON — top placement (30 days)</li>
+        </ul>
 
-    <button onclick="closeHow()">Close</button>
-  </div>
+        <div class="close-btn" onclick="closeHow()">Close</div>
+    </div>
 </div>
 
 <script>
-/* ===== TELEGRAM ===== */
+/* ================= CONFIG ================= */
+
+// 🔴 МЕНЯЕШЬ ТОЛЬКО ЭТИ ДВЕ СТРОКИ
+const API_BASE = "https://ТВОЙ_NGROK_URL.ngrok-free.dev";
+const BOT_USERNAME = "ТВОЙ_BOT_USERNAME";
+
+/* ================= TELEGRAM ================= */
+
 const tg = window.Telegram.WebApp;
-tg.ready();
-const tgUserId = tg.initDataUnsafe?.user?.id || 1;
+tg.expand();
 
-/* ===== API (ВСТАВЬ СВОЙ NGROK) ===== */
-const API_URL = "https://loyce-taxitic-elenora.ngrok-free.dev";
+/* ================= API ================= */
 
-/* ===== BASIC ===== */
-function invite() {
-  tg.openTelegramLink(`https://t.me/${tg.initDataUnsafe?.user?.username}`);
+async function post(endpoint) {
+    const res = await fetch(API_BASE + endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ initData: tg.initData })
+    });
+    return res.json();
 }
 
-function withdraw() {
-  alert("💸 Minimum withdrawal: 5 TON");
+async function getBalance() {
+    const d = await post("/balance");
+    alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
 }
 
-function activate() {
-  alert("🔐 Activation price: 1 TON (one-time)\n\nTON payment will be connected next");
+async function getStats() {
+    const d = await post("/stats");
+    alert(`📊 Statistics\nLevel 1: ${d.level1}\nLevel 2: ${d.level2}\nEarned: ${d.earned} TON`);
+}
+
+async function withdraw() {
+    const d = await post("/withdraw");
+    alert(d.message);
+}
+
+async function activate() {
+    alert("🔐 Activation price: 1 TON (one-time)");
 }
 
 function ads() {
-  alert(
-    "📣 Advertising packages:\n\n" +
-    "25 TON — one-time broadcast\n" +
-    "75 TON — top button (7 days)\n" +
-    "250 TON — top placement (30 days)"
-  );
+    alert("📣 Advertising packages:\n25 TON\n75 TON\n250 TON");
 }
 
-/* ===== BALANCE ===== */
-async function getBalance() {
-  try {
-    const r = await fetch(API_URL + "/balance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: tgUserId })
-    });
-    const d = await r.json();
-    alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
-  } catch (e) {
-    alert("Balance error");
-    console.error(e);
-  }
-}
+/* ================= TG SHARE (ВАЖНО) ================= */
 
-/* ===== STATS ===== */
-async function getStats() {
-  try {
-    const r = await fetch(API_URL + "/stats", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: tgUserId })
-    });
-    const d = await r.json();
-    alert(
-      `📊 Statistics\n\n` +
-      `👤 Level 1: ${d.level1}\n` +
-      `👥 Level 2: ${d.level2}\n` +
-      `💎 Earned: ${d.earned} TON`
+function invite() {
+    const userId = tg.initDataUnsafe?.user?.id || "ref";
+    const link = `https://t.me/${BOT_USERNAME}?start=${userId}`;
+
+    tg.openTelegramLink(
+        `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent("Join FriendPortal and earn TON!")}`
     );
-  } catch (e) {
-    alert("Stats error");
-    console.error(e);
-  }
 }
 
-/* ===== MODAL ===== */
+/* ================= MODAL ================= */
+
 function openHow() {
-  document.getElementById("howModal").style.display = "flex";
-}
-function closeHow() {
-  document.getElementById("howModal").style.display = "none";
+    document.getElementById("howModal").style.display = "flex";
 }
 
-/* ===== COIN ANIMATION ===== */
+function closeHow() {
+    document.getElementById("howModal").style.display = "none";
+}
+
+/* ================= COIN ANIMATION ================= */
+
 const coins = document.querySelectorAll(".coin");
 const W = window.innerWidth;
 const H = window.innerHeight;
 
 const data = [...coins].map(() => ({
-  x: Math.random() * (W - 260),
-  y: Math.random() * (H - 260),
-  vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+    x: Math.random() * (W - 90),
+    y: Math.random() * (H - 90),
+    vx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
+    vy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1)
 }));
 
 function animate() {
-  coins.forEach((coin, i) => {
-    const d = data[i];
-    d.x += d.vx;
-    d.y += d.vy;
+    coins.forEach((c, i) => {
+        const d = data[i];
+        d.x += d.vx;
+        d.y += d.vy;
 
-    if (d.x < -40 || d.x > W - 220) d.vx *= -1;
-    if (d.y < -40 || d.y > H - 220) d.vy *= -1;
+        if (d.x < 0 || d.x > W - 90) d.vx *= -1;
+        if (d.y < 0 || d.y > H - 90) d.vy *= -1;
 
-    coin.style.transform = `translate(${d.x}px, ${d.y}px)`;
-  });
-  requestAnimationFrame(animate);
+        c.style.transform = `translate(${d.x}px, ${d.y}px)`;
+    });
+    requestAnimationFrame(animate);
 }
 animate();
 </script>
