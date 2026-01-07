@@ -21,7 +21,7 @@ body {
   background-size: cover;
 }
 
-/* ===== COINS ===== */
+/* ================= COINS ================= */
 .coin {
   position: absolute;
   width: 260px;
@@ -32,7 +32,7 @@ body {
   z-index: 2;
 }
 
-/* ===== BUTTONS ===== */
+/* ================= BUTTONS ================= */
 .buttons {
   position: absolute;
   top: 32%;
@@ -46,7 +46,7 @@ body {
 
 .btn {
   width: 75%;
-  padding: 24px 0;
+  padding: 25px 0;
   border-radius: 16px;
   text-align: center;
   font-size: 18px;
@@ -55,16 +55,16 @@ body {
 }
 
 .btn.white {
-  background: #fff;
+  background: #ffffff;
   color: #222;
 }
 
 .btn.blue {
   background: #6c6cff;
-  color: #fff;
+  color: #ffffff;
 }
 
-/* ===== MODAL ===== */
+/* ================= MODAL ================= */
 .modal {
   position: fixed;
   inset: 0;
@@ -78,18 +78,24 @@ body {
 .modal-content {
   background: #111;
   color: #fff;
-  padding: 22px;
+  padding: 24px;
   border-radius: 16px;
   width: 88%;
   max-width: 420px;
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 .modal-content h2 {
   margin-top: 0;
 }
 
+.modal-content ul {
+  padding-left: 18px;
+}
+
 .close {
-  margin-top: 14px;
+  margin-top: 16px;
   text-align: center;
   cursor: pointer;
   color: #6c6cff;
@@ -99,33 +105,88 @@ body {
 
 <body>
 
-<!-- COINS -->
+<!-- ================= COINS ================= -->
 <img src="coin1.png" class="coin">
 <img src="coin13.png" class="coin">
 <img src="coin94.png" class="coin">
 <img src="coin108.png" class="coin">
 <img src="coin216.png" class="coin">
 
-<!-- BUTTONS -->
+<!-- ================= BUTTONS ================= -->
 <div class="buttons">
   <div class="btn white" onclick="invite()">👥 Invite users</div>
-  <div class="btn blue" onclick="openModal('balance')">💰 Balance</div>
-  <div class="btn blue" onclick="openModal('withdraw')">💸 Withdraw</div>
-  <div class="btn blue" onclick="openModal('stats')">📊 Statistics</div>
-  <div class="btn blue" onclick="openModal('how')">ℹ️ How it works</div>
-  <div class="btn blue" onclick="openModal('activate')">🔒 Activate access</div>
-  <div class="btn blue" onclick="openModal('ads')">📣 For advertisers</div>
+  <div class="btn blue" onclick="getBalance()">💰 Balance</div>
+  <div class="btn blue" onclick="withdraw()">💸 Withdraw</div>
+  <div class="btn blue" onclick="getStats()">📊 Statistics</div>
+  <div class="btn blue" onclick="openHow()">ℹ️ How it works</div>
+  <div class="btn blue" onclick="activate()">🔒 Activate access</div>
+  <div class="btn blue" onclick="ads()">📣 For advertisers</div>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content" id="modalContent"></div>
+<!-- ================= HOW IT WORKS ================= -->
+<div class="modal" id="howModal">
+  <div class="modal-content">
+    <h2>ℹ️ How FriendPortal works</h2>
+
+    <p>
+      <b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.
+      It allows users to generate real profit by inviting new users who activate access inside the mini app.
+    </p>
+
+    <p>
+      The system is designed to protect against fake accounts and abuse.
+      Rewards are credited only after activation, ensuring long-term stability and fair payouts.
+    </p>
+
+    <p><b>💎 Referral rewards</b></p>
+    <ul>
+      <li><b>Level 1:</b> +0.5 TON for each invited user who activates access</li>
+      <li><b>Level 2:</b> +0.25 TON for each user invited by your referral</li>
+    </ul>
+
+    <p>
+      <b>⚡ Instant withdrawals</b><br>
+      All rewards are credited instantly to your balance.
+      Once the minimum withdrawal amount is reached, funds can be withdrawn directly to your TON wallet.
+    </p>
+
+    <p>
+      <b>🔒 Why activation is required</b>
+    </p>
+    <ul>
+      <li>Prevents multi-account abuse</li>
+      <li>Ensures fair reward distribution</li>
+      <li>Keeps the ecosystem transparent and sustainable</li>
+    </ul>
+
+    <p>
+      <b>📣 Advertising opportunities</b><br>
+      FriendPortal is also focused on audience growth.
+      Advertisers can promote any product, service, or community using flexible advertising packages.
+    </p>
+
+    <ul>
+      <li>25 TON – one-time broadcast message</li>
+      <li>75 TON – promoted button inside the app for 7 days</li>
+      <li>250 TON – top placement inside the app for 30 days</li>
+    </ul>
+
+    <p>
+      FriendPortal is a transparent ecosystem where users earn from real activity,
+      advertisers reach a growing audience, and the platform grows organically.
+    </p>
+
+    <div class="close" onclick="closeHow()">Close</div>
+  </div>
 </div>
 
 <script>
 const tg = Telegram.WebApp;
 tg.ready();
 tg.expand();
+
+const USER_ID = tg.initDataUnsafe?.user?.id;
+const API = "http://127.0.0.1:8000";
 
 /* INVITE */
 function invite() {
@@ -134,41 +195,54 @@ function invite() {
   );
 }
 
-/* MODALS */
-function openModal(type) {
-  const modal = document.getElementById("modal");
-  const content = document.getElementById("modalContent");
-
-  const data = {
-    balance: "<h2>💰 Balance</h2><p>Your balance: <b>0 TON</b></p>",
-    withdraw: "<h2>💸 Withdraw</h2><p>Minimum withdrawal: <b>5 TON</b></p>",
-    stats: "<h2>📊 Statistics</h2><p>Statistics will be available soon.</p>",
-    activate: "<h2>🔒 Activate access</h2><p>One-time payment: <b>1 TON</b></p>",
-    ads: `
-      <h2>📣 Advertising</h2>
-      <ul>
-        <li>25 TON — one-time broadcast</li>
-        <li>75 TON — top button (7 days)</li>
-        <li>250 TON — top placement (30 days)</li>
-      </ul>
-    `,
-    how: `
-      <h2>ℹ️ How FriendPortal works</h2>
-      <p><b>FriendPortal</b> is a referral-based platform on TON.</p>
-      <ul>
-        <li><b>Level 1:</b> +0.5 TON</li>
-        <li><b>Level 2:</b> +0.25 TON</li>
-      </ul>
-      <p>Instant withdrawals to your TON wallet.</p>
-    `
-  };
-
-  content.innerHTML = data[type] + `<div class="close" onclick="closeModal()">Close</div>`;
-  modal.style.display = "flex";
+/* BACKEND */
+async function getBalance() {
+  const r = await fetch(API + "/balance", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({user_id: USER_ID})
+  });
+  const d = await r.json();
+  alert("💰 Your balance: " + d.balance + " TON");
 }
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+async function getStats() {
+  const r = await fetch(API + "/stats", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({user_id: USER_ID})
+  });
+  const d = await r.json();
+  alert(
+    "👥 Level 1: " + d.level1 +
+    "\n👥 Level 2: " + d.level2 +
+    "\n💎 Earned: " + d.earned + " TON"
+  );
+}
+
+function withdraw() {
+  alert("💸 Minimum withdrawal: 5 TON");
+}
+
+function activate() {
+  alert("🔒 Activation price: 1 TON (one-time)");
+}
+
+function ads() {
+  alert(
+    "📣 Advertising packages:\n\n" +
+    "25 TON – one-time broadcast\n" +
+    "75 TON – top button (7 days)\n" +
+    "250 TON – top placement (30 days)"
+  );
+}
+
+/* MODAL */
+function openHow() {
+  document.getElementById("howModal").style.display = "flex";
+}
+function closeHow() {
+  document.getElementById("howModal").style.display = "none";
 }
 
 /* COIN ANIMATION */
@@ -179,8 +253,8 @@ const H = window.innerHeight;
 const data = [...coins].map(() => ({
   x: Math.random() * (W - 260),
   y: Math.random() * (H - 260),
-  vx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
+  vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
 }));
 
 function animate() {
