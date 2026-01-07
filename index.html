@@ -181,63 +181,91 @@ body {
 </div>
 
 <script>
-const tg = Telegram.WebApp;
-tg.ready();
-tg.expand();
+/* ================= TELEGRAM ================= */
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
 
-const USER_ID = tg.initDataUnsafe?.user?.id;
+/* ================= CONFIG ================= */
+// 🔴 ВАЖНО: когда выложишь сервер — поменяешь на HTTPS домен
 const API = "http://127.0.0.1:8000";
 
-/* INVITE */
+/* USER ID
+   - В Telegram берём реальный
+   - В браузере — фейковый для тестов
+*/
+const USER_ID = tg?.initDataUnsafe?.user?.id || 1;
+
+/* ================= INVITE ================= */
 function invite() {
-  tg.openTelegramLink(
-    "https://t.me/share/url?url=https://t.me/FriendPortal_bot&text=Join%20FriendPortal%20and%20earn%20TON"
-  );
+  const refLink = `https://t.me/FriendPortal_bot?start=ref_${USER_ID}`;
+  tg?.openTelegramLink
+    ? tg.openTelegramLink(
+        `https://t.me/share/url?url=${encodeURIComponent(refLink)}`
+      )
+    : alert("Invite link:\n" + refLink);
 }
 
-/* BACKEND */
+/* ================= BALANCE ================= */
 async function getBalance() {
-  const r = await fetch(API + "/balance", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({user_id: USER_ID})
-  });
-  const d = await r.json();
-  alert("💰 Your balance: " + d.balance + " TON");
+  try {
+    const r = await fetch(API + "/balance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: USER_ID })
+    });
+    const d = await r.json();
+    alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
+  } catch (e) {
+    alert("Balance error");
+    console.error(e);
+  }
 }
 
+/* ================= STATS ================= */
 async function getStats() {
-  const r = await fetch(API + "/stats", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({user_id: USER_ID})
-  });
-  const d = await r.json();
-  alert(
-    "👥 Level 1: " + d.level1 +
-    "\n👥 Level 2: " + d.level2 +
-    "\n💎 Earned: " + d.earned + " TON"
-  );
+  try {
+    const r = await fetch(API + "/stats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: USER_ID })
+    });
+    const d = await r.json();
+    alert(
+      `📊 Statistics\n\n` +
+      `👤 Level 1: ${d.level1}\n` +
+      `👥 Level 2: ${d.level2}\n` +
+      `💎 Earned: ${d.earned} TON`
+    );
+  } catch (e) {
+    alert("Stats error");
+    console.error(e);
+  }
 }
 
+/* ================= WITHDRAW ================= */
 function withdraw() {
   alert("💸 Minimum withdrawal: 5 TON");
 }
 
-function activate() {
-  alert("🔒 Activation price: 1 TON (one-time)");
+/* ================= ACTIVATE ================= */
+async function activate() {
+  alert("🔐 Activation price: 1 TON (one-time)\n\nTON payment will be connected next");
 }
 
+/* ================= ADS ================= */
 function ads() {
   alert(
     "📣 Advertising packages:\n\n" +
-    "25 TON – one-time broadcast\n" +
-    "75 TON – top button (7 days)\n" +
-    "250 TON – top placement (30 days)"
+    "25 TON — one-time broadcast\n" +
+    "75 TON — top button (7 days)\n" +
+    "250 TON — top placement (30 days)"
   );
 }
 
-/* MODAL */
+/* ================= MODAL ================= */
 function openHow() {
   document.getElementById("howModal").style.display = "flex";
 }
@@ -245,7 +273,7 @@ function closeHow() {
   document.getElementById("howModal").style.display = "none";
 }
 
-/* COIN ANIMATION */
+/* ================= COIN ANIMATION (НЕ ТРОГАЕМ) ================= */
 const coins = document.querySelectorAll(".coin");
 const W = window.innerWidth;
 const H = window.innerHeight;
@@ -254,7 +282,7 @@ const data = [...coins].map(() => ({
   x: Math.random() * (W - 260),
   y: Math.random() * (H - 260),
   vx: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
-  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1),
+  vy: (Math.random() * 2.5 + 1.5) * (Math.random() < 0.5 ? -1 : 1)
 }));
 
 function animate() {
@@ -272,6 +300,7 @@ function animate() {
 }
 animate();
 </script>
+
 
 </body>
 </html>
