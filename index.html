@@ -1,201 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>FriendPortal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
 html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #000;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    background: url("bg.png") no-repeat center center fixed;
+    background-size: cover;
 }
 
-/* ===== APP ===== */
-.app {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-width: 480px;
-  background: url("background.jpg") center / cover no-repeat;
-  overflow: hidden;
+.coin {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    z-index: 1;
 }
 
-/* ===== LOGO ===== */
-.logo {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 85%;
-  z-index: 2;
-}
-
-/* ===== BUTTONS ===== */
 .buttons {
-  position: absolute;
-  bottom: env(safe-area-inset-bottom);
-  left: 0;
-  width: 100%;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 3;
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 20px;
+    z-index: 2;
 }
 
 .btn {
-  width: 100%;
-  padding: 16px;
-  border-radius: 14px;
-  border: none;
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(180deg, #5f6bff, #4a56e2);
+    padding: 16px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    background: rgba(80,90,200,0.85);
 }
 
-.btn.secondary {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(6px);
+.btn.white {
+    background: rgba(255,255,255,0.9);
+    color: #000;
 }
 
-/* ===== COINS ===== */
-.coin {
-  position: absolute;
-  width: 56px;
-  aspect-ratio: 1 / 1;   /* 🔥 СТРОГО 1:1 */
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  animation: float linear infinite;
-  pointer-events: none;
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.55);
+    z-index: 10;
 }
 
-@keyframes float {
-  from {
-    transform: translateY(110vh) rotate(0deg);
-    opacity: 0;
-  }
-  10% { opacity: 1; }
-  to {
-    transform: translateY(-120vh) rotate(360deg);
-    opacity: 0;
-  }
+.modal-content {
+    width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    background: #111;
+    color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    border-radius: 12px;
+    border: none;
+    background: #4e6cff;
+    color: white;
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-  <img src="logo.png" class="logo" alt="FriendPortal">
+<!-- COINS -->
+<img src="coin1.png" class="coin">
+<img src="coin13.png" class="coin">
+<img src="coin94.png" class="coin">
+<img src="coin108.png" class="coin">
+<img src="coin216.png" class="coin">
 
-  <!-- BUTTONS -->
-  <div class="buttons">
-    <button class="btn secondary" onclick="invite()">👥 Invite users</button>
-    <button class="btn" onclick="balance()">💰 Balance</button>
-    <button class="btn" onclick="withdraw()">💸 Withdraw</button>
-    <button class="btn" onclick="stats()">📊 Statistics</button>
-    <button class="btn" onclick="how()">ℹ️ How it works</button>
-    <button class="btn" onclick="activate()">🔐 Activate access</button>
-    <button class="btn" onclick="ads()">📣 For advertisers</button>
-  </div>
+<!-- BUTTONS -->
+<div class="buttons">
+    <div class="btn white" onclick="invite()">👥 Invite users</div>
+    <div class="btn" onclick="getBalance()">💰 Balance</div>
+    <div class="btn" onclick="withdraw()">💸 Withdraw</div>
+    <div class="btn" onclick="getStats()">📊 Statistics</div>
+    <div class="btn" onclick="openHow()">ℹ️ How it works</div>
+    <div class="btn" onclick="activate()">🔐 Activate access</div>
+    <div class="btn" onclick="ads()">📣 For advertisers</div>
+</div>
 
+<!-- HOW IT WORKS -->
+<div class="modal" id="howModal">
+<div class="modal-content">
+<h2>ℹ️ How FriendPortal works</h2>
+
+<p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.</p>
+
+<p>Invite new users. When they activate access, you earn rewards.</p>
+
+<p><b>💎 Referral rewards</b></p>
+<ul>
+<li>Level 1: +0.5 TON</li>
+<li>Level 2: +0.25 TON</li>
+</ul>
+
+<p><b>⚡ Instant withdrawals</b><br>
+Funds are credited instantly and can be withdrawn after reaching the minimum.</p>
+
+<p><b>🔒 Why activation is required</b></p>
+<ul>
+<li>Prevents abuse</li>
+<li>Ensures fair distribution</li>
+<li>Keeps ecosystem sustainable</li>
+</ul>
+
+<p><b>📣 Advertising</b></p>
+<ul>
+<li>25 TON — broadcast</li>
+<li>75 TON — top button (7 days)</li>
+<li>250 TON — top placement (30 days)</li>
+</ul>
+
+<button onclick="closeHow()">Close</button>
+</div>
 </div>
 
 <script>
-/* ===== TELEGRAM INIT ===== */
-const tg = window.Telegram.WebApp;
-tg.ready();
+const API = "https://loyce-taxitic-elenora.ngrok-free.dev";
+const BOT = "FriendPortal_bot";
+const tg = Telegram.WebApp;
 tg.expand();
 
-/* ===== BACKEND ===== */
-const API = "https://loyce-taxitic-elenora.ngrok-free.dev";
+const user = tg.initDataUnsafe?.user;
+if (!user) alert("Telegram user not detected");
 
-/* ===== COINS SPAWN ===== */
-const coinImages = [
-  "coin1.png",
-  "coin2.png",
-  "coin3.png"
-];
+const user_id = user?.id;
 
-function spawnCoin() {
-  const coin = document.createElement("div");
-  coin.className = "coin";
-  coin.style.left = Math.random() * 90 + "%";
-  coin.style.animationDuration = (8 + Math.random() * 6) + "s";
-  coin.style.backgroundImage =
-    `url(${coinImages[Math.floor(Math.random() * coinImages.length)]})`;
+// COINS ANIMATION
+const coins = document.querySelectorAll(".coin");
+const W = window.innerWidth;
+const H = window.innerHeight;
 
-  document.querySelector(".app").appendChild(coin);
+const data = [...coins].map(() => ({
+    x: Math.random() * (W - 80),
+    y: Math.random() * (H - 80),
+    vx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1),
+    vy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1)
+}));
 
-  setTimeout(() => coin.remove(), 15000);
+function animate() {
+    coins.forEach((c, i) => {
+        const d = data[i];
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.x < 0 || d.x > W - 80) d.vx *= -1;
+        if (d.y < 0 || d.y > H - 80) d.vy *= -1;
+        c.style.transform = `translate(${d.x}px, ${d.y}px)`;
+    });
+    requestAnimationFrame(animate);
 }
+animate();
 
-setInterval(spawnCoin, 900);
-
-/* ===== BUTTON ACTIONS ===== */
+// ACTIONS
 function invite() {
-  tg.openTelegramLink(
-    "https://t.me/share/url?url=https://t.me/FriendPortal_bot&text=Join FriendPortal and earn TON!"
-  );
+    const link = `https://t.me/${BOT}?startapp=${user_id}`;
+    tg.openTelegramLink(
+        `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join FriendPortal`
+    );
 }
 
-async function balance() {
-  const r = await fetch(API + "/balance", { method: "POST" });
-  const d = await r.json();
-  alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
+async function getBalance() {
+    const r = await fetch(API + "/balance", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({user_id})
+    });
+    const d = await r.json();
+    alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
 }
 
-async function stats() {
-  const r = await fetch(API + "/stats", { method: "POST" });
-  const d = await r.json();
-  alert(`📊 Statistics\nLevel 1: ${d.level1}\nLevel 2: ${d.level2}\nEarned: ${d.earned} TON`);
+async function getStats() {
+    const r = await fetch(API + "/stats", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({user_id})
+    });
+    const d = await r.json();
+    alert(`📊 Statistics\nLevel 1: ${d.level1}\nLevel 2: ${d.level2}\nEarned: ${d.earned} TON`);
 }
 
 function withdraw() {
-  alert("💸 Minimum withdrawal: 5 TON");
-}
-
-function how() {
-  alert(
-    "FriendPortal referral system\n\n" +
-    "Level 1: +0.5 TON\n" +
-    "Level 2: +0.25 TON\n\n" +
-    "Minimum withdrawal: 5 TON"
-  );
+    alert("💸 Minimum withdrawal: 5 TON");
 }
 
 function activate() {
-  alert("🔐 Activation price: 1 TON\nTON payment will be connected next");
+    alert("🔐 Activation price: 1 TON\nTON payment will be connected next");
 }
 
 function ads() {
-  alert(
-    "📣 Advertising packages:\n\n" +
-    "25 TON — broadcast\n" +
-    "75 TON — top button\n" +
-    "250 TON — top placement"
-  );
+    alert("📣 Advertising packages:\n\n25 TON — broadcast\n75 TON — top button\n250 TON — top placement");
+}
+
+function openHow() {
+    document.getElementById("howModal").style.display = "flex";
+}
+
+function closeHow() {
+    document.getElementById("howModal").style.display = "none";
 }
 </script>
+
 </body>
 </html>
