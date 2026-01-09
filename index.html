@@ -9,9 +9,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -23,7 +21,7 @@ html, body {
   background: #000;
 }
 
-/* APP WRAPPER */
+/* APP */
 .app {
   position: relative;
   width: 100%;
@@ -34,7 +32,7 @@ html, body {
   background: url("bg.png") center top / cover no-repeat;
 }
 
-/* COINS */
+/* COINS — НЕ ТРОГАЛ */
 .coin {
   position: absolute;
   width: 70px;
@@ -45,9 +43,8 @@ html, body {
   z-index: 1;
 }
 
-/* BUTTONS */
+/* BUTTON CONTAINER */
 .buttons {
-  align-items: center;
   position: absolute;
   bottom: 32px;
   left: 0;
@@ -55,10 +52,36 @@ html, body {
   padding: 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
   z-index: 5;
 }
 
+/* ZIGZAG BUTTON */
+.btn-img {
+  width: 100%;
+  display: flex;
+}
+
+.btn-img.left  { justify-content: flex-start; }
+.btn-img.right { justify-content: flex-end; }
+
+.btn-img img {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  transition:
+    transform 0.12s cubic-bezier(.2,.8,.3,1),
+    filter 0.12s ease;
+  will-change: transform;
+}
+
+/* 🔥 REAL PRESS EFFECT */
+.btn-img:active img {
+  transform: translateY(4px) scale(0.965);
+  filter: brightness(0.92);
+}
 
 /* MODAL */
 .modal {
@@ -91,124 +114,61 @@ html, body {
   color: #fff;
   font-size: 16px;
 }
-/* контейнер кнопок */
-.buttons.zigzag {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 0 16px 40px;
-}
-
-/* кнопка-картинка */
-.btn-img {
-  width: 100%;
-  display: flex;
-}
-
-.btn-img img {
-  width: 100%;
-  max-width: 360px; /* 🔥 регулируй ширину */
-  height: auto;
-  display: block;
-  border-radius: 20px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* левое положение */
-.btn-img.left {
-  justify-content: flex-start;
-}
-
-/* правое положение */
-.btn-img.right {
-  justify-content: flex-end;
-}
-
-/* эффект нажатия */
-.btn-img:active img {
-  transform: scale(0.97) translateY(2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-}
-  
 </style>
 </head>
 
 <body>
 <div class="app">
 
-  <!-- COINS -->
-  <img src="coin1.png" class="coin">
-  <img src="coin13.png" class="coin">
-  <img src="coin94.png" class="coin">
-  <img src="coin108.png" class="coin">
-  <img src="coin216.png" class="coin">
+<!-- COINS -->
+<img src="coin1.png" class="coin">
+<img src="coin13.png" class="coin">
+<img src="coin94.png" class="coin">
+<img src="coin108.png" class="coin">
+<img src="coin216.png" class="coin">
 
-  <!-- BUTTONS -->
-  <div class="buttons zigzag">
+<!-- BUTTONS -->
+<div class="buttons">
 
   <div class="btn-img left" onclick="invite()">
-    <img src="inv.png" alt="Invite">
+    <img src="inv.png">
   </div>
 
   <div class="btn-img right" onclick="getBalance()">
-    <img src="bal.png" alt="Balance">
+    <img src="bal.png">
   </div>
 
   <div class="btn-img left" onclick="withdraw()">
-    <img src="wit.png" alt="Withdraw">
+    <img src="wit.png">
   </div>
 
   <div class="btn-img right" onclick="getStats()">
-    <img src="sta.png" alt="Statistics">
+    <img src="sta.png">
   </div>
 
   <div class="btn-img left" onclick="openHow()">
-    <img src="how.png" alt="How">
+    <img src="how.png">
   </div>
 
   <div class="btn-img right" onclick="activate()">
-    <img src="act.png" alt="Activate">
+    <img src="act.png">
   </div>
 
   <div class="btn-img left" onclick="ads()">
-    <img src="for.png" alt="Ads">
+    <img src="for.png">
   </div>
 
 </div>
 
-<!-- HOW IT WORKS -->
+<!-- MODAL -->
 <div class="modal" id="howModal">
   <div class="modal-content">
     <h2>ℹ️ How FriendPortal works</h2>
-
-    <p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.</p>
-    <p>Invite new users. When they activate access, you earn rewards.</p>
-
-    <p><b>💎 Referral rewards</b></p>
-    <ul>
-      <li>Level 1: +0.5 TON</li>
-      <li>Level 2: +0.25 TON</li>
-    </ul>
-
-    <p><b>⚡ Instant withdrawals</b><br>
-    Funds are credited instantly and can be withdrawn after reaching the minimum.</p>
-
-    <p><b>🔐 Why activation is required</b></p>
-    <ul>
-      <li>Prevents abuse</li>
-      <li>Ensures fair distribution</li>
-      <li>Keeps ecosystem sustainable</li>
-    </ul>
-
-    <p><b>📣 Advertising</b></p>
-    <ul>
-      <li>25 TON — broadcast</li>
-      <li>75 TON — top button (7 days)</li>
-      <li>250 TON — top placement (30 days)</li>
-    </ul>
-
+    <p><b>FriendPortal</b> is a referral-based earning platform on TON.</p>
     <button onclick="closeHow()">Close</button>
   </div>
+</div>
+
 </div>
 
 <script>
@@ -219,10 +179,9 @@ const tg = Telegram.WebApp;
 tg.expand();
 
 const user = tg.initDataUnsafe?.user;
-if (!user) alert("Telegram user not detected");
 const user_id = user?.id;
 
-// COIN ANIMATION
+/* COIN ANIMATION — ИСПРАВЛЕНО */
 const coins = document.querySelectorAll(".coin");
 const W = window.innerWidth;
 const H = window.innerHeight;
@@ -249,7 +208,7 @@ function animate() {
 }
 animate();
 
-// ACTIONS
+/* ACTIONS */
 function invite() {
   const link = `https://t.me/${BOT}?startapp=${user_id}`;
   tg.openTelegramLink(
@@ -282,11 +241,11 @@ function withdraw() {
 }
 
 function activate() {
-  alert("🔐 Activation price: 1 TON\nTON payment will be connected next");
+  alert("🔐 Activation price: 1 TON");
 }
 
 function ads() {
-  alert("📣 Advertising packages:\n\n25 TON — broadcast\n75 TON — top button\n250 TON — top placement");
+  alert("📣 Advertising packages available");
 }
 
 function openHow() {
