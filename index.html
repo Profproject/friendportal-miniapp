@@ -223,8 +223,23 @@ function invite(){
   tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
 }
 
-async function getBalance(){
-  alert("Balance request (backend required)");
+async function getBalance() {
+  try {
+    const r = await fetch(API + "/balance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id })
+    });
+
+    const d = await r.json();
+
+    alert(
+      `💰 Balance: ${d.balance} TON\n` +
+      `✅ Activated: ${d.activated ? "Yes" : "No"}`
+    );
+  } catch (e) {
+    alert("❌ Backend not reachable");
+  }
 }
 
 function withdraw(){ alert("💸 Minimum withdrawal: 5 TON"); }
@@ -234,11 +249,43 @@ function ads(){ alert("📣 Advertising packages available"); }
 function openHow(){ document.getElementById("howModal").style.display="flex"; }
 function closeHow(){ document.getElementById("howModal").style.display="none"; }
 
-async function openStats(){
-  document.getElementById("statsModal").style.display="flex";
-  document.getElementById("statsContent").innerHTML="<h2>📊 Statistics</h2><p>Backend required</p><button onclick='closeStats()'>Close</button>";
+async function getStats() {
+  document.getElementById("statsModal").style.display = "flex";
+
+  try {
+    const r = await fetch(API + "/stats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id })
+    });
+
+    const d = await r.json();
+
+    document.getElementById("statsContent").innerHTML = `
+      <h2>📊 Statistics</h2>
+
+      <p>👥 Level 1 referrals: <b>${d.level1}</b></p>
+      <p>👥 Level 2 referrals: <b>${d.level2}</b></p>
+
+      <hr>
+
+      <p>💎 Total earned: <b>${d.earned} TON</b></p>
+
+      <button onclick="closeStats()">Close</button>
+    `;
+  } catch (e) {
+    document.getElementById("statsContent").innerHTML = `
+      <h2>📊 Statistics</h2>
+      <p>❌ Backend not reachable</p>
+      <button onclick="closeStats()">Close</button>
+    `;
+  }
 }
-function closeStats(){ document.getElementById("statsModal").style.display="none"; }
+
+function closeStats() {
+  document.getElementById("statsModal").style.display = "none";
+}
+
 </script>
 
 </body>
