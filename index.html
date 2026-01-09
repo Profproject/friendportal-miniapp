@@ -59,84 +59,6 @@ html, body {
   z-index: 5;
 }
 
-.btn {
-  width: 55%;
-  padding: 16px;
-
-  border-radius: 22px;
-  text-align: center;
-
-  font-size: 18px;
-  font-weight: 600;
-  color: #f6f8ff;
-
-  /* ОСНОВНОЙ TON-СИНИЙ */
-  background: linear-gradient(
-    180deg,
-    #4458ff 0%,
-    #2b3fa8 100%
-  );
-
-  /* ТЕНЬ КАК У НАДПИСИ FRIENDPORTAL (ВЛЕВО И ВНИЗ) */
-  box-shadow:
-    -6px 10px 20px rgba(20, 30, 90, 0.6),
-    inset 0 1px 0 rgba(255, 215, 120, 0.35),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.45);
-
-  /* ЗОЛОТОЙ КАНТ */
-  border: 1px solid rgba(255, 215, 120, 0.35);
-
-  position: relative;
-  overflow: hidden;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-.btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 22px;
-
-  /* ЗОЛОТОЙ СВЕТ КАК В НАДПИСИ */
-  background: linear-gradient(
-    120deg,
-    rgba(255, 215, 120, 0.45),
-    rgba(255, 215, 120, 0.12) 35%,
-    transparent 60%
-  );
-
-  pointer-events: none;
-}
-.btn:active {
-  transform: translateY(3px) scale(0.98);
-
-  box-shadow:
-    -3px 6px 12px rgba(20, 30, 90, 0.6),
-    inset 0 3px 6px rgba(0, 0, 0, 0.5);
-}
-/* ОСОБАЯ КНОПКА INVITE */
-.btn.invite {
-  background: linear-gradient(
-    180deg,
-    #ffe08a 0%,
-    #f5b942 100%
-  );
-  color: #2b2b2b;
-
-  box-shadow:
-    -6px 10px 22px rgba(30, 40, 120, 0.55),
-    inset 0 2px 3px rgba(255,255,255,0.6),
-    inset 0 -4px 8px rgba(0,0,0,0.35);
-
-  border: 1px solid rgba(255, 215, 120, 0.7);
-}
-
-
-
-
-
 
 /* MODAL */
 .modal {
@@ -169,6 +91,45 @@ html, body {
   color: #fff;
   font-size: 16px;
 }
+/* контейнер кнопок */
+.buttons.zigzag {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 16px 40px;
+}
+
+/* кнопка-картинка */
+.btn-img {
+  width: 100%;
+  display: flex;
+}
+
+.btn-img img {
+  width: 100%;
+  max-width: 360px; /* 🔥 регулируй ширину */
+  height: auto;
+  display: block;
+  border-radius: 20px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* левое положение */
+.btn-img.left {
+  justify-content: flex-start;
+}
+
+/* правое положение */
+.btn-img.right {
+  justify-content: flex-end;
+}
+
+/* эффект нажатия */
+.btn-img:active img {
+  transform: scale(0.97) translateY(2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+  
 </style>
 </head>
 
@@ -183,14 +144,34 @@ html, body {
   <img src="coin216.png" class="coin">
 
   <!-- BUTTONS -->
-  <div class="buttons">
-    <div class="btn invhite" onclick="invite()">👥 Invite users</div>
-    <div class="btn" onclick="getBalance()">💰 Balance</div>
-    <div class="btn" onclick="withdraw()">💸 Withdraw</div>
-    <div class="btn" onclick="getStats()">📊 Statistics</div>
-    <div class="btn" onclick="openHow()">ℹ️ How it works</div>
-    <div class="btn" onclick="activate()">🔐 Activate access</div>
-    <div class="btn" onclick="ads()">📣 For advertisers</div>
+  <div class="buttons zigzag">
+
+  <div class="btn-img left" onclick="invite()">
+    <img src="inv.png" alt="Invite">
+  </div>
+
+  <div class="btn-img right" onclick="getBalance()">
+    <img src="bal.png" alt="Balance">
+  </div>
+
+  <div class="btn-img left" onclick="withdraw()">
+    <img src="wit.png" alt="Withdraw">
+  </div>
+
+  <div class="btn-img right" onclick="getStats()">
+    <img src="sta.png" alt="Statistics">
+  </div>
+
+  <div class="btn-img left" onclick="openHow()">
+    <img src="how.png" alt="How">
+  </div>
+
+  <div class="btn-img right" onclick="activate()">
+    <img src="act.png" alt="Activate">
+  </div>
+
+  <div class="btn-img left" onclick="ads()">
+    <img src="for.png" alt="Ads">
   </div>
 
 </div>
