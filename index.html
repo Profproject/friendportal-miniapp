@@ -145,7 +145,8 @@ html, body {
   <div class="btn-img left" onclick="invite()"><img src="inv.png"></div>
   <div class="btn-img right" onclick="getBalance()"><img src="bal.png"></div>
   <div class="btn-img left" onclick="withdraw()"><img src="wit.png"></div>
-  <div class="btn-img right" onclick="openStats()"><img src="sta.png"></div>
+  <div class="btn-img right" onclick="getStats()">
+  <img src="sta.png" alt="Statistics">
   <div class="btn-img left" onclick="openHow()"><img src="how.png"></div>
   <div class="btn-img right" onclick="activate()"><img src="act.png"></div>
   <div class="btn-img left" onclick="ads()"><img src="for.png"></div>
@@ -177,13 +178,14 @@ html, body {
 </div>
 
 <!-- STATS -->
+<!-- STATS MODAL -->
 <div class="modal" id="statsModal">
   <div class="modal-content" id="statsContent">
     <h2>📊 Statistics</h2>
     <p>Loading...</p>
-    <button onclick="closeStats()">Close</button>
   </div>
 </div>
+
 
 <script>
 const API = "https://loyce-taxitic-elenora.ngrok-free.dev";
@@ -251,6 +253,10 @@ function closeHow(){ document.getElementById("howModal").style.display="none"; }
 
 async function getStats() {
   document.getElementById("statsModal").style.display = "flex";
+  document.getElementById("statsContent").innerHTML = `
+    <h2>📊 Statistics</h2>
+    <p>Loading...</p>
+  `;
 
   try {
     const r = await fetch(API + "/stats", {
@@ -285,6 +291,7 @@ async function getStats() {
 function closeStats() {
   document.getElementById("statsModal").style.display = "none";
 }
+
 
 </script>
 
