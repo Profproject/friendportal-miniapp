@@ -9,9 +9,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -28,13 +26,13 @@ html, body {
   position: relative;
   width: 100%;
   max-width: 480px;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0 auto;
   overflow-y: auto;
   background: url("bg.png") center top / cover no-repeat;
 }
 
-/* COINS */
+/* COINS (НЕ МЕНЯЕМ) */
 .coin {
   position: absolute;
   width: 70px;
@@ -45,14 +43,16 @@ html, body {
   z-index: 1;
 }
 
-/* BUTTONS CONTAINER */
+/* BUTTONS */
 .buttons {
   position: relative;
   z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 260px 16px 40px;
+  gap: 14px;
+
+  /* 🔥 меньше отступ сверху, чтобы всё влезало */
+  padding: 220px 16px 24px;
 }
 
 /* IMAGE BUTTON */
@@ -63,28 +63,24 @@ html, body {
 
 .btn-img img {
   width: 100%;
-  max-width: 300px;
+  max-width: 300px;     /* 🔥 стабилизирует размер */
   height: auto;
-  border-radius: 22px;
+  border-radius: 20px;
   display: block;
-  transition: transform 0.15s ease, filter 0.15s ease;
+
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
 }
 
 /* ZIGZAG */
-.btn-img.left {
-  justify-content: flex-start;
-  padding-left: 4px;
-}
+.btn-img.left  { justify-content: flex-start; }
+.btn-img.right { justify-content: flex-end; }
 
-.btn-img.right {
-  justify-content: flex-end;
-  padding-right: 4px;
-}
-
-/* PRESS EFFECT */
+/* 🔥 РЕАЛЬНЫЙ ЭФФЕКТ НАЖАТИЯ */
 .btn-img:active img {
-  transform: translateY(6px) scale(0.95);
-  filter: brightness(0.88);
+  transform: translateY(5px) scale(0.96);
+  filter: brightness(0.9);
 }
 
 /* MODAL */
@@ -169,14 +165,7 @@ html, body {
 <div class="modal" id="howModal">
   <div class="modal-content">
     <h2>ℹ️ How FriendPortal works</h2>
-
-    <p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.</p>
-
-    <ul>
-      <li>Level 1: +0.5 TON</li>
-      <li>Level 2: +0.25 TON</li>
-    </ul>
-
+    <p>Invite users and earn TON rewards.</p>
     <button onclick="closeHow()">Close</button>
   </div>
 </div>
@@ -191,7 +180,7 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 const user_id = user?.id;
 
-/* COINS ANIMATION */
+/* COINS ANIMATION (НЕ МЕНЯЕМ) */
 const coins = document.querySelectorAll(".coin");
 const W = window.innerWidth;
 const H = window.innerHeight;
@@ -225,23 +214,11 @@ function invite() {
 }
 
 async function getBalance() {
-  const r = await fetch(API + "/balance", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({user_id})
-  });
-  const d = await r.json();
-  alert(`Balance: ${d.balance} TON`);
+  alert("Balance request (backend required)");
 }
 
 async function getStats() {
-  const r = await fetch(API + "/stats", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({user_id})
-  });
-  const d = await r.json();
-  alert(`Earned: ${d.earned} TON`);
+  alert("Stats request (backend required)");
 }
 
 function withdraw() {
