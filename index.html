@@ -9,7 +9,9 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html, body {
   margin: 0;
@@ -26,13 +28,13 @@ html, body {
   position: relative;
   width: 100%;
   max-width: 480px;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
-  overflow: hidden;
+  overflow-y: auto;
   background: url("bg.png") center top / cover no-repeat;
 }
 
-/* COINS — НЕ ТРОГАЛ */
+/* COINS */
 .coin {
   position: absolute;
   width: 70px;
@@ -43,44 +45,46 @@ html, body {
   z-index: 1;
 }
 
-/* BUTTON CONTAINER */
+/* BUTTONS CONTAINER */
 .buttons {
-  position: absolute;
-  bottom: 32px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
+  position: relative;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  z-index: 5;
+  padding: 260px 16px 40px;
 }
 
-/* ZIGZAG BUTTON */
+/* IMAGE BUTTON */
 .btn-img {
   width: 100%;
   display: flex;
 }
 
-.btn-img.left  { justify-content: flex-start; }
-.btn-img.right { justify-content: flex-end; }
-
 .btn-img img {
   width: 100%;
-  max-width: 360px;
+  max-width: 300px;
   height: auto;
-  display: block;
   border-radius: 22px;
-  transition:
-    transform 0.12s cubic-bezier(.2,.8,.3,1),
-    filter 0.12s ease;
-  will-change: transform;
+  display: block;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-/* 🔥 REAL PRESS EFFECT */
+/* ZIGZAG */
+.btn-img.left {
+  justify-content: flex-start;
+  padding-left: 4px;
+}
+
+.btn-img.right {
+  justify-content: flex-end;
+  padding-right: 4px;
+}
+
+/* PRESS EFFECT */
 .btn-img:active img {
-  transform: translateY(4px) scale(0.965);
-  filter: brightness(0.92);
+  transform: translateY(6px) scale(0.95);
+  filter: brightness(0.88);
 }
 
 /* MODAL */
@@ -120,55 +124,61 @@ html, body {
 <body>
 <div class="app">
 
-<!-- COINS -->
-<img src="coin1.png" class="coin">
-<img src="coin13.png" class="coin">
-<img src="coin94.png" class="coin">
-<img src="coin108.png" class="coin">
-<img src="coin216.png" class="coin">
+  <!-- COINS -->
+  <img src="coin1.png" class="coin">
+  <img src="coin13.png" class="coin">
+  <img src="coin94.png" class="coin">
+  <img src="coin108.png" class="coin">
+  <img src="coin216.png" class="coin">
 
-<!-- BUTTONS -->
-<div class="buttons">
+  <!-- BUTTONS -->
+  <div class="buttons">
 
-  <div class="btn-img left" onclick="invite()">
-    <img src="inv.png">
+    <div class="btn-img left" onclick="invite()">
+      <img src="inv.png">
+    </div>
+
+    <div class="btn-img right" onclick="getBalance()">
+      <img src="bal.png">
+    </div>
+
+    <div class="btn-img left" onclick="withdraw()">
+      <img src="wit.png">
+    </div>
+
+    <div class="btn-img right" onclick="getStats()">
+      <img src="sta.png">
+    </div>
+
+    <div class="btn-img left" onclick="openHow()">
+      <img src="how.png">
+    </div>
+
+    <div class="btn-img right" onclick="activate()">
+      <img src="act.png">
+    </div>
+
+    <div class="btn-img left" onclick="ads()">
+      <img src="for.png">
+    </div>
+
   </div>
-
-  <div class="btn-img right" onclick="getBalance()">
-    <img src="bal.png">
-  </div>
-
-  <div class="btn-img left" onclick="withdraw()">
-    <img src="wit.png">
-  </div>
-
-  <div class="btn-img right" onclick="getStats()">
-    <img src="sta.png">
-  </div>
-
-  <div class="btn-img left" onclick="openHow()">
-    <img src="how.png">
-  </div>
-
-  <div class="btn-img right" onclick="activate()">
-    <img src="act.png">
-  </div>
-
-  <div class="btn-img left" onclick="ads()">
-    <img src="for.png">
-  </div>
-
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="howModal">
   <div class="modal-content">
     <h2>ℹ️ How FriendPortal works</h2>
-    <p><b>FriendPortal</b> is a referral-based earning platform on TON.</p>
+
+    <p><b>FriendPortal</b> is a referral-based earning platform built on the TON blockchain.</p>
+
+    <ul>
+      <li>Level 1: +0.5 TON</li>
+      <li>Level 2: +0.25 TON</li>
+    </ul>
+
     <button onclick="closeHow()">Close</button>
   </div>
-</div>
-
 </div>
 
 <script>
@@ -181,7 +191,7 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 const user_id = user?.id;
 
-/* COIN ANIMATION — ИСПРАВЛЕНО */
+/* COINS ANIMATION */
 const coins = document.querySelectorAll(".coin");
 const W = window.innerWidth;
 const H = window.innerHeight;
@@ -211,9 +221,7 @@ animate();
 /* ACTIONS */
 function invite() {
   const link = `https://t.me/${BOT}?startapp=${user_id}`;
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join FriendPortal`
-  );
+  tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
 }
 
 async function getBalance() {
@@ -223,7 +231,7 @@ async function getBalance() {
     body: JSON.stringify({user_id})
   });
   const d = await r.json();
-  alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
+  alert(`Balance: ${d.balance} TON`);
 }
 
 async function getStats() {
@@ -233,19 +241,19 @@ async function getStats() {
     body: JSON.stringify({user_id})
   });
   const d = await r.json();
-  alert(`📊 Statistics\nLevel 1: ${d.level1}\nLevel 2: ${d.level2}\nEarned: ${d.earned} TON`);
+  alert(`Earned: ${d.earned} TON`);
 }
 
 function withdraw() {
-  alert("💸 Minimum withdrawal: 5 TON");
+  alert("Minimum withdrawal: 5 TON");
 }
 
 function activate() {
-  alert("🔐 Activation price: 1 TON");
+  alert("Activation price: 1 TON");
 }
 
 function ads() {
-  alert("📣 Advertising packages available");
+  alert("Advertising packages available");
 }
 
 function openHow() {
