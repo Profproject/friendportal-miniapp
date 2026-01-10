@@ -149,31 +149,31 @@ html, body {
 <!-- BUTTONS -->
 <div class="buttons">
 
-  <div class="btn-img left" onclick="invite()">
+  <div class="btn-img left" onclick="playClick(); invite()">
     <img src="inv.png" alt="Invite">
   </div>
 
-  <div class="btn-img right" onclick="getBalance()">
+  <div class="btn-img right" onclick="playClick(); getBalance()">
     <img src="bal.png" alt="Balance">
   </div>
 
-  <div class="btn-img left" onclick="withdraw()">
+  <div class="btn-img left" onclick="playClick(); withdraw()">
     <img src="wit.png" alt="Withdraw">
   </div>
 
-  <div class="btn-img right" onclick="getStats()">
+  <div class="btn-img right" onclick="playClick(); getStats()">
     <img src="sta.png" alt="Statistics">
   </div>
 
-  <div class="btn-img left" onclick="openHow()">
+  <div class="btn-img left" onclick="playClick(); openHow()">
     <img src="how.png" alt="How it works">
   </div>
 
-  <div class="btn-img right" onclick="activate()">
+  <div class="btn-img right" onclick="playClick(); activate()">
     <img src="act.png" alt="Activate">
   </div>
 
-  <div class="btn-img left" onclick="ads()">
+  <div class="btn-img left" onclick="playClick(); ads()">
     <img src="for.png" alt="For advertisers">
   </div>
 
@@ -319,6 +319,33 @@ function closeStats() {
   document.getElementById("statsModal").style.display = "none";
 }
 
+// 🔊 CLICK SOUND (NO DELAY)
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioCtx();
+
+function playClick() {
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = "square";       // чёткий щелчок
+  osc.frequency.value = 1200; // высота щелчка
+
+  gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioCtx.currentTime + 0.05
+  );
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
 
 </script>
 
