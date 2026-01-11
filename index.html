@@ -3,124 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <title>FriendPortal</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;background:#000;font-family:-apple-system}
+.app{position:relative;width:100%;max-width:480px;height:100vh;margin:0 auto;background:url("bg.png") center top/cover no-repeat;overflow:hidden}
 
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #000;
-  overflow: hidden;
-}
+.coin{position:absolute;width:70px;height:70px;object-fit:contain;pointer-events:none;z-index:1}
 
-.app {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
-  margin: 0 auto;
-  background: url("bg.png") center top / cover no-repeat;
-  overflow: hidden;
-}
+.buttons{position:absolute;bottom:20px;left:0;width:100%;padding:0 16px;display:flex;flex-direction:column;gap:10px;z-index:5}
+.btn-img{display:flex;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-img.left{justify-content:flex-start}
+.btn-img.right{justify-content:flex-end}
+.btn-img img{width:100%;max-width:250px;border-radius:18px;transition:.12s}
+.btn-img.pressed img{transform:translateY(6px) scale(.94);filter:brightness(.85)}
 
-/* COINS */
-.coin {
-  position: absolute;
-  width: 70px;
-  height: 70px;
-  pointer-events: none;
-  object-fit: contain;
-  z-index: 1;
-}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:20}
+.modal-content{width:90%;max-height:85%;overflow:auto;background:linear-gradient(180deg,#111,#1b1b1b);color:#fff;border-radius:22px;padding:22px}
+.modal-content h2{color:#ffd87a;margin-top:0}
+.modal-content button{margin-top:20px;width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(180deg,#4e6cff,#2f46ff);color:#fff}
 
-/* BUTTONS */
-.buttons {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 5;
-}
-
-.btn-img {
-  width: 100%;
-  display: flex;
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-img.left { justify-content: flex-start; }
-.btn-img.right { justify-content: flex-end; }
-
-.btn-img img {
-  width: 100%;
-  max-width: 250px;
-  border-radius: 18px;
-  transition: transform 0.12s ease, filter 0.12s ease;
-}
-
-.btn-img.pressed img {
-  transform: translateY(6px) scale(0.94);
-  filter: brightness(0.85);
-}
-
-/* MODALS */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(6px);
-  z-index: 20;
-}
-
-.modal-content {
-  width: 90%;
-  max-height: 85%;
-  overflow-y: auto;
-  background: linear-gradient(180deg,#111,#1b1b1b);
-  color: #fff;
-  border-radius: 22px;
-  padding: 22px;
-}
-
-.modal-content h2 { color:#ffd87a; margin-top:0; }
-
-.modal-content button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  background: linear-gradient(180deg,#4e6cff,#2f46ff);
-  color: #fff;
-  font-size: 16px;
-}
-
-#soundToggle {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  z-index: 30;
-  font-size: 22px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 50%;
-}
+#soundToggle{position:absolute;bottom:12px;right:12px;font-size:22px;background:rgba(0,0,0,.6);padding:10px;border-radius:50%;z-index:30}
 </style>
 </head>
 
@@ -129,7 +34,6 @@ html, body {
 
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
-
 <div id="soundToggle" onclick="toggleSound()">🔊</div>
 
 <img src="coin1.png" class="coin">
@@ -139,48 +43,44 @@ html, body {
 <img src="coin216.png" class="coin">
 
 <div class="buttons">
-  <div class="btn-img left" onpointerdown="press(this)" onclick="invite()"><img src="inv.png"></div>
-  <div class="btn-img right" onpointerdown="press(this)" onclick="getBalance()"><img src="bal.png"></div>
-  <div class="btn-img left" onpointerdown="press(this)" onclick="withdraw()"><img src="wit.png"></div>
-  <div class="btn-img right" onpointerdown="press(this)" onclick="getStats()"><img src="sta.png"></div>
-  <div class="btn-img left" onpointerdown="press(this)" onclick="openHow()"><img src="how.png"></div>
-  <div class="btn-img right" onpointerdown="press(this)" onclick="payActivate()"><img src="act.png"></div>
-  <div class="btn-img left" onpointerdown="press(this)" onclick="openAds()"><img src="for.png"></div>
+<div class="btn-img left" onpointerdown="press(this)" onclick="invite()"><img src="inv.png"></div>
+<div class="btn-img right" onpointerdown="press(this)" onclick="getBalance()"><img src="bal.png"></div>
+<div class="btn-img left" onpointerdown="press(this)" onclick="withdraw()"><img src="wit.png"></div>
+<div class="btn-img right" onpointerdown="press(this)" onclick="getStats()"><img src="sta.png"></div>
+<div class="btn-img left" onpointerdown="press(this)" onclick="openHow()"><img src="how.png"></div>
+<div class="btn-img right" onpointerdown="press(this)" onclick="payActivate()"><img src="act.png"></div>
+<div class="btn-img left" onpointerdown="press(this)" onclick="openAds()"><img src="for.png"></div>
 </div>
 
 <!-- HOW -->
 <div class="modal" id="howModal">
 <div class="modal-content">
-<h2>🚀 How FriendPortal works — step by step</h2>
+<h2>🚀 How FriendPortal works</h2>
+<p><b>FriendPortal</b> — referral earning platform on TON.</p>
 
-<p>FriendPortal — referral earning platform on the TON blockchain.</p>
+<p><b>1️⃣ Invite users</b></p>
+<ul><li>Send referral link</li></ul>
 
-<p>🔹 <b>Step 1 — Invite users</b></p>
-<ul><li>Invite friends using your referral link</li></ul>
+<p><b>2️⃣ Activation</b></p>
+<ul><li>User activates for <b>1 TON</b></li></ul>
 
-<p>🔹 <b>Step 2 — Activation</b></p>
-<ul>
-<li>User activates access for <b>1 TON</b></li>
-<li>Activation unlocks withdrawals</li>
-</ul>
-
-<p>🔹 <b>Step 3 — Earn</b></p>
+<p><b>3️⃣ Earnings</b></p>
 <ul>
 <li>Level 1 — <b>0.5 TON</b></li>
 <li>Level 2 — <b>0.25 TON</b></li>
 </ul>
 
-<p>💸 <b>Withdrawal rules</b></p>
+<p><b>💸 Withdrawal</b></p>
 <ul>
 <li>Minimum — <b>5 TON</b></li>
 <li>Activation required</li>
 </ul>
 
-<p>📣 <b>Advertising packages</b></p>
+<p><b>📣 Advertising</b></p>
 <ul>
-<li>🎯 <b>25 TON</b> — one-time broadcast</li>
-<li>⭐ <b>75 TON</b> — top button (7 days)</li>
-<li>👑 <b>250 TON</b> — top placement (30 days)</li>
+<li>🎯 25 TON — broadcast</li>
+<li>⭐️ 75 TON — top button 7 days</li>
+<li>👑 200 TON — top button 30 days</li>
 </ul>
 
 <button onclick="closeHow()">Close</button>
@@ -192,8 +92,8 @@ html, body {
 <div class="modal-content">
 <h2>📣 Advertising</h2>
 <button onclick="buyAd(25)">🎯 25 TON — Broadcast</button>
-<button onclick="buyAd(75)">⭐ 75 TON — Top (7 days)</button>
-<button onclick="buyAd(250)">👑 250 TON — Top (30 days)</button>
+<button onclick="buyAd(75)">⭐️ 75 TON — Top 7 days</button>
+<button onclick="buyAd(200)">👑 200 TON — Top 30 days</button>
 <button onclick="closeAds()">Close</button>
 </div>
 </div>
@@ -204,77 +104,43 @@ html, body {
 </div>
 
 <script>
-const API="https://YOUR_BACKEND_URL";
+const API="https://YOUR_NGROK_URL";
 const BOT="FriendPortal_bot";
 const tg=Telegram.WebApp; tg.expand();
 
+const user=tg.initDataUnsafe.user;
+if(!user){alert("Open from Telegram");throw "no user";}
+const user_id=user.id;
+
 const clickSound=document.getElementById("clickSound");
 const bgMusic=document.getElementById("bgMusic");
-clickSound.volume=0.9; bgMusic.volume=0.25;
+clickSound.volume=.9; bgMusic.volume=.25;
+let sound=true, unlocked=false;
 
-let soundEnabled=true, unlocked=false;
-document.addEventListener("pointerdown",()=>{if(unlocked)return; clickSound.play().then(()=>{clickSound.pause();clickSound.currentTime=0;bgMusic.play();unlocked=true})},{once:true});
+document.addEventListener("pointerdown",()=>{if(unlocked)return;clickSound.play().then(()=>{clickSound.pause();clickSound.currentTime=0;unlocked=true;bgMusic.play();});},{once:true});
 
-function press(el){el.classList.add("pressed");setTimeout(()=>el.classList.remove("pressed"),120); if(soundEnabled) clickSound.play();}
-function toggleSound(){soundEnabled=!soundEnabled; document.getElementById("soundToggle").textContent=soundEnabled?"🔊":"🔇"; soundEnabled?bgMusic.play():bgMusic.pause();}
+function press(el){if(sound&&unlocked){clickSound.currentTime=0;clickSound.play()}el.classList.add("pressed");setTimeout(()=>el.classList.remove("pressed"),120)}
+function toggleSound(){sound=!sound;document.getElementById("soundToggle").textContent=sound?"🔊":"🔇";sound?bgMusic.play():bgMusic.pause()}
 
-const user=tg.initDataUnsafe?.user;
-const user_id=user?.id;
+function invite(){tg.openTelegramLink(`https://t.me/${BOT}?startapp=${user_id}`)}
+async function getBalance(){const r=await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});alert(JSON.stringify(await r.json(),null,2))}
+async function getStats(){statsModal.style.display="flex";const r=await fetch(API+"/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});const d=await r.json();statsContent.innerHTML=`<h2>📊 Stats</h2><p>L1: ${d.level1}</p><p>L2: ${d.level2}</p><p>Earned: ${d.earned} TON</p><button onclick="statsModal.style.display='none'">Close</button>`}
+function withdraw(){alert("Minimum withdrawal: 5 TON")}
+function openHow(){howModal.style.display="flex"}
+function closeHow(){howModal.style.display="none"}
+function openAds(){adsModal.style.display="flex"}
+function closeAds(){adsModal.style.display="none"}
 
-/* COINS */
-const coins=document.querySelectorAll(".coin");
-const W=innerWidth,H=innerHeight;
-const data=[...coins].map(()=>({x:Math.random()*(W-70),y:Math.random()*(H-70),vx:Math.random()*2,vy:Math.random()*2}));
-(function anim(){
-coins.forEach((c,i)=>{let d=data[i]; d.x+=d.vx; d.y+=d.vy;
-if(d.x<0||d.x>W-70)d.vx*=-1;
-if(d.y<0||d.y>H-70)d.vy*=-1;
-c.style.transform=`translate(${d.x}px,${d.y}px)`});
-requestAnimationFrame(anim)
-})();
-
-/* ACTIONS */
-function invite(){
-const link=`https://t.me/${BOT}?startapp=${user_id}`;
-tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`)
+async function payActivate(){
+const r=await fetch(API+"/crypto/activate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
+tg.openTelegramLink((await r.json()).pay_url);
 }
-
-async function getBalance(){
-const r=await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
-const d=await r.json();
-alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
-}
-
-function withdraw(){alert("Minimum withdrawal: 5 TON");}
-function openHow(){howModal.style.display="flex";}
-function closeHow(){howModal.style.display="none";}
-function openAds(){adsModal.style.display="flex";}
-function closeAds(){adsModal.style.display="none";}
 
 async function buyAd(amount){
 const link=prompt("Enter your link");
 if(!link)return;
 const r=await fetch(API+"/crypto/ad",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount,link})});
-const d=await r.json();
-tg.openTelegramLink(d.pay_url);
-}
-
-async function payActivate(){
-const r=await fetch(API+"/crypto/activate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
-const d=await r.json();
-tg.openTelegramLink(d.pay_url);
-}
-
-async function getStats(){
-statsModal.style.display="flex";
-statsContent.innerHTML="Loading...";
-const r=await fetch(API+"/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`<h2>📊 Stats</h2>
-<p>L1: ${d.level1}</p>
-<p>L2: ${d.level2}</p>
-<p>Earned: ${d.earned} TON</p>
-<button onclick="statsModal.style.display='none'">Close</button>`;
+tg.openTelegramLink((await r.json()).pay_url);
 }
 </script>
 </body>
