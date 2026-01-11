@@ -262,7 +262,7 @@ tg.openTelegramLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${e
 async function payActivate(){
 const r=await fetch(API+"/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount:1})});
 const d=await r.json();
-tg.openLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment)}`)
+tg.openTelegramLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment)}`)
 }
 </script>
 </body>
