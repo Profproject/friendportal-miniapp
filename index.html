@@ -251,19 +251,36 @@ statsContent.innerHTML=`<h2>📊 Statistics</h2>
 function openAds(){adsModal.style.display="flex"}
 function closeAds(){adsModal.style.display="none"}
 
-async function buyAd(amount){
-const url=prompt("🔗 Enter your link");
-if(!url)return;
-const r=await fetch(API+"/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount})});
-const d=await r.json();
-tg.openTelegramLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment+" | "+url)}`)
+async function buyAd(amount) {
+  const link = prompt("🔗 Enter your link");
+  if (!link) return;
+
+  const r = await fetch(API + "/crypto/ad", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id,
+      amount,
+      link
+    })
+  });
+
+  const d = await r.json();
+  tg.openTelegramLink(d.pay_url);
 }
 
-async function payActivate(){
-const r=await fetch(API+"/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount:1})});
-const d=await r.json();
-tg.openTelegramLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment)}`)
+
+async function payActivate() {
+  const r = await fetch(API + "/crypto/activate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id })
+  });
+
+  const d = await r.json();
+  tg.openTelegramLink(d.pay_url);
 }
+
 </script>
 </body>
 </html>
