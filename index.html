@@ -228,12 +228,37 @@ statsContent.innerHTML=`<h2>📊 Statistics</h2>
 <button onclick="statsModal.style.display='none'">Close</button>`;
 }
 
-function payActivate(){
-fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
-.then(r=>r.json()).then(d=>{
-tg.openLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment)}`);
-});
+function payActivate() {
+  fetch(API + "/pay", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: user_id,
+      amount: 1
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (!d.pay_url) {
+      alert("Pay URL not received");
+      return;
+    }
+
+    // ✅ Telegram Mini App
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.openLink(d.pay_url);
+    } 
+    // ✅ обычный браузер
+    else {
+      window.location.href = d.pay_url;
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Payment error");
+  });
 }
+
 
 function openHow(){howModal.style.display="flex"}
 function closeHow(){howModal.style.display="none"}
