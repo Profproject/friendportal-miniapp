@@ -20,7 +20,6 @@ html, body {
   overflow: hidden;
 }
 
-/* APP */
 .app {
   position: relative;
   width: 100%;
@@ -31,22 +30,14 @@ html, body {
   overflow: hidden;
 }
 
-/* COINS */
 .coin {
   position: absolute;
   width: 70px;
   height: 70px;
-  overflow: hidden;
   pointer-events: none;
   z-index: 1;
 }
 
-.coin {
-  object-fit: contain;
-}
-
-
-/* BUTTONS CONTAINER */
 .buttons {
   position: absolute;
   bottom: 20px;
@@ -59,13 +50,10 @@ html, body {
   z-index: 5;
 }
 
-/* BUTTON IMAGE */
 .btn-img {
   width: 100%;
   display: flex;
   cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-img.left { justify-content: flex-start; }
@@ -73,39 +61,33 @@ html, body {
 
 .btn-img img {
   width: 100%;
-  max-width: 250px; /* 👈 УМЕНЬШЕНО */
-  height: auto;
+  max-width: 250px;
   border-radius: 18px;
-  transition: transform 0.12s ease, filter 0.12s ease;
+  transition: transform .12s ease, filter .12s ease;
 }
 
-/* PRESS EFFECT */
 .btn-img.pressed img {
-  transform: translateY(6px) scale(0.94);
-  filter: brightness(0.85);
+  transform: translateY(6px) scale(.94);
+  filter: brightness(.85);
 }
 
-/* MODAL */
 .modal {
   position: fixed;
   inset: 0;
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,.65);
   backdrop-filter: blur(6px);
-  z-index: 20;
+  z-index: 50;
 }
 
 .modal-content {
   width: 90%;
-  max-height: 85%;
-  overflow-y: auto;
   background: linear-gradient(180deg,#111,#1b1b1b);
   color: #fff;
   border-radius: 22px;
   padding: 22px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
 }
 
 .modal-content h2 {
@@ -113,17 +95,8 @@ html, body {
   color: #ffd87a;
 }
 
-.modal-content p, .modal-content li {
-  line-height: 1.5;
-  color: #ddd;
-}
-
-.modal-content ul {
-  padding-left: 18px;
-}
-
 .modal-content button {
-  margin-top: 20px;
+  margin-top: 10px;
   width: 100%;
   padding: 14px;
   border-radius: 14px;
@@ -132,195 +105,102 @@ html, body {
   color: #fff;
   font-size: 16px;
 }
-#soundToggle {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  z-index: 30;
-  font-size: 22px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  user-select: none;
-}
-
 </style>
 </head>
 
 <body>
 <div class="app">
-<audio id="clickSound" src="click.mp3" preload="auto"></audio>
-<audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
 
-<div id="soundToggle" onclick="toggleSound()">🔊</div>
-
-<!-- COINS -->
 <img src="coin1.png" class="coin">
 <img src="coin13.png" class="coin">
 <img src="coin94.png" class="coin">
-<img src="coin108.png" class="coin">
-<img src="coin216.png" class="coin">
 
-<!-- BUTTONS -->
 <div class="buttons">
 
-  <div class="btn-img left"
-       onpointerdown="playClick()"
-       onclick="invite()">
+  <div class="btn-img left" onclick="invite()">
     <img src="inv.png">
   </div>
 
-  <div class="btn-img right"
-       onpointerdown="playClick()"
-       onclick="getBalance()">
+  <div class="btn-img right" onclick="getBalance()">
     <img src="bal.png">
   </div>
 
-  <div class="btn-img left"
-       onpointerdown="playClick()"
-       onclick="withdraw()">
+  <div class="btn-img left" onclick="withdraw()">
     <img src="wit.png">
   </div>
 
-  <div class="btn-img right"
-       onpointerdown="playClick()"
-       onclick="getStats()">
+  <div class="btn-img right" onclick="getStats()">
     <img src="sta.png">
   </div>
 
-  <div class="btn-img left"
-       onpointerdown="playClick()"
-       onclick="openHow()">
+  <div class="btn-img left" onclick="openHow()">
     <img src="how.png">
   </div>
 
-  <div class="btn-img right"
-     onpointerdown="playClick()"
-     onclick="payActivate()">
-    <img src="act.png" alt="Activate">
-</div>
+  <div class="btn-img right" onclick="payActivate()">
+    <img src="act.png">
+  </div>
 
-
-  <div class="btn-img left"
-       onpointerdown="playClick()"
-       onclick="ads()">
+  <div class="btn-img left" onclick="openAds()">
     <img src="for.png">
   </div>
 
 </div>
 
-
-
 <!-- HOW -->
 <div class="modal" id="howModal">
   <div class="modal-content">
-    <h2>ℹ️ How FriendPortal works</h2>
-    <p><b>FriendPortal</b> — referral earning platform on the TON blockchain.</p>
-    <p>Invite users → they activate → you earn TON.</p>
-
-    <p><b>💎 Referral rewards</b></p>
-    <ul>
-      <li>Level 1 — +0.5 TON</li>
-      <li>Level 2 — +0.25 TON</li>
-    </ul>
-
-    <p><b>📣 Advertising packages</b></p>
-    <ul>
-      <li>25 TON — broadcast</li>
-      <li>75 TON — top button (7 days)</li>
-      <li>250 TON — top placement (30 days)</li>
-    </ul>
-
+    <h2>ℹ️ How it works</h2>
+    <p>Invite → activate → earn TON</p>
+    <p>🥇 Level 1: +0.5 TON</p>
+    <p>🥈 Level 2: +0.25 TON</p>
     <button onclick="closeHow()">Close</button>
   </div>
 </div>
 
-<!-- STATS -->
-<!-- STATS MODAL -->
-<div class="modal" id="statsModal">
-  <div class="modal-content" id="statsContent">
-    <h2>📊 Statistics</h2>
-    <p>Loading...</p>
-  </div>
- 
-</div>
+<!-- ADS -->
+<div class="modal" id="adsModal">
+  <div class="modal-content">
+    <h2>📣 Advertising</h2>
 
+    <p>🟢 <b>25 TON</b> — one-time broadcast</p>
+    <button onclick="buyAd(25)">Buy</button>
+
+    <p>🔵 <b>75 TON</b> — top button 7 days</p>
+    <button onclick="buyAd(75)">Buy</button>
+
+    <p>🟣 <b>200 TON</b> — top button 30 days</p>
+    <button onclick="buyAd(200)">Buy</button>
+
+    <button onclick="closeAds()">Close</button>
+  </div>
+</div>
 
 <script>
 const API = "https://loyce-taxitic-elenora.ngrok-free.dev";
 const BOT = "FriendPortal_bot";
-
 const tg = Telegram.WebApp;
 tg.expand();
-const clickSound = document.getElementById("clickSound");
-const bgMusic = document.getElementById("bgMusic");
-
-clickSound.volume = 0.9; // 🔊 громкий щелчок
-bgMusic.volume = 0.25;   // 🎵 тихий фон
-
-let soundEnabled = true;
-let audioUnlocked = false;
-
-function unlockAudio() {
-  if (audioUnlocked) return;
-
-  clickSound.play().then(() => {
-    clickSound.pause();
-    clickSound.currentTime = 0;
-    audioUnlocked = true;
-  }).catch(() => {});
-}
-
-// первый реальный жест пользователя
-document.addEventListener("pointerdown", unlockAudio, { once: true });
-
-
-function playClick() {
-  if (!soundEnabled || !audioUnlocked) return;
-
-  clickSound.pause();
-  clickSound.currentTime = 0;
-  clickSound.play();
-}
-
-function startMusic() {
-  if (!soundEnabled) return;
-  bgMusic.play().catch(() => {});
-}
-
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  document.getElementById("soundToggle").textContent = soundEnabled ? "🔊" : "🔇";
-  if (soundEnabled) {
-    startMusic();
-  } else {
-    bgMusic.pause();
-  }
-}
-
 
 const user = tg.initDataUnsafe?.user;
 const user_id = user?.id;
 
-/* BUTTON PRESS */
-document.querySelectorAll(".btn-img").forEach(btn=>{
-  ["mousedown","touchstart"].forEach(e=>btn.addEventListener(e,()=>btn.classList.add("pressed")));
-  ["mouseup","mouseleave","touchend","touchcancel"].forEach(e=>btn.addEventListener(e,()=>btn.classList.remove("pressed")));
-});
-
 /* COINS */
 const coins = document.querySelectorAll(".coin");
-const W = window.innerWidth;
-const H = window.innerHeight;
-const data=[...coins].map(()=>({x:Math.random()*(W-70),y:Math.random()*(H-70),vx:(Math.random()*1.5+.5)*(Math.random()<.5?-1:1),vy:(Math.random()*1.5+.5)*(Math.random()<.5?-1:1)}));
-function animate(){
+const data = [...coins].map(() => ({
+  x: Math.random()*300,
+  y: Math.random()*400,
+  vx: Math.random()*2,
+  vy: Math.random()*2
+}));
+
+function animate() {
   coins.forEach((c,i)=>{
     const d=data[i];
     d.x+=d.vx; d.y+=d.vy;
-    if(d.x<=0||d.x>=W-70) d.vx*=-1;
-    if(d.y<=0||d.y>=H-70) d.vy*=-1;
-    c.style.transform=`translate(${d.x}px,${d.y}px)`;
+    if(d.x<0||d.x>300) d.vx*=-1;
+    if(d.y<0||d.y>500) d.vy*=-1;
+    c.style.transform = `translate(${d.x}px,${d.y}px)`;
   });
   requestAnimationFrame(animate);
 }
@@ -328,112 +208,46 @@ animate();
 
 /* ACTIONS */
 function invite(){
-  const link=`https://t.me/${BOT}?startapp=${user_id}`;
-  tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
+  tg.openTelegramLink(`https://t.me/${BOT}?startapp=${user_id}`);
 }
 
-async function getBalance() {
-  try {
-    const r = await fetch(API + "/balance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id })
-    });
-
-    const d = await r.json();
-
-    alert(
-      `💰 Balance: ${d.balance} TON\n` +
-      `✅ Activated: ${d.activated ? "Yes" : "No"}`
-    );
-  } catch (e) {
-    alert("❌ Backend not reachable");
-  }
-}
-
-function withdraw(){ alert("💸 Minimum withdrawal: 5 TON"); }
-function activate(){ alert("🔐 Activation: 1 TON"); }
-function ads(){ alert("📣 Advertising packages available"); }
-
-function openHow(){ document.getElementById("howModal").style.display="flex"; }
-function closeHow(){ document.getElementById("howModal").style.display="none"; }
-
-async function getStats() {
-  document.getElementById("statsModal").style.display = "flex";
-  document.getElementById("statsContent").innerHTML = `
-    <h2>📊 Statistics</h2>
-    <p>Loading...</p>
-  `;
-
-  try {
-    const r = await fetch(API + "/stats", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id })
-    });
-
-    const d = await r.json();
-
-    document.getElementById("statsContent").innerHTML = `
-      <h2>📊 Statistics</h2>
-
-      <p>👥 Level 1 referrals: <b>${d.level1}</b></p>
-      <p>👥 Level 2 referrals: <b>${d.level2}</b></p>
-
-      <hr>
-
-      <p>💎 Total earned: <b>${d.earned} TON</b></p>
-
-      <button onclick="closeStats()">Close</button>
-    `;
-  } catch (e) {
-    document.getElementById("statsContent").innerHTML = `
-      <h2>📊 Statistics</h2>
-      <p>❌ Backend not reachable</p>
-      <button onclick="closeStats()">Close</button>
-    `;
-  }
-}
-
-function closeStats() {
-  document.getElementById("statsModal").style.display = "none";
-}
-
-document.addEventListener("touchstart", () => {
-  startMusic();
-}, { once: true });
-
-async function payActivate() {
-  if (!user_id) {
-    alert("User not found");
-    return;
-  }
-
-  const r = await fetch(API + "/pay", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: user_id,
-      amount: 1
-    })
-  });
-
+async function getBalance(){
+  const r = await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
   const d = await r.json();
-
-  const tonUrl =
-    "ton://transfer/" +
-    d.address +
-    "?amount=" +
-    (d.amount * 1e9) +
-    "&text=" +
-    encodeURIComponent(d.comment);
-
-  tg.openLink(tonUrl);
+  alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
 }
 
-  
+function withdraw(){ alert("💸 Withdrawal soon"); }
 
+function openHow(){ howModal.style.display="flex"; }
+function closeHow(){ howModal.style.display="none"; }
+
+function openAds(){ adsModal.style.display="flex"; }
+function closeAds(){ adsModal.style.display="none"; }
+
+async function payActivate(){
+  const r = await fetch(API+"/pay",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({user_id,amount:1,purpose:"activate"})
+  });
+  const d = await r.json();
+  tg.openLink(d.pay_url);
+}
+
+async function buyAd(amount){
+  const link = prompt("🔗 Enter your link");
+  if(!link) return;
+
+  const r = await fetch(API+"/pay",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({user_id,amount,purpose:"ads_"+amount})
+  });
+  const d = await r.json();
+  tg.openLink(d.pay_url);
+}
 </script>
-
+</div>
 </body>
 </html>
