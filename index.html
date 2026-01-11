@@ -196,10 +196,10 @@ html, body {
   </div>
 
   <div class="btn-img right"
-       onpointerdown="playClick()"
-       onclick="activate()">
-    <img src="act.png">
-  </div>
+     onpointerdown="playClick()"
+     onclick="payActivate()">
+  <img src="act.png" alt="Activate">
+</div>
 
   <div class="btn-img left"
        onpointerdown="playClick()"
@@ -402,6 +402,33 @@ document.addEventListener("touchstart", () => {
   startMusic();
 }, { once: true });
 
+async function payActivate() {
+  if (!user_id) {
+    alert("User not found");
+    return;
+  }
+
+  const r = await fetch(API + "/pay", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: user_id,
+      amount: 1
+    })
+  });
+
+  const d = await r.json();
+
+  const tonUrl =
+    "ton://transfer/" +
+    d.address +
+    "?amount=" +
+    (d.amount * 1e9) +
+    "&text=" +
+    encodeURIComponent(d.comment);
+
+  tg.openLink(tonUrl);
+}
 
 </script>
 
