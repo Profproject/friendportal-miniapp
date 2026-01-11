@@ -8,102 +8,59 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #000;
-  overflow: hidden;
+*{box-sizing:border-box}
+html,body{
+  margin:0;padding:0;width:100%;height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#000;overflow:hidden
 }
-
-.app {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
-  margin: 0 auto;
-  background: url("bg.png") center top / cover no-repeat;
-  overflow: hidden;
+.app{
+  position:relative;
+  max-width:480px;
+  height:100vh;
+  margin:0 auto;
+  background:url("bg.png") center top/cover no-repeat;
 }
-
-.coin {
-  position: absolute;
-  width: 70px;
-  height: 70px;
-  pointer-events: none;
-  z-index: 1;
+.coin{
+  position:absolute;width:70px;height:70px;
+  pointer-events:none;z-index:1
 }
-
-.buttons {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 5;
+.buttons{
+  position:absolute;bottom:20px;left:0;width:100%;
+  padding:0 16px;display:flex;flex-direction:column;gap:10px;z-index:5
 }
-
-.btn-img {
-  width: 100%;
-  display: flex;
-  cursor: pointer;
+.btn-img{display:flex;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-img.left{justify-content:flex-start}
+.btn-img.right{justify-content:flex-end}
+.btn-img img{
+  max-width:250px;border-radius:18px;
+  transition:.12s
 }
-
-.btn-img.left { justify-content: flex-start; }
-.btn-img.right { justify-content: flex-end; }
-
-.btn-img img {
-  width: 100%;
-  max-width: 250px;
-  border-radius: 18px;
-  transition: transform .12s ease, filter .12s ease;
+.btn-img.pressed img{
+  transform:translateY(6px) scale(.94);
+  filter:brightness(.85)
 }
-
-.btn-img.pressed img {
-  transform: translateY(6px) scale(.94);
-  filter: brightness(.85);
+.modal{
+  position:fixed;inset:0;display:none;
+  align-items:center;justify-content:center;
+  background:rgba(0,0,0,.7);z-index:20
 }
-
-.modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,.65);
-  backdrop-filter: blur(6px);
-  z-index: 50;
+.modal-content{
+  width:90%;max-height:85%;overflow:auto;
+  background:linear-gradient(180deg,#111,#1b1b1b);
+  border-radius:22px;padding:22px;color:#fff
 }
-
-.modal-content {
-  width: 90%;
-  background: linear-gradient(180deg,#111,#1b1b1b);
-  color: #fff;
-  border-radius: 22px;
-  padding: 22px;
+.modal-content h2{margin-top:0;color:#ffd87a}
+.modal-content button{
+  margin-top:18px;width:100%;padding:14px;
+  border-radius:14px;border:none;
+  background:linear-gradient(180deg,#4e6cff,#2f46ff);
+  color:#fff;font-size:16px
 }
-
-.modal-content h2 {
-  margin-top: 0;
-  color: #ffd87a;
-}
-
-.modal-content button {
-  margin-top: 10px;
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  background: linear-gradient(180deg,#4e6cff,#2f46ff);
-  color: #fff;
-  font-size: 16px;
+#soundToggle{
+  position:absolute;bottom:12px;right:12px;
+  background:rgba(0,0,0,.6);
+  padding:10px;border-radius:50%;font-size:22px
 }
 </style>
 </head>
@@ -111,143 +68,133 @@ html, body {
 <body>
 <div class="app">
 
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
+
+<div id="soundToggle" onclick="toggleSound()">🔊</div>
+
 <img src="coin1.png" class="coin">
 <img src="coin13.png" class="coin">
 <img src="coin94.png" class="coin">
+<img src="coin108.png" class="coin">
+<img src="coin216.png" class="coin">
 
 <div class="buttons">
 
-  <div class="btn-img left" onclick="invite()">
-    <img src="inv.png">
-  </div>
-
-  <div class="btn-img right" onclick="getBalance()">
-    <img src="bal.png">
-  </div>
-
-  <div class="btn-img left" onclick="withdraw()">
-    <img src="wit.png">
-  </div>
-
-  <div class="btn-img right" onclick="getStats()">
-    <img src="sta.png">
-  </div>
-
-  <div class="btn-img left" onclick="openHow()">
-    <img src="how.png">
-  </div>
-
-  <div class="btn-img right" onclick="payActivate()">
-    <img src="act.png">
-  </div>
-
-  <div class="btn-img left" onclick="openAds()">
-    <img src="for.png">
-  </div>
+<div class="btn-img left" onpointerdown="playClick()" onclick="invite()"><img src="inv.png"></div>
+<div class="btn-img right" onpointerdown="playClick()" onclick="getBalance()"><img src="bal.png"></div>
+<div class="btn-img left" onpointerdown="playClick()" onclick="withdraw()"><img src="wit.png"></div>
+<div class="btn-img right" onpointerdown="playClick()" onclick="getStats()"><img src="sta.png"></div>
+<div class="btn-img left" onpointerdown="playClick()" onclick="openHow()"><img src="how.png"></div>
+<div class="btn-img right" onpointerdown="playClick()" onclick="payActivate()"><img src="act.png"></div>
+<div class="btn-img left" onpointerdown="playClick()" onclick="openAds()"><img src="for.png"></div>
 
 </div>
 
-<!-- HOW -->
 <div class="modal" id="howModal">
   <div class="modal-content">
-    <h2>ℹ️ How it works</h2>
-    <p>Invite → activate → earn TON</p>
-    <p>🥇 Level 1: +0.5 TON</p>
-    <p>🥈 Level 2: +0.25 TON</p>
+    <h2>ℹ️ How FriendPortal Works</h2>
+    <p>Invite users, they activate access and you earn TON.</p>
+    <p><b>💎 Rewards</b></p>
+    <ul>
+      <li>Level 1 — 0.5 TON</li>
+      <li>Level 2 — 0.25 TON</li>
+    </ul>
     <button onclick="closeHow()">Close</button>
   </div>
 </div>
 
-<!-- ADS -->
+<div class="modal" id="statsModal">
+  <div class="modal-content" id="statsContent"></div>
+</div>
+
 <div class="modal" id="adsModal">
   <div class="modal-content">
     <h2>📣 Advertising</h2>
-
-    <p>🟢 <b>25 TON</b> — one-time broadcast</p>
-    <button onclick="buyAd(25)">Buy</button>
-
-    <p>🔵 <b>75 TON</b> — top button 7 days</p>
-    <button onclick="buyAd(75)">Buy</button>
-
-    <p>🟣 <b>200 TON</b> — top button 30 days</p>
-    <button onclick="buyAd(200)">Buy</button>
-
+    <p>Choose package:</p>
+    <button onclick="payAd(25)">🎯 25 TON — One-time broadcast</button>
+    <button onclick="payAd(75)">⭐ 75 TON — Button 7 days</button>
+    <button onclick="payAd(200)">👑 200 TON — Button 30 days</button>
     <button onclick="closeAds()">Close</button>
   </div>
 </div>
 
 <script>
-const API = "https://loyce-taxitic-elenora.ngrok-free.dev";
-const BOT = "FriendPortal_bot";
-const tg = Telegram.WebApp;
-tg.expand();
+const API="https://loyce-taxitic-elenora.ngrok-free.dev"
+const BOT="FriendPortal_bot"
+const tg=Telegram.WebApp
+tg.expand()
 
-const user = tg.initDataUnsafe?.user;
-const user_id = user?.id;
+const user=tg.initDataUnsafe?.user
+const user_id=user?.id
 
-/* COINS */
-const coins = document.querySelectorAll(".coin");
-const data = [...coins].map(() => ({
-  x: Math.random()*300,
-  y: Math.random()*400,
-  vx: Math.random()*2,
-  vy: Math.random()*2
-}));
+const clickSound=document.getElementById("clickSound")
+const bgMusic=document.getElementById("bgMusic")
+let sound=true,unlocked=false
 
-function animate() {
-  coins.forEach((c,i)=>{
-    const d=data[i];
-    d.x+=d.vx; d.y+=d.vy;
-    if(d.x<0||d.x>300) d.vx*=-1;
-    if(d.y<0||d.y>500) d.vy*=-1;
-    c.style.transform = `translate(${d.x}px,${d.y}px)`;
-  });
-  requestAnimationFrame(animate);
+document.addEventListener("pointerdown",()=>{
+  if(unlocked)return
+  clickSound.play().then(()=>{clickSound.pause();clickSound.currentTime=0;unlocked=true})
+},{once:true})
+
+function playClick(){if(sound&&unlocked){clickSound.currentTime=0;clickSound.play()}}
+function toggleSound(){
+  sound=!sound
+  document.getElementById("soundToggle").textContent=sound?"🔊":"🔇"
+  sound?bgMusic.play():bgMusic.pause()
 }
-animate();
 
-/* ACTIONS */
 function invite(){
-  tg.openTelegramLink(`https://t.me/${BOT}?startapp=${user_id}`);
+  const link=`https://t.me/${BOT}?startapp=ref_${user_id}`
+  tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`)
 }
 
 async function getBalance(){
-  const r = await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})});
-  const d = await r.json();
-  alert(`💰 Balance: ${d.balance} TON\nActivated: ${d.activated}`);
+  const r=await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})})
+  const d=await r.json()
+  alert(`💰 Balance: ${d.balance} TON\n🔐 Activated: ${d.activated?"Yes":"No"}`)
 }
 
-function withdraw(){ alert("💸 Withdrawal soon"); }
-
-function openHow(){ howModal.style.display="flex"; }
-function closeHow(){ howModal.style.display="none"; }
-
-function openAds(){ adsModal.style.display="flex"; }
-function closeAds(){ adsModal.style.display="none"; }
+async function withdraw(){
+  const r=await fetch(API+"/balance",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})})
+  const d=await r.json()
+  if(d.balance<5)return alert("❌ Minimum withdrawal: 5 TON")
+  if(!d.activated)return alert("🔐 Activate withdrawals first (1 TON)")
+  alert("✅ Withdrawal request accepted (manual for now)")
+}
 
 async function payActivate(){
-  const r = await fetch(API+"/pay",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({user_id,amount:1,purpose:"activate"})
-  });
-  const d = await r.json();
-  tg.openLink(d.pay_url);
+  const r=await fetch(API+"/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount:1})})
+  const d=await r.json()
+  tg.openLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent(d.comment)}`)
 }
 
-async function buyAd(amount){
-  const link = prompt("🔗 Enter your link");
-  if(!link) return;
+async function getStats(){
+  document.getElementById("statsModal").style.display="flex"
+  const r=await fetch(API+"/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id})})
+  const d=await r.json()
+  document.getElementById("statsContent").innerHTML=`
+  <h2>📊 Statistics</h2>
+  <p>👥 Level 1: <b>${d.level1}</b></p>
+  <p>👥 Level 2: <b>${d.level2}</b></p>
+  <hr>
+  <p>💎 Earned: <b>${d.earned} TON</b></p>
+  <button onclick="closeStats()">Close</button>`
+}
 
-  const r = await fetch(API+"/pay",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({user_id,amount,purpose:"ads_"+amount})
-  });
-  const d = await r.json();
-  tg.openLink(d.pay_url);
+function closeStats(){document.getElementById("statsModal").style.display="none"}
+function openHow(){document.getElementById("howModal").style.display="flex"}
+function closeHow(){document.getElementById("howModal").style.display="none"}
+function openAds(){document.getElementById("adsModal").style.display="flex"}
+function closeAds(){document.getElementById("adsModal").style.display="none"}
+
+async function payAd(amount){
+  const r=await fetch(API+"/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id,amount})})
+  const d=await r.json()
+  tg.openLink(`ton://transfer/${d.address}?amount=${d.amount*1e9}&text=${encodeURIComponent("AD:"+user_id)}`)
 }
 </script>
+
 </div>
 </body>
 </html>
