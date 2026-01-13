@@ -341,34 +341,41 @@ fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body
 }
 
 async function sendWithdraw(){
-  const r = await fetch(API+"/withdraw",{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      user_id,
-      address,
-      memo
+
+  const address = document.getElementById("withdrawAddress").value;
+  const memo = document.getElementById("withdrawMemo")?.value || "";
+
+  if (!address) {
+    alert("Enter wallet address");
+    return;
+  }
+
+  const r = await fetch(API + "/withdraw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: user_id,
+      address: address,
+      memo: memo
     })
   });
 
   const res = await r.json();
 
-  // ❌ НЕ АКТИВИРОВАН
   if (res.error === "not_activated") {
-    alert("🔒 Withdraw available only after activation (1 TON)");
+    alert("Activate account first (1 TON)");
     return;
   }
 
-  // ✅ УСПЕХ
   if (res.status === "ok") {
-    alert("✅ Withdraw request sent");
+    alert("Withdraw request sent");
     closeWithdraw();
     return;
   }
 
-  // ⚠️ ДРУГАЯ ОШИБКА
-  alert("❌ Error, try later");
+  alert("Error");
 }
+
 
 function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
