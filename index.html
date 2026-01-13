@@ -175,28 +175,56 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 <!-- ADS -->
 <div class="modal" id="adsModal">
 <div class="modal-content">
-<h2>📣 Advertising</h2>
-<input id="adLink" placeholder="Your link">
+  <h2>📣 Advertising</h2>
 
-<h3>🎯 25 TON — One-time Broadcast</h3>
-<p>Send your link to all active users (50,000+ reach)</p>
-<button onclick="buyAd(25)">Pay 25 TON</button>
+  <p style="opacity:0.85; font-size:14px; margin-bottom:10px;">
+    Promote your project inside FriendPortal and reach thousands of active users instantly.
+  </p>
 
-<hr>
+  <input
+    id="adLink"
+    placeholder="Paste the link you want to promote (website, Telegram, mini app)"
+  >
 
-<h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
-<p>Top placement with maximum visibility</p>
-<button onclick="buyAd(75)">Pay 75 TON</button>
+  <p style="opacity:0.7; font-size:13px; margin-top:6px;">
+    Enter your link and a short description of your project.  
+    After payment, your promotion will be published automatically.
+  </p>
 
-<hr>
+  <hr>
 
-<h3>👑 250 TON — VIP TOP (30 Days)</h3>
-<p>Premium placement for maximum traffic</p>
-<button onclick="buyAd(250)">Pay 250 TON</button>
+  <h3>🎯 25 TON — One-time Broadcast</h3>
+  <p>
+    A one-time message sent to all active users (50,000+ reach).  
+    Ideal for fast traffic and instant visibility.
+  </p>
+  <button onclick="playClick(); buyAd(25)">Pay 25 TON</button>
 
-<button onclick="closeAds()">Close</button>
+  <hr>
+
+  <h3>⭐ 75 TON — TOP Promotion (7 Days)</h3>
+  <p>
+    Your link will appear as a highlighted button at the top of the mini app for 7 days.  
+    Maximum visibility across all users.
+  </p>
+  <button onclick="playClick(); buyAd(75)">Pay 75 TON</button>
+
+  <hr>
+
+  <h3>👑 250 TON — VIP TOP (30 Days)</h3>
+  <p>
+    Premium placement for 30 days with top priority.  
+    Best choice for long-term exposure and steady daily traffic.
+  </p>
+  <button onclick="playClick(); buyAd(250)">Pay 250 TON</button>
+
+  <p style="opacity:0.6; font-size:12px; margin-top:14px;">
+    All advertisements are reviewed automatically and published instantly after payment.
+  </p>
+
+  <button onclick="playClick(); closeAds()">Close</button>
 </div>
-</div>
+
 
 <!-- STATS -->
 <div class="modal" id="statsModal">
