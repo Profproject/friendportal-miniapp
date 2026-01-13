@@ -92,23 +92,25 @@ font-size:16px;
 margin-top:10px
 }
 
-/* SOUND */
+/* SOUND BUTTON */
 #soundToggle{
 position:absolute;
 bottom:14px;
 right:14px;
 z-index:30;
-font-size:28px;
-background:rgba(0,0,0,.65);
+font-size:26px;
+background:rgba(0,0,0,.6);
 padding:14px;
-border-radius:50%;
+border-radius:50%
 }
+
+/* 🔴 RED LINE WHEN MUTED */
 #soundToggle.muted::after{
 content:"";
 position:absolute;
 top:10px;
 left:10px;
-width:36px;
+width:34px;
 height:3px;
 background:red;
 transform:rotate(-45deg);
@@ -169,7 +171,8 @@ let userActivated = false;
 const clickSound=document.getElementById("clickSound");
 const bgMusic=document.getElementById("bgMusic");
 const soundBtn=document.getElementById("soundToggle");
-clickSound.volume=0.9;bgMusic.volume=0.25;
+clickSound.volume=0.9;
+bgMusic.volume=0.25;
 let sound=true,unlocked=false;
 
 document.addEventListener("pointerdown",()=>{
@@ -203,6 +206,14 @@ el.classList.add("pressed");
 setTimeout(()=>el.classList.remove("pressed"),120);
 }
 
+function invite(){
+const link=`https://t.me/${BOT}?startapp=${user_id}`;
+tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
+}
+
+function openWithdraw(){withdrawModal.style.display="flex"}
+function closeWithdraw(){withdrawModal.style.display="none"}
+
 async function openBalance(){
 const r=await fetch(API+"/balance",{
 method:"POST",
@@ -211,8 +222,6 @@ body:JSON.stringify({user_id})
 });
 const d=await r.json();
 userActivated = d.activated;
-balAmount.textContent=d.balance+" TON";
-balActive.textContent=d.activated ? "Activated" : "Not activated";
 balanceModal.style.display="flex";
 }
 
