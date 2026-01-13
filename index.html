@@ -246,15 +246,26 @@ sound?bgMusic.play():bgMusic.pause();
 
 /* COINS */
 const coins=document.querySelectorAll(".coin");
-const W=innerWidth,H=innerHeight;
-const d=[...coins].map(()=>({x:Math.random()*(W-70),y:Math.random()*(H-70),vx:1+Math.random(),vy:1+Math.random()}));
+const size = 70;               // размер монеты
+const radius = size / 2;
+
+const W = innerWidth;
+const H = innerHeight;
+
+const d = [...coins].map(() => ({
+  x: Math.random() * (W - size) + radius,
+  y: Math.random() * (H - size) + radius,
+  vx: (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random()),
+  vy: (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random())
+}));
+
 (function anim(){
 coins.forEach((c,i)=>{
 let o=d[i];
 o.x+=o.vx;o.y+=o.vy;
-if(o.x<0||o.x>W-70)o.vx*=-1;
-if(o.y<0||o.y>H-70)o.vy*=-1;
-c.style.transform=`translate(${o.x}px,${o.y}px)`;
+if (o.x - radius <= 0 || o.x + radius >= W) o.vx *= -1;
+if (o.y - radius <= 0 || o.y + radius >= H) o.vy *= -1;
+c.style.transform = `translate(${o.x - radius}px, ${o.y - radius}px)`;
 });
 requestAnimationFrame(anim);
 })();
