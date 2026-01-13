@@ -357,28 +357,60 @@ fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
 
-/* BACKGROUND PARALLAX BY DEVICE TILT */
-let tiltX = 0;
-let tiltY = 0;
+/* === REAL DEVICE PARALLAX (VISIBLE) === */
 
-function clamp(val, min, max){
-  return Math.max(min, Math.min(max, val));
+let targetX = 50;
+let targetY = 50;
+let currentX = 50;
+let currentY = 50;
+
+function requestGyro(){
+  if (
+    typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function"
+  ) {
+    DeviceOrientationEvent.requestPermission()
+      .then(permissionState => {
+        if (permissionState === "granted") {
+          window.addEventListener("deviceorientation", handleTilt, true);
+        }
+      })
+      .catch(console.error);
+  } else {
+    window.addEventListener("deviceorientation", handleTilt, true);
+  }
 }
 
-if (window.DeviceOrientationEvent) {
-  window.addEventListener("deviceorientation", (e) => {
-    // gamma: left/right (-45 to 45)
-    // beta: front/back (-180 to 180)
+function handleTilt(e){
+  const gamma = e.gamma || 0; // left/right
+  const beta  = e.beta  || 0; // forward/back
 
-    tiltX = clamp(e.gamma || 0, -20, 20);
-    tiltY = clamp(e.beta  || 0, -20, 20);
+  // 🔥 ОЧЕНЬ ЗАМЕТНАЯ АМПЛИТУДА
+  targetX = 50 + gamma * 0.4;
+  targetY = 50 + beta  * 0.25;
 
-    const moveX = 50 + tiltX * 0.15;
-    const moveY = 50 + tiltY * 0.15;
-
-    app.style.backgroundPosition = `${moveX}% ${moveY}%`;
-  }, true);
+  // ограничения чтобы не вылезало
+  targetX = Math.max(30, Math.min(70, targetX));
+  targetY = Math.max(35, Math.min(65, targetY));
 }
+
+// плавное догоняние (инерция)
+function animateBackground(){
+  currentX += (targetX - currentX) * 0.08;
+  currentY += (targetY - currentY) * 0.08;
+
+  app.style.backgroundPosition = `${currentX}% ${currentY}%`;
+
+  requestAnimationFrame(animateBackground);
+}
+
+// 🔑 ВАЖНО: первый пользовательский жест
+document.addEventListener("pointerdown", () => {
+  requestGyro();
+}, { once:true });
+
+animateBackground();
+
   
 </script>
 </div>
