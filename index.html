@@ -191,7 +191,7 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
     <p id="balanceAmount">Balance: -- TON</p>
     <p id="balanceActivated">Activated: --</p>
 
-    <button class="btn-danger" onclick="closeBalance()">Close</button>
+    <button type="button" class="btn-danger" onclick="closeBalance()">Close</button>
   </div>
 </div>
   
@@ -403,8 +403,14 @@ closeWithdraw();
 function buyAd(amount){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link:adLink.value})})
 .then(r=>r.json())
-.then(d=>Telegram.WebApp.openLink(d.pay_url));
-}
+.then(d=>{
+  if(!d.pay_url){
+    alert("Payment link error");
+    return;
+  }
+  Telegram.WebApp.openTelegramLink(d.pay_url);
+});
+
   
 </script>
 </div>
