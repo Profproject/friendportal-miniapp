@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>FriendPortal</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -23,7 +24,7 @@ overflow:hidden
 /* COINS */
 .coin{
 position:absolute;
-width:60px;height:60px;
+width:70px;height:70px;
 object-fit:contain;
 pointer-events:none;
 z-index:1
@@ -61,8 +62,8 @@ background:linear-gradient(180deg,#111,#1b1b1b);
 border-radius:22px;padding:22px;color:#fff
 }
 .modal-content h2{color:#ffd87a}
-.modal-content h3{margin-top:14px;font-size:20px}
-.modal-content p{font-size:16px;opacity:.9}
+.modal-content h3{margin-top:18px;font-size:20px}
+.modal-content p{font-size:16px;opacity:.9;line-height:1.6}
 .modal-content input{
 width:100%;padding:12px;border-radius:12px;border:none;margin-top:10px
 }
@@ -72,8 +73,23 @@ border-radius:14px;border:none;
 background:linear-gradient(180deg,#4e6cff,#2f46ff);
 color:#fff;font-size:16px
 }
+
+/* CLOSE BUTTON */
 .btn-close{
-background:linear-gradient(180deg,#ff5a5a,#d93434)!important
+background:linear-gradient(180deg,#ff5a5a,#d93434)!important;
+box-shadow:0 6px 14px rgba(255,90,90,.35);
+}
+.btn-close:active{
+transform:translateY(4px) scale(.96);
+filter:brightness(.9);
+}
+
+/* WARNING */
+.warning{
+color:#ff5a5a;
+font-weight:700;
+font-size:16px;
+margin-top:10px
 }
 
 /* SOUND */
@@ -114,9 +130,65 @@ padding:10px;border-radius:50%
 <!-- HOW IT WORKS -->
 <div class="modal" id="howModal">
 <div class="modal-content">
-<h2>🚀 How FriendPortal Works</h2>
-<p>Invite users, earn TON rewards from two levels and withdraw instantly.</p>
-<p>Advertisers reach a real crypto-native audience directly inside Telegram.</p>
+<h2>🚀 FriendPortal Ecosystem</h2>
+
+<p>
+<b>FriendPortal</b> is a premium referral & advertising ecosystem built on TON,
+designed for <b>real users, organic growth and long-term exposure</b>.
+</p>
+
+<hr>
+
+<h3>👥 For Users</h3>
+<ul>
+<li>Invite new users and grow your referral network</li>
+<li>Earn TON rewards from <b>two referral levels</b></li>
+<li>Instant balance updates and fast withdrawals</li>
+</ul>
+
+<p><b>Referral Rewards</b></p>
+<ul>
+<li>🥇 Level 1 — <b>0.5 TON</b></li>
+<li>🥈 Level 2 — <b>0.25 TON</b></li>
+</ul>
+
+<hr>
+
+<h3>📣 For Advertisers</h3>
+<p>
+FriendPortal provides <b>direct access to an active crypto-native audience</b>
+inside a Telegram Mini App environment.
+</p>
+<ul>
+<li>🚀 Real users only — no bots</li>
+<li>🎯 High engagement & premium visibility</li>
+<li>📈 Constant organic traffic growth</li>
+</ul>
+
+<p><b>Advertising Packages</b></p>
+<ul>
+<li>🎯 <b>25 TON</b> — One-time broadcast</li>
+<li>⭐️ <b>75 TON</b> — Top placement for 7 days</li>
+<li>👑 <b>250 TON</b> — VIP top placement for 30 days</li>
+</ul>
+
+<hr>
+
+<h3>🛠 Support & Development</h3>
+<p>
+For advertising inquiries or custom Telegram Mini App development,
+please contact our support team.
+</p>
+<p>
+We design and develop <b>Telegram Mini Apps of any complexity</b>,
+with modern UI, animations and scalable backend solutions.
+</p>
+<p>
+👉 <a href="https://t.me/FPSupportOnline" target="_blank" style="color:#4e6cff">
+<b>@FPSupportOnline</b>
+</a>
+</p>
+
 <button class="btn-close" onclick="closeHow()">Close</button>
 </div>
 </div>
@@ -124,8 +196,18 @@ padding:10px;border-radius:50%
 <!-- BALANCE -->
 <div class="modal" id="balanceModal">
 <div class="modal-content">
-<h2>💰 Balance</h2>
-<p id="balanceText"></p>
+<h2>💰 Balance Overview</h2>
+
+<div style="padding:14px;border-radius:14px;background:rgba(255,255,255,.05)">
+<p>💎 <b>Available balance</b></p>
+<h3 id="balAmount">—</h3>
+</div>
+
+<div style="margin-top:12px;padding:14px;border-radius:14px;background:rgba(255,255,255,.05)">
+<p>🔓 <b>Activation status</b></p>
+<h3 id="balActive">—</h3>
+</div>
+
 <button class="btn-close" onclick="closeBalance()">Close</button>
 </div>
 </div>
@@ -133,10 +215,13 @@ padding:10px;border-radius:50%
 <!-- WITHDRAW -->
 <div class="modal" id="withdrawModal">
 <div class="modal-content">
-<h2>💸 Withdraw</h2>
+<h2>💸 Withdraw Request</h2>
 <input id="wAddress" placeholder="TON wallet address">
 <input id="wMemo" placeholder="MEMO (if required)">
-<p style="font-size:16px;opacity:.85">If your wallet requires MEMO, please include it.</p>
+<div class="warning">
+⚠️ IMPORTANT: If your wallet requires MEMO and you do not include it,
+your funds may be permanently lost.
+</div>
 <button onclick="sendWithdraw()">Send request</button>
 <button class="btn-close" onclick="closeWithdraw()">Close</button>
 </div>
@@ -145,21 +230,33 @@ padding:10px;border-radius:50%
 <!-- ADS -->
 <div class="modal" id="adsModal">
 <div class="modal-content">
-<h2>📣 Advertising</h2>
+<h2>📣 Advertising Packages</h2>
 
 <h3>🎯 25 TON — One-time Broadcast</h3>
+<p>
+Instant broadcast sent to all active users.
+Perfect for launches, announcements and fast traffic.
+</p>
 <input id="ad25" placeholder="Link to promote">
 <button onclick="buyAd(25,ad25.value)">Pay 25 TON</button>
 
 <hr>
 
-<h3>⭐️ 75 TON — TOP (7 Days)</h3>
+<h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
+<p>
+Highlighted top placement inside the mini app for 7 days.
+Ideal for steady exposure and brand awareness.
+</p>
 <input id="ad75" placeholder="Link to promote">
 <button onclick="buyAd(75,ad75.value)">Pay 75 TON</button>
 
 <hr>
 
 <h3>👑 250 TON — VIP TOP (30 Days)</h3>
+<p>
+Maximum visibility and priority placement for 30 days.
+Designed for serious projects and long-term growth.
+</p>
 <input id="ad250" placeholder="Link to promote">
 <button onclick="buyAd(250,ad250.value)">Pay 250 TON</button>
 
@@ -190,7 +287,7 @@ function toggleSound(){sound=!sound;sound?bgMusic.play():bgMusic.pause();}
 /* COINS */
 const app=document.querySelector(".app");
 const coins=document.querySelectorAll(".coin");
-const size=60,rad=30;
+const size=70,rad=35;
 let W=app.clientWidth,H=app.clientHeight;
 const d=[...coins].map(()=>({x:Math.random()*(W-size)+rad,y:Math.random()*(H-size)+rad,vx:1+Math.random(),vy:1+Math.random()}));
 (function anim(){
@@ -206,7 +303,10 @@ requestAnimationFrame(anim);
 
 /* ACTIONS */
 function press(el){playClick();el.classList.add("pressed");setTimeout(()=>el.classList.remove("pressed"),120);}
-function invite(){tg.openTelegramLink(`https://t.me/${BOT}?startapp=${user_id}`);}
+function invite(){
+const link=`https://t.me/${BOT}?startapp=${user_id}`;
+tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
+}
 function openHow(){howModal.style.display="flex"}
 function closeHow(){howModal.style.display="none"}
 function openWithdraw(){withdrawModal.style.display="flex"}
@@ -218,7 +318,8 @@ function closeBalance(){balanceModal.style.display="none"}
 async function openBalance(){
 const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
 const d=await r.json();
-balanceText.innerHTML=`Balance: <b>${d.balance} TON</b><br>Activated: <b>${d.activated}</b>`;
+balAmount.textContent=d.balance+" TON";
+balActive.textContent=d.activated;
 balanceModal.style.display="flex";
 }
 
@@ -227,10 +328,10 @@ statsModal.style.display="flex";
 const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
 const d=await r.json();
 statsContent.innerHTML=`
-<h2>📊 Statistics</h2>
-<p>Level 1 referrals: <b>${d.level1}</b></p>
-<p>Level 2 referrals: <b>${d.level2}</b></p>
-<p>Total earned: <b>${d.earned} TON</b></p>
+<h2>📊 Statistics Overview</h2>
+<p>👥 Level 1 referrals: <b>${d.level1}</b></p>
+<p>👥 Level 2 referrals: <b>${d.level2}</b></p>
+<p>💎 Total earned: <b>${d.earned} TON</b></p>
 <button class="btn-close" onclick="statsModal.style.display='none'">Close</button>`;
 }
 
@@ -241,7 +342,8 @@ fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body
 
 async function sendWithdraw(){
 await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
-alert("Request sent");closeWithdraw();
+alert("Withdraw request sent");
+closeWithdraw();
 }
 
 function buyAd(amount,link){
