@@ -48,22 +48,12 @@ filter:brightness(.85)
 
 /* MODALS */
 .modal{
-position:fixed;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
+position:fixed;inset:0;display:none;
+align-items:center;justify-content:center;
 background:rgba(0,0,0,.65);
-backdrop-filter:blur(6px);
-z-index:1000; /* ВАЖНО */
+backdrop-filter:blur(6px);z-index:20
 }
-
-
 .modal-content{
-
-position:relative;
-z-index:1001;   
-  
 width:90%;max-height:85%;overflow:auto;
 background:linear-gradient(180deg,#111,#1b1b1b);
 border-radius:22px;padding:22px;color:#fff
@@ -185,81 +175,35 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 <!-- ADS -->
 <div class="modal" id="adsModal">
 <div class="modal-content">
-  <h2>📣 Advertising</h2>
+<h2>📣 Advertising</h2>
 
-  <p style="opacity:.9; line-height:1.45">
-    Promote your project inside <b>FriendPortal</b> and reach a highly engaged,
-    crypto-native audience. Your promotion appears directly inside the mini app
-    interface — not as spam, but as a <b>native highlighted button</b>.
-  </p>
+<p style="opacity:.85">
+Submit your project link and get instant exposure inside FriendPortal.
+Your promotion will be displayed as a highlighted button at the top of the mini app.
+</p>
 
-  <p style="opacity:.7; font-size:14px">
-    All placements are published automatically after payment.
-    No bots. No fake traffic. Only real users.
-  </p>
+<input id="adLink" placeholder="Paste the link you want to promote (website, Telegram, mini app)">
 
-  <hr>
+<hr>
 
-  <!-- PACKAGE 25 -->
-  <h3>🎯 25 TON — One-time Broadcast</h3>
-  <p>
-    A one-time message sent to all active users of FriendPortal.
-    Ideal for fast traffic, launches, announcements, or short-term campaigns.
-  </p>
+<h3>🎯 25 TON — One-time Broadcast</h3>
+<p>One-time message to all active users. Perfect for fast traffic.</p>
+<button onclick="playClick();buyAd(25)">Pay 25 TON</button>
 
-  <input
-    id="adLink"
-    placeholder="Paste the link you want to promote (website, Telegram, mini app)"
-  >
+<hr>
 
-  <button onclick="playClick();buyAd(25)">Pay 25 TON</button>
+<h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
+<p>Top button placement inside the mini app for 7 days.</p>
+<button onclick="playClick();buyAd(75)">Pay 75 TON</button>
 
-  <hr>
+<hr>
 
-  <!-- PACKAGE 75 -->
-  <h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
-  <p>
-    Your project will be placed as a <b>highlighted top button</b>
-    inside the mini app for 7 days, visible to all active users.
-    Best choice for sustained visibility.
-  </p>
+<h3>👑 250 TON — VIP TOP (30 Days)</h3>
+<p>Premium top placement for 30 days with maximum visibility.</p>
+<button onclick="playClick();buyAd(250)">Pay 250 TON</button>
 
-  <input
-    placeholder="Optional: add a short description or campaign note"
-  >
-
-  <button onclick="playClick();buyAd(75)">Pay 75 TON</button>
-
-  <hr>
-
-  <!-- PACKAGE 250 -->
-  <h3>👑 250 TON — VIP TOP (30 Days)</h3>
-  <p>
-    Premium placement with top priority for 30 days.
-    Maximum exposure, long-term presence, and steady daily traffic.
-    Recommended for serious projects and brands.
-  </p>
-
-  <input
-    placeholder="Optional: describe your project or promotion details"
-  >
-
-  <button onclick="playClick();buyAd(250)">Pay 250 TON</button>
-
-  <!-- CLOSE SEPARATOR -->
-  <div style="margin-top:22px; padding-top:16px; border-top:1px solid rgba(255,255,255,.15)">
-    <button
-      onclick="playClick();closeAds()"
-      style="
-        background:transparent;
-        border:1px solid rgba(255,255,255,.25);
-        color:#fff;
-        opacity:.85
-      "
-    >
-      Close
-    </button>
-  </div>
+<button onclick="playClick();closeAds()">Close</button>
+</div>
 </div>
 
 <!-- STATS -->
@@ -359,34 +303,16 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 }
 
 async function getStats(){
-
-  // 1️⃣ закрываем ВСЕ модалки
-  document.querySelectorAll(".modal").forEach(m=>{
-    m.style.display="none";
-  });
-
-  // 2️⃣ открываем статистику
-  statsModal.style.display="flex";
-
-  const r = await fetch(API+"/stats", {
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id})
-  });
-
-  const d = await r.json();
-
-  statsContent.innerHTML = `
-    <h2>📊 Statistics</h2>
-    <p>👥 Level 1: ${d.level1}</p>
-    <p>👥 Level 2: ${d.level2}</p>
-    <p>💎 Earned: ${d.earned} TON</p>
-    <button onclick="playClick();statsModal.style.display='none'">
-      Close
-    </button>
-  `;
+statsModal.style.display="flex";
+const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
+const d=await r.json();
+statsContent.innerHTML=`
+<h2>📊 Statistics</h2>
+<p>👥 Level 1: ${d.level1}</p>
+<p>👥 Level 2: ${d.level2}</p>
+<p>💎 Earned: ${d.earned} TON</p>
+<button onclick="playClick();statsModal.style.display='none'">Close</button>`;
 }
-
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
