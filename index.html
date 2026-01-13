@@ -244,13 +244,15 @@ document.getElementById("soundToggle").textContent=sound?"🔊":"🔇";
 sound?bgMusic.play():bgMusic.pause();
 }
 
-/* COINS */
-const coins=document.querySelectorAll(".coin");
-const size = 70;               // размер монеты
+/* COINS — FINAL FIX */
+const app = document.querySelector(".app");
+const coins = document.querySelectorAll(".coin");
+
+const size = 70;
 const radius = size / 2;
 
-const W = innerWidth;
-const H = innerHeight;
+let W = app.clientWidth;
+let H = app.clientHeight;
 
 const d = [...coins].map(() => ({
   x: Math.random() * (W - size) + radius,
@@ -259,16 +261,27 @@ const d = [...coins].map(() => ({
   vy: (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random())
 }));
 
-(function anim(){
-coins.forEach((c,i)=>{
-let o=d[i];
-o.x+=o.vx;o.y+=o.vy;
-if (o.x - radius <= 0 || o.x + radius >= W) o.vx *= -1;
-if (o.y - radius <= 0 || o.y + radius >= H) o.vy *= -1;
-c.style.transform = `translate(${o.x - radius}px, ${o.y - radius}px)`;
-});
-requestAnimationFrame(anim);
-})();
+function animateCoins() {
+  W = app.clientWidth;
+  H = app.clientHeight;
+
+  coins.forEach((c, i) => {
+    const o = d[i];
+
+    o.x += o.vx;
+    o.y += o.vy;
+
+    if (o.x - radius <= 0 || o.x + radius >= W) o.vx *= -1;
+    if (o.y - radius <= 0 || o.y + radius >= H) o.vy *= -1;
+
+    c.style.transform = `translate(${o.x - radius}px, ${o.y - radius}px)`;
+  });
+
+  requestAnimationFrame(animateCoins);
+}
+
+animateCoins();
+
 
 /* BUTTON PRESS */
 function press(el){
