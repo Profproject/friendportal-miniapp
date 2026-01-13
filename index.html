@@ -345,15 +345,33 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 }
 
 async function getStats(){
-statsModal.style.display="flex";
-const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`
-<h2>📊 Statistics</h2>
-<p>👥 Level 1: ${d.level1}</p>
-<p>👥 Level 2: ${d.level2}</p>
-<p>💎 Earned: ${d.earned} TON</p>
-<button onclick="playClick();statsModal.style.display='none'">Close</button>`;
+
+  // 1️⃣ Закрываем все остальные модалки (ВАЖНО)
+  document.querySelectorAll(".modal").forEach(m=>{
+    m.style.display = "none";
+  });
+
+  // 2️⃣ Показываем statsModal
+  statsModal.style.display = "flex";
+
+  // 3️⃣ ФОРСИРУЕМ REFLOW (КЛЮЧЕВО!)
+  statsModal.offsetHeight;
+
+  const r = await fetch(API + "/stats", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ user_id })
+  });
+
+  const d = await r.json();
+
+  statsContent.innerHTML = `
+    <h2>📊 Statistics</h2>
+    <p>👥 Level 1: ${d.level1}</p>
+    <p>👥 Level 2: ${d.level2}</p>
+    <p>💎 Earned: ${d.earned} TON</p>
+    <button onclick="statsModal.style.display='none'">Close</button>
+  `;
 }
 
 function payActivate(){
