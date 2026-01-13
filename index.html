@@ -77,6 +77,14 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
+.modal {
+  pointer-events: none;
+}
+
+.modal[style*="display: flex"] {
+  pointer-events: auto;
+}
+  
 </style>
 </head>
 
@@ -319,8 +327,16 @@ function payActivate() {
 }
 
 
-function openHow(){howModal.style.display="flex"}
-function closeHow(){howModal.style.display="none"}
+function openHow(){
+  howModal.style.display = "flex";
+  howModal.style.pointerEvents = "auto";
+  document.body.style.overflow = "hidden";
+}
+function closeHow(){
+  howModal.style.display = "none";
+  howModal.style.pointerEvents = "none";
+  document.body.style.overflow = "auto";
+}
 function openWithdraw(){withdrawModal.style.display="flex"}
 function closeWithdraw(){withdrawModal.style.display="none"}
 function openAds(){adsModal.style.display="flex"}
@@ -385,7 +401,16 @@ function buyAd(amount){
     alert("❌ Payment error");
   });
 }
+function press(el){
+  if (howModal.style.display === "flex") return;
 
+  if(sound && unlocked){
+    clickSound.currentTime = 0;
+    clickSound.play();
+  }
+  el.classList.add("pressed");
+  setTimeout(()=>el.classList.remove("pressed"),120);
+}
 </script>
 </div>
 </body>
