@@ -346,33 +346,44 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 
 async function getStats(){
 
-  // 1️⃣ Закрываем все остальные модалки (ВАЖНО)
+  // 1️⃣ Закрываем ВСЕ модалки
   document.querySelectorAll(".modal").forEach(m=>{
     m.style.display = "none";
+    m.style.visibility = "hidden";
   });
 
-  // 2️⃣ Показываем statsModal
+  // 2️⃣ Готовим statsModal
   statsModal.style.display = "flex";
+  statsModal.style.visibility = "hidden";
 
-  // 3️⃣ ФОРСИРУЕМ REFLOW (КЛЮЧЕВО!)
+  // 3️⃣ ЖЁСТКИЙ REFLOW (iOS FIX)
   statsModal.offsetHeight;
 
-  const r = await fetch(API + "/stats", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ user_id })
+  // 4️⃣ Даём браузеру кадр
+  requestAnimationFrame(async () => {
+
+    // 5️⃣ Загружаем данные
+    const r = await fetch(API + "/stats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id })
+    });
+
+    const d = await r.json();
+
+    statsContent.innerHTML = `
+      <h2>📊 Statistics</h2>
+      <p>👥 Level 1: ${d.level1}</p>
+      <p>👥 Level 2: ${d.level2}</p>
+      <p>💎 Earned: ${d.earned} TON</p>
+      <button onclick="statsModal.style.display='none'">Close</button>
+    `;
+
+    // 6️⃣ И ТОЛЬКО ТЕПЕРЬ показываем
+    statsModal.style.visibility = "visible";
   });
-
-  const d = await r.json();
-
-  statsContent.innerHTML = `
-    <h2>📊 Statistics</h2>
-    <p>👥 Level 1: ${d.level1}</p>
-    <p>👥 Level 2: ${d.level2}</p>
-    <p>💎 Earned: ${d.earned} TON</p>
-    <button onclick="statsModal.style.display='none'">Close</button>
-  `;
 }
+
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
