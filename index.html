@@ -1,21 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-/* FIX: allow buttons to receive clicks inside modal */
-.modal-content {
-  pointer-events: auto;
-}
-
-.modal-content button {
-  pointer-events: auto;
-}
-
-/* Optional: prevent modal background from blocking buttons */
-.modal {
-  pointer-events: auto;
-}
-</style>
-  
 <head>
 <meta charset="UTF-8">
 <title>FriendPortal</title>
@@ -113,66 +97,21 @@ padding:10px;border-radius:50%
 
 <!-- BUTTONS -->
 <div class="buttons">
-<div class="btn-img left" onclick="invite()"><img src="inv.png"></div>
-<div class="btn-img right" onclick="getBalance()"><img src="bal.png"></div>
-<div class="btn-img left" onclick="openWithdraw()"><img src="wit.png"></div>
-<div class="btn-img right" onclick="getStats()"><img src="sta.png"></div>
-<div class="btn-img left" onclick="openHow()"><img src="how.png"></div>
-<div class="btn-img right" onclick="payActivate()"><img src="act.png"></div>
-<div class="btn-img left" onclick="openAds()"><img src="for.png"></div>
+<div class="btn-img left" onclick="press(this);invite()"><img src="inv.png"></div>
+<div class="btn-img right" onclick="press(this);getBalance()"><img src="bal.png"></div>
+<div class="btn-img left" onclick="press(this);openWithdraw()"><img src="wit.png"></div>
+<div class="btn-img right" onclick="press(this);getStats()"><img src="sta.png"></div>
+<div class="btn-img left" onclick="press(this);openHow()"><img src="how.png"></div>
+<div class="btn-img right" onclick="press(this);payActivate()"><img src="act.png"></div>
+<div class="btn-img left" onclick="press(this);openAds()"><img src="for.png"></div>
 </div>
 
 <!-- HOW -->
 <div class="modal" id="howModal">
 <div class="modal-content">
 <h2>🚀 FriendPortal Ecosystem</h2>
-
-<p>
-<b>FriendPortal</b> is a premium referral & advertising ecosystem built on TON,
-designed for <b>real users, organic growth and long-term exposure</b>.
-</p>
-
-<hr>
-
-<h3>👥 For Users</h3>
-<ul>
-<li>Invite new users and build your referral network</li>
-<li>Earn TON rewards from <b>two referral levels</b></li>
-<li>Instant balance updates & withdrawals</li>
-</ul>
-
-<p><b>Rewards</b></p>
-<ul>
-<li>🥇 Level 1 — <b>0.5 TON</b></li>
-<li>🥈 Level 2 — <b>0.25 TON</b></li>
-</ul>
-
-<hr>
-
-<h3>📣 For Advertisers</h3>
-<p>
-FriendPortal provides <b>direct access to an active crypto-native audience</b>
-inside a Telegram Mini App environment.
-</p>
-
-<ul>
-<li>🚀 Real users only (no bots)</li>
-<li>🎯 High engagement & visibility</li>
-<li>📈 Constant organic traffic growth</li>
-</ul>
-
-<p><b>Advertising packages</b></p>
-<ul>
-<li>🎯 <b>25 TON</b> — One-time broadcast to all active users</li>
-<li>⭐️ <b>75 TON</b> — Top placement for <b>7 days</b></li>
-<li>👑 <b>250 TON</b> — VIP top placement for <b>30 days</b></li>
-</ul>
-
-<p style="opacity:.85">
-Early advertisers benefit from <b>lower costs and higher exposure</b>.
-</p>
-
-<button onclick="closeHow()">Close</button>
+<p><b>FriendPortal</b> is a premium referral & advertising ecosystem built on TON.</p>
+<button onclick="playClick();closeHow()">Close</button>
 </div>
 </div>
 
@@ -182,65 +121,23 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 <h2>💸 Withdraw request</h2>
 <input id="wAddress" placeholder="TON wallet address">
 <input id="wMemo" placeholder="MEMO (if required)">
-<div class="warning">⚠️ If your wallet requires MEMO — do not forget to include it</div>
-<button onclick="sendWithdraw()">Send request</button>
-<button onclick="closeWithdraw()">Close</button>
+<div class="warning">⚠️ If your wallet requires MEMO — include it</div>
+<button onclick="playClick();sendWithdraw()">Send request</button>
+<button onclick="playClick();closeWithdraw()">Close</button>
 </div>
 </div>
 
 <!-- ADS -->
 <div class="modal" id="adsModal">
 <div class="modal-content">
-  <h2>📣 Advertising</h2>
-
-  <p style="opacity:0.85; font-size:14px; margin-bottom:10px;">
-    Promote your project inside FriendPortal and reach thousands of active users instantly.
-  </p>
-
-  <input
-    id="adLink"
-    placeholder="Paste the link you want to promote (website, Telegram, mini app)"
-  >
-
-  <p style="opacity:0.7; font-size:13px; margin-top:6px;">
-    Enter your link and a short description of your project.  
-    After payment, your promotion will be published automatically.
-  </p>
-
-  <hr>
-
-  <h3>🎯 25 TON — One-time Broadcast</h3>
-  <p>
-    A one-time message sent to all active users (50,000+ reach).  
-    Ideal for fast traffic and instant visibility.
-  </p>
-  <button onclick="playClick(); buyAd(25)">Pay 25 TON</button>
-
-  <hr>
-
-  <h3>⭐ 75 TON — TOP Promotion (7 Days)</h3>
-  <p>
-    Your link will appear as a highlighted button at the top of the mini app for 7 days.  
-    Maximum visibility across all users.
-  </p>
-  <button onclick="playClick(); buyAd(75)">Pay 75 TON</button>
-
-  <hr>
-
-  <h3>👑 250 TON — VIP TOP (30 Days)</h3>
-  <p>
-    Premium placement for 30 days with top priority.  
-    Best choice for long-term exposure and steady daily traffic.
-  </p>
-  <button onclick="playClick(); buyAd(250)">Pay 250 TON</button>
-
-  <p style="opacity:0.6; font-size:12px; margin-top:14px;">
-    All advertisements are reviewed automatically and published instantly after payment.
-  </p>
-
-  <button onclick="playClick(); closeAds()">Close</button>
+<h2>📣 Advertising</h2>
+<input id="adLink" placeholder="Paste link to promote">
+<button onclick="playClick();buyAd(25)">Pay 25 TON</button>
+<button onclick="playClick();buyAd(75)">Pay 75 TON</button>
+<button onclick="playClick();buyAd(250)">Pay 250 TON</button>
+<button onclick="playClick();closeAds()">Close</button>
 </div>
-
+</div>
 
 <!-- STATS -->
 <div class="modal" id="statsModal">
@@ -254,25 +151,30 @@ const tg=Telegram.WebApp; tg.expand();
 const user_id=tg.initDataUnsafe?.user?.id;
 
 /* SOUND */
-const clickSound=document.getElementById("clickSound"); 
+const clickSound=document.getElementById("clickSound");
 const bgMusic=document.getElementById("bgMusic");
+clickSound.volume=0.9;
+bgMusic.volume=0.25;
 
-clickSound.volume = 0.9;
-bgMusic.volume = 0.25;
-  
-let sound=true,unlocked=false;
+let sound=true, unlocked=false;
 
-document.addEventListener("pointerdown", () => {
-  if (!unlocked) {
-    unlocked = true;
-    bgMusic.play().catch(()=>{});
-  }
+document.addEventListener("pointerdown",()=>{
+if(!unlocked){
+unlocked=true;
+bgMusic.play().catch(()=>{});
+}
 });
+
+function playClick(){
+if(!sound)return;
+clickSound.currentTime=0;
+clickSound.play().catch(()=>{});
+}
 
 function toggleSound(){
 sound=!sound;
 document.getElementById("soundToggle").textContent=sound?"🔊":"🔇";
-sound?bgMusic.play():bgMusic.pause()
+sound?bgMusic.play():bgMusic.pause();
 }
 
 /* COINS */
@@ -281,13 +183,21 @@ const W=innerWidth,H=innerHeight;
 const d=[...coins].map(()=>({x:Math.random()*(W-70),y:Math.random()*(H-70),vx:1+Math.random(),vy:1+Math.random()}));
 (function anim(){
 coins.forEach((c,i)=>{
-let o=d[i];o.x+=o.vx;o.y+=o.vy;
+let o=d[i];
+o.x+=o.vx;o.y+=o.vy;
 if(o.x<0||o.x>W-70)o.vx*=-1;
 if(o.y<0||o.y>H-70)o.vy*=-1;
 c.style.transform=`translate(${o.x}px,${o.y}px)`;
 });
 requestAnimationFrame(anim);
 })();
+
+/* BUTTON PRESS */
+function press(el){
+playClick();
+el.classList.add("pressed");
+setTimeout(()=>el.classList.remove("pressed"),120);
+}
 
 /* ACTIONS */
 function invite(){
@@ -305,18 +215,18 @@ async function getStats(){
 statsModal.style.display="flex";
 const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
 const d=await r.json();
-statsContent.innerHTML=`<h2>📊 Statistics</h2>
+statsContent.innerHTML=`
+<h2>📊 Statistics</h2>
 <p>👥 Level 1: ${d.level1}</p>
 <p>👥 Level 2: ${d.level2}</p>
 <p>💎 Earned: ${d.earned} TON</p>
-<button onclick="statsModal.style.display='none'">Close</button>`;
+<button onclick="playClick();statsModal.style.display='none'">Close</button>`;
 }
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
 .then(r=>r.json())
-.then(d=>Telegram.WebApp.openLink(d.pay_url))
-.catch(()=>alert("Payment error"));
+.then(d=>Telegram.WebApp.openLink(d.pay_url));
 }
 
 function openHow(){howModal.style.display="flex"}
@@ -325,24 +235,19 @@ function openWithdraw(){withdrawModal.style.display="flex"}
 function closeWithdraw(){withdrawModal.style.display="none"}
 function openAds(){adsModal.style.display="flex"}
 function closeAds(){adsModal.style.display="none"}
-document.querySelectorAll(".modal-content").forEach(el => {
-  el.addEventListener("pointerdown", e => e.stopPropagation());
-  el.addEventListener("click", e => e.stopPropagation());
-});
-  
 
 async function sendWithdraw(){
 const r=await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
 const d=await r.json();
 if(d.error==="not_activated"){alert("❌ Activate access first");return;}
-alert("✅ Request sent");closeWithdraw();
+alert("✅ Request sent");
+closeWithdraw();
 }
 
 function buyAd(amount){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link:adLink.value})})
 .then(r=>r.json())
-.then(d=>Telegram.WebApp.openLink(d.pay_url))
-.catch(()=>alert("Payment error"));
+.then(d=>Telegram.WebApp.openLink(d.pay_url));
 }
 </script>
 </div>
