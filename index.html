@@ -110,6 +110,18 @@ padding:10px;border-radius:50%
 
 <body>
 <div class="app">
+ #soundToggle.muted::after{
+  content:"";
+  position:absolute;
+  top:6px;
+  left:6px;
+  width:32px;
+  height:2px;
+  background:red;
+  transform:rotate(-45deg);
+  border-radius:2px;
+}
+ 
 
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
@@ -288,7 +300,28 @@ clickSound.volume=0.9;bgMusic.volume=0.25;
 let sound=true,unlocked=false;
 document.addEventListener("pointerdown",()=>{if(!unlocked){unlocked=true;bgMusic.play().catch(()=>{});}});
 function playClick(){if(!sound)return;clickSound.currentTime=0;clickSound.play().catch(()=>{});}
-function toggleSound(){sound=!sound;sound?bgMusic.play():bgMusic.pause();}
+let soundEnabled = true;
+
+function toggleSound(){
+  const bg = document.getElementById("bgMusic");
+  const click = document.getElementById("clickSound");
+  const btn = document.getElementById("soundToggle");
+
+  soundEnabled = !soundEnabled;
+
+  if(soundEnabled){
+    bg.muted = false;
+    click.muted = false;
+    btn.classList.remove("muted");
+    btn.innerHTML = "🔊";
+  }else{
+    bg.muted = true;
+    click.muted = true;
+    btn.classList.add("muted");
+    btn.innerHTML = "🔇";
+  }
+}
+
 
 /* COINS */
 const app=document.querySelector(".app");
