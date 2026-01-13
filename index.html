@@ -356,26 +356,6 @@ function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
-/* BACKGROUND PARALLAX */
-let bgX = 50;
-let bgY = 50;
-
-let bgVX = (Math.random() * 0.04) + 0.01;
-let bgVY = (Math.random() * 0.04) + 0.01;
-
-function animateBackground(){
-  bgX += bgVX;
-  bgY += bgVY;
-
-  if(bgX > 52 || bgX < 48) bgVX *= -1;
-  if(bgY > 52 || bgY < 48) bgVY *= -1;
-
-  app.style.backgroundPosition = `${bgX}% ${bgY}%`;
-
-  requestAnimationFrame(animateBackground);
-}
-
-animateBackground();
 
 /* BACKGROUND PARALLAX BY DEVICE TILT */
 let tiltX = 0;
