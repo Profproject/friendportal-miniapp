@@ -58,6 +58,27 @@ width:90%;max-height:85%;overflow:auto;
 background:linear-gradient(180deg,#111,#1b1b1b);
 border-radius:22px;padding:22px;color:#fff
 }
+/* STATS OVERLAY — FINAL FIX */
+.stats-overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(0,0,0,.85);
+  z-index:5000;
+  align-items:center;
+  justify-content:center;
+}
+
+.stats-box{
+  width:90%;
+  max-height:80%;
+  background:linear-gradient(180deg,#111,#1b1b1b);
+  border-radius:22px;
+  padding:22px;
+  color:#fff;
+  overflow:auto;
+}
+  
 .modal-content h2{color:#ffd87a}
 .modal-content h3{margin-top:16px}
 .modal-content input{
@@ -346,43 +367,39 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 
 async function getStats(){
 
-  // 1️⃣ Закрываем ВСЕ модалки
+  // закрываем ВСЕ модалки
   document.querySelectorAll(".modal").forEach(m=>{
     m.style.display = "none";
-    m.style.visibility = "hidden";
   });
 
-  // 2️⃣ Готовим statsModal
-  statsModal.style.display = "flex";
-  statsModal.style.visibility = "hidden";
+  const overlay = document.getElementById("statsOverlay");
+  const box = document.getElementById("statsBox");
 
-  // 3️⃣ ЖЁСТКИЙ REFLOW (iOS FIX)
-  statsModal.offsetHeight;
+  overlay.style.display = "flex";
 
-  // 4️⃣ Даём браузеру кадр
-  requestAnimationFrame(async () => {
-
-    // 5️⃣ Загружаем данные
-    const r = await fetch(API + "/stats", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id })
-    });
-
-    const d = await r.json();
-
-    statsContent.innerHTML = `
-      <h2>📊 Statistics</h2>
-      <p>👥 Level 1: ${d.level1}</p>
-      <p>👥 Level 2: ${d.level2}</p>
-      <p>💎 Earned: ${d.earned} TON</p>
-      <button onclick="statsModal.style.display='none'">Close</button>
-    `;
-
-    // 6️⃣ И ТОЛЬКО ТЕПЕРЬ показываем
-    statsModal.style.visibility = "visible";
+  const r = await fetch(API + "/stats", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ user_id })
   });
+
+  const d = await r.json();
+
+  box.innerHTML = `
+    <h2>📊 Statistics</h2>
+    <p>👥 Level 1: ${d.level1}</p>
+    <p>👥 Level 2: ${d.level2}</p>
+    <p>💎 Earned: ${d.earned} TON</p>
+
+    <button
+      onclick="document.getElementById('statsOverlay').style.display='none'"
+      style="margin-top:16px;width:100%"
+    >
+      Close
+    </button>
+  `;
 }
+
 
 
 function payActivate(){
@@ -413,5 +430,12 @@ fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:
 }
 </script>
 </div>
+<!-- STATS OVERLAY -->
+<div class="stats-overlay" id="statsOverlay">
+  <div class="stats-box" id="statsBox">
+    <!-- content injected by JS -->
+  </div>
+</div>
+  
 </body>
 </html>
