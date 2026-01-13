@@ -177,24 +177,21 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 <div class="modal-content">
   <h2>📣 Advertising</h2>
 
-  <p style="opacity:.9; line-height:1.5">
+  <p style="opacity:.9;line-height:1.5">
     Promote your project inside <b>FriendPortal</b> and reach a real,
-    crypto-native audience. All promotions are displayed natively
-    inside the mini app interface.
+    crypto-native audience. Your promotion is shown natively inside the mini app
+    — not as spam, but as a highlighted interface element.
   </p>
 
-  <p style="opacity:.7; font-size:14px">
-    Choose a package below, paste your link and get instant exposure.
-    Activation happens automatically after payment.
+  <p style="opacity:.7;font-size:14px">
+    Choose a package below, submit your link and get instant exposure.
+    All promotions are activated automatically after payment.
   </p>
 
   <hr>
 
-  <!-- MAIN LINK (ЕДИНСТВЕННЫЙ id) -->
-  <input
-    id="adLink"
-    placeholder="Main link to promote (website, Telegram, mini app)"
-  >
+  <!-- ОСНОВНОЙ LINK (ЕДИНСТВЕННЫЙ id) -->
+  <input id="adLink" placeholder="Paste the main link you want to promote">
 
   <hr>
 
@@ -202,14 +199,12 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
   <h3>🎯 25 TON — One-time Broadcast</h3>
   <p>
     One-time message sent to all active users.
-    Ideal for launches, announcements and fast traffic.
+    Best for fast traffic, launches and announcements.
   </p>
-
-  <input
-    placeholder="Link for this broadcast (optional override)"
-    style="margin-top:6px"
-  >
-
+  <textarea
+    placeholder="Optional: short description or message for this broadcast"
+    style="width:100%;margin-top:8px;border-radius:12px;padding:10px"
+  ></textarea>
   <button onclick="buyAd(25)">Pay 25 TON</button>
 
   <hr>
@@ -217,15 +212,13 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
   <!-- 75 TON -->
   <h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
   <p>
-    Highlighted top button placement inside the mini app
-    for 7 days with maximum visibility.
+    Your project will be displayed as a highlighted top button
+    inside the mini app for 7 days.
   </p>
-
-  <input
-    placeholder="Link for TOP placement (optional override)"
-    style="margin-top:6px"
-  >
-
+  <textarea
+    placeholder="Optional: description for TOP placement"
+    style="width:100%;margin-top:8px;border-radius:12px;padding:10px"
+  ></textarea>
   <button onclick="buyAd(75)">Pay 75 TON</button>
 
   <hr>
@@ -233,34 +226,19 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
   <!-- 250 TON -->
   <h3>👑 250 TON — VIP TOP (30 Days)</h3>
   <p>
-    Premium placement with top priority for 30 days.
-    Best option for long-term exposure and serious projects.
+    Premium placement with maximum visibility for 30 days.
+    Ideal for serious projects and long-term exposure.
   </p>
-
-  <input
-    placeholder="Link for VIP placement (optional override)"
-    style="margin-top:6px"
-  >
-
+  <textarea
+    placeholder="Optional: VIP promotion notes"
+    style="width:100%;margin-top:8px;border-radius:12px;padding:10px"
+  ></textarea>
   <button onclick="buyAd(250)">Pay 250 TON</button>
 
-  <!-- CLOSE (ОТДЕЛЬНО, НЕ СИНЯЯ) -->
-  <div
-    style="
-      margin-top:24px;
-      padding-top:16px;
-      border-top:1px solid rgba(255,255,255,.15);
-      text-align:center
-    "
-  >
+  <div style="margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15)">
     <button
       onclick="closeAds()"
-      style="
-        background:transparent;
-        border:1px solid rgba(255,255,255,.35);
-        color:#fff;
-        opacity:.85
-      "
+      style="background:transparent;border:1px solid rgba(255,255,255,.3);opacity:.85"
     >
       Close
     </button>
