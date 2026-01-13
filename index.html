@@ -92,28 +92,23 @@ font-size:16px;
 margin-top:10px
 }
 
-/* SOUND BUTTON */
+/* SOUND */
 #soundToggle{
-position:absolute;
-bottom:14px;
-right:14px;
-z-index:30;
-font-size:26px;
+position:absolute;bottom:12px;right:12px;
+z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
-padding:14px;
-border-radius:50%
+padding:10px;border-radius:50%;
+position:relative
 }
-
-/* 🔴 RED LINE WHEN MUTED */
 #soundToggle.muted::after{
 content:"";
 position:absolute;
-top:10px;
-left:10px;
-width:34px;
-height:3px;
-background:red;
-transform:rotate(-45deg);
+width:3px;
+height:36px;
+background:#ff3b3b;
+top:2px;
+left:50%;
+transform:translateX(-50%) rotate(45deg);
 border-radius:2px;
 }
 </style>
@@ -159,27 +154,26 @@ your funds may be permanently lost.
 </div>
 </div>
 
+<!-- STATS -->
+<div class="modal" id="statsModal">
+<div class="modal-content" id="statsContent"></div>
+</div>
+
 <script>
 const API="https://loyce-taxitic-elenora.ngrok-free.dev";
 const BOT="FriendPortal_bot";
 const tg=Telegram.WebApp;tg.expand();
 const user_id=tg.initDataUnsafe?.user?.id;
 
-let userActivated = false;
-
 /* SOUND */
 const clickSound=document.getElementById("clickSound");
 const bgMusic=document.getElementById("bgMusic");
-const soundBtn=document.getElementById("soundToggle");
 clickSound.volume=0.9;
 bgMusic.volume=0.25;
 let sound=true,unlocked=false;
 
 document.addEventListener("pointerdown",()=>{
-if(!unlocked){
-unlocked=true;
-bgMusic.play().catch(()=>{});
-}
+if(!unlocked){unlocked=true;bgMusic.play().catch(()=>{});}
 });
 
 function playClick(){
@@ -190,13 +184,10 @@ clickSound.play().catch(()=>{});
 
 function toggleSound(){
 sound=!sound;
-if(sound){
-bgMusic.play();
-soundBtn.classList.remove("muted");
-}else{
-bgMusic.pause();
-soundBtn.classList.add("muted");
-}
+const el=document.getElementById("soundToggle");
+el.classList.toggle("muted",!sound);
+el.textContent=sound?"🔊":"🔇";
+sound?bgMusic.play():bgMusic.pause();
 }
 
 /* ACTIONS */
@@ -214,39 +205,22 @@ tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
 function openWithdraw(){withdrawModal.style.display="flex"}
 function closeWithdraw(){withdrawModal.style.display="none"}
 
-async function openBalance(){
-const r=await fetch(API+"/balance",{
+async function sendWithdraw(){
+const r=await fetch(API+"/withdraw",{
 method:"POST",
 headers:{'Content-Type':'application/json'},
-body:JSON.stringify({user_id})
+body:JSON.stringify({
+user_id,
+address:wAddress.value,
+memo:wMemo.value
+})
 });
 const d=await r.json();
-userActivated = d.activated;
-balanceModal.style.display="flex";
-}
-
-async function sendWithdraw(){
-if(!userActivated){
+if(d.error==="not_activated"){
 alert("❌ Activate access first (1 TON)");
 return;
 }
-
-const address=document.getElementById("wAddress").value;
-const memo=document.getElementById("wMemo").value;
-
-const r = await fetch(API+"/withdraw",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({user_id,address,memo})
-});
-
-const d = await r.json();
-if(d.error){
-alert("❌ Withdraw denied");
-return;
-}
-
-alert("Withdraw request sent");
+alert("✅ Withdraw request sent");
 closeWithdraw();
 }
 </script>
