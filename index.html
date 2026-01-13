@@ -341,9 +341,33 @@ fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body
 }
 
 async function sendWithdraw(){
-await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
-alert("Withdraw request sent");
-closeWithdraw();
+  const r = await fetch(API+"/withdraw",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      user_id,
+      address,
+      memo
+    })
+  });
+
+  const res = await r.json();
+
+  // ❌ НЕ АКТИВИРОВАН
+  if (res.error === "not_activated") {
+    alert("🔒 Withdraw available only after activation (1 TON)");
+    return;
+  }
+
+  // ✅ УСПЕХ
+  if (res.status === "ok") {
+    alert("✅ Withdraw request sent");
+    closeWithdraw();
+    return;
+  }
+
+  // ⚠️ ДРУГАЯ ОШИБКА
+  alert("❌ Error, try later");
 }
 
 function buyAd(amount,link){
