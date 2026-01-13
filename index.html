@@ -78,6 +78,27 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
+/* STATS OVERLAY — FINAL FIX */
+.stats-overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(0,0,0,.85);
+  z-index:5000;
+  align-items:center;
+  justify-content:center;
+}
+
+.stats-box{
+  width:90%;
+  max-height:80%;
+  background:linear-gradient(180deg,#111,#1b1b1b);
+  border-radius:22px;
+  padding:22px;
+  color:#fff;
+  overflow:auto;
+}
+  
 </style>
 </head>
 
@@ -345,16 +366,40 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 }
 
 async function getStats(){
-statsModal.style.display="flex";
-const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`
-<h2>📊 Statistics</h2>
-<p>👥 Level 1: ${d.level1}</p>
-<p>👥 Level 2: ${d.level2}</p>
-<p>💎 Earned: ${d.earned} TON</p>
-<button onclick="playClick();statsModal.style.display='none'">Close</button>`;
+
+  // закрываем ВСЕ модалки
+  document.querySelectorAll(".modal").forEach(m=>{
+    m.style.display = "none";
+  });
+
+  const overlay = document.getElementById("statsOverlay");
+  const box = document.getElementById("statsBox");
+
+  overlay.style.display = "flex";
+
+  const r = await fetch(API + "/stats", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ user_id })
+  });
+
+  const d = await r.json();
+
+  box.innerHTML = `
+    <h2>📊 Statistics</h2>
+    <p>👥 Level 1: ${d.level1}</p>
+    <p>👥 Level 2: ${d.level2}</p>
+    <p>💎 Earned: ${d.earned} TON</p>
+
+    <button
+      onclick="document.getElementById('statsOverlay').style.display='none'"
+      style="margin-top:16px;width:100%"
+    >
+      Close
+    </button>
+  `;
 }
+
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
@@ -384,5 +429,12 @@ fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:
 }
 </script>
 </div>
+<!-- STATS OVERLAY -->
+<div class="stats-overlay" id="statsOverlay">
+  <div class="stats-box" id="statsBox">
+    <!-- content injected by JS -->
+  </div>
+</div>
+  
 </body>
 </html>
