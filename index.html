@@ -211,14 +211,17 @@ const user_id=tg.initDataUnsafe?.user?.id;
 
 /* SOUND */
 const clickSound=document.getElementById("clickSound");
+clickSound.volume = 0.9;
+bgMusic.volume = 0.25;  
 const bgMusic=document.getElementById("bgMusic");
 let sound=true,unlocked=false;
 
-document.addEventListener("pointerdown",()=>{
-if(unlocked)return;
-clickSound.play().then(()=>{clickSound.pause();clickSound.currentTime=0;unlocked=true});
-bgMusic.play().catch(()=>{});
-},{once:true});
+document.addEventListener("pointerdown", () => {
+  if (!unlocked) {
+    unlocked = true;
+    bgMusic.play().catch(()=>{});
+  }
+}, { once: true });
 
 function toggleSound(){
 sound=!sound;
