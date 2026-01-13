@@ -97,7 +97,19 @@ margin-top:10px
 position:absolute;bottom:12px;right:12px;
 z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
-padding:10px;border-radius:50%
+padding:10px;border-radius:50%;
+position:relative
+}
+#soundToggle.muted::after{
+content:"";
+position:absolute;
+width:3px;
+height:36px;
+background:#ff3b3b;
+top:2px;
+left:50%;
+transform:translateX(-50%) rotate(45deg);
+border-radius:2px;
 }
 </style>
 </head>
@@ -282,7 +294,13 @@ clickSound.volume=0.9;bgMusic.volume=0.25;
 let sound=true,unlocked=false;
 document.addEventListener("pointerdown",()=>{if(!unlocked){unlocked=true;bgMusic.play().catch(()=>{});}});
 function playClick(){if(!sound)return;clickSound.currentTime=0;clickSound.play().catch(()=>{});}
-function toggleSound(){sound=!sound;sound?bgMusic.play():bgMusic.pause();}
+function toggleSound(){
+sound=!sound;
+const el=document.getElementById("soundToggle");
+el.classList.toggle("muted",!sound);
+el.textContent=sound?"🔊":"🔇";
+sound?bgMusic.play():bgMusic.pause();
+}
 
 /* COINS */
 const app=document.querySelector(".app");
@@ -337,18 +355,23 @@ statsContent.innerHTML=`
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
-.then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
+.then(r=>r.json()).then(d=>Telegram.WebApp.openLink(d.pay_url));
 }
 
 async function sendWithdraw(){
-await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
+const r=await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
+const d=await r.json();
+if(d.error==="not_activated"){
+alert("❌ Activate access first (1 TON)");
+return;
+}
 alert("Withdraw request sent");
 closeWithdraw();
 }
 
 function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
-.then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
+.then(r=>r.json()).then(d=>Telegram.WebApp.openLink(d.pay_url));
 }
 </script>
 </div>
