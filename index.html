@@ -48,13 +48,21 @@ filter:brightness(.85)
 
 /* MODALS */
 .modal{
-position:fixed;inset:0;display:none;
-align-items:center;justify-content:center;
+position:fixed;
+inset:0;
+display:none;
+align-items:center;
+justify-content:center;
 background:rgba(0,0,0,.65);
-backdrop-filter:blur(6px);z-index:20
+backdrop-filter:blur(6px);
+z-index:1000; /* ВАЖНО */
 }
+
+
 .modal-content{
 width:90%;max-height:85%;overflow:auto;
+position:relative;
+z-index:1001;  
 background:linear-gradient(180deg,#111,#1b1b1b);
 border-radius:22px;padding:22px;color:#fff
 }
@@ -349,16 +357,34 @@ alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 }
 
 async function getStats(){
-statsModal.style.display="flex";
-const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`
-<h2>📊 Statistics</h2>
-<p>👥 Level 1: ${d.level1}</p>
-<p>👥 Level 2: ${d.level2}</p>
-<p>💎 Earned: ${d.earned} TON</p>
-<button onclick="playClick();statsModal.style.display='none'">Close</button>`;
+
+  // 1️⃣ закрываем ВСЕ модалки
+  document.querySelectorAll(".modal").forEach(m=>{
+    m.style.display="none";
+  });
+
+  // 2️⃣ открываем статистику
+  statsModal.style.display="flex";
+
+  const r = await fetch(API+"/stats", {
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id})
+  });
+
+  const d = await r.json();
+
+  statsContent.innerHTML = `
+    <h2>📊 Statistics</h2>
+    <p>👥 Level 1: ${d.level1}</p>
+    <p>👥 Level 2: ${d.level2}</p>
+    <p>💎 Earned: ${d.earned} TON</p>
+    <button onclick="playClick();statsModal.style.display='none'">
+      Close
+    </button>
+  `;
 }
+
 
 function payActivate(){
 fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
