@@ -99,6 +99,20 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
+/* RED LINE WHEN SOUND OFF */
+#soundToggle.muted::after{
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  width: 28px;
+  height: 3px;
+  background: red;
+  transform: rotate(-45deg);
+  border-radius: 2px;
+}
+
+
 </style>
 </head>
 
