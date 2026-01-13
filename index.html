@@ -357,59 +357,34 @@ fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
 
-/* === REAL DEVICE PARALLAX (VISIBLE) === */
+/* === SMOOTH BACKGROUND FLOAT (NO GYRO) === */
 
-let targetX = 50;
-let targetY = 50;
-let currentX = 50;
-let currentY = 50;
+let bgX = 50;
+let bgY = 50;
 
-function requestGyro(){
-  if (
-    typeof DeviceOrientationEvent !== "undefined" &&
-    typeof DeviceOrientationEvent.requestPermission === "function"
-  ) {
-    DeviceOrientationEvent.requestPermission()
-      .then(permissionState => {
-        if (permissionState === "granted") {
-          window.addEventListener("deviceorientation", handleTilt, true);
-        }
-      })
-      .catch(console.error);
-  } else {
-    window.addEventListener("deviceorientation", handleTilt, true);
-  }
+let targetX = 52;
+let targetY = 48;
+
+let time = 0;
+
+function animateBackgroundFloat(){
+  time += 0.0025; // скорость движения
+
+  // целевые точки по синусу (медленно и красиво)
+  targetX = 50 + Math.sin(time) * 4;   // влево-вправо
+  targetY = 50 + Math.cos(time * 0.8) * 3; // вверх-вниз
+
+  // ПЛАВНОЕ догоняние (никаких дерганий)
+  bgX += (targetX - bgX) * 0.02;
+  bgY += (targetY - bgY) * 0.02;
+
+  app.style.backgroundPosition = `${bgX}% ${bgY}%`;
+
+  requestAnimationFrame(animateBackgroundFloat);
 }
 
-function handleTilt(e){
-  const gamma = e.gamma || 0; // left/right
-  const beta  = e.beta  || 0; // forward/back
+animateBackgroundFloat();
 
-  // 🔥 ОЧЕНЬ ЗАМЕТНАЯ АМПЛИТУДА
-  targetX = 50 + gamma * 0.4;
-  targetY = 50 + beta  * 0.25;
-
-  // ограничения чтобы не вылезало
-  targetX = Math.max(30, Math.min(70, targetX));
-  targetY = Math.max(35, Math.min(65, targetY));
-}
-
-// плавное догоняние (инерция)
-function animateBackground(){
-  currentX += (targetX - currentX) * 0.08;
-  currentY += (targetY - currentY) * 0.08;
-
-  app.style.backgroundPosition = `${currentX}% ${currentY}%`;
-
-  requestAnimationFrame(animateBackground);
-}
-
-// 🔑 ВАЖНО: первый пользовательский жест
-document.addEventListener("pointerdown", () => {
-  requestGyro();
-}, { once:true });
-
-animateBackground();
 
   
 </script>
