@@ -15,10 +15,19 @@ font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 background:#000;overflow:hidden
 }
 .app{
-position:relative;width:100%;max-width:480px;
-height:100vh;margin:0 auto;
-background:url("bg.png") center top/cover no-repeat;
-overflow:hidden
+position:relative;
+width:100%;
+max-width:480px;
+height:100vh;
+margin:0 auto;
+
+background-image:url("bg.png");
+background-repeat:no-repeat;
+background-size:110% 110%;
+background-position:50% 50%;
+
+overflow:hidden;
+transition:background-position 0.2s linear;
 }
 
 /* COINS */
@@ -350,6 +359,26 @@ function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
+/* BACKGROUND PARALLAX */
+let bgX = 50;
+let bgY = 50;
+
+let bgVX = (Math.random() * 0.04) + 0.01;
+let bgVY = (Math.random() * 0.04) + 0.01;
+
+function animateBackground(){
+  bgX += bgVX;
+  bgY += bgVY;
+
+  if(bgX > 52 || bgX < 48) bgVX *= -1;
+  if(bgY > 52 || bgY < 48) bgVY *= -1;
+
+  app.style.backgroundPosition = `${bgX}% ${bgY}%`;
+
+  requestAnimationFrame(animateBackground);
+}
+
+animateBackground();  
 </script>
 </div>
 </body>
