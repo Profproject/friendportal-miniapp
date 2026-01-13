@@ -15,17 +15,11 @@ font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 background:#000;overflow:hidden
 }
 .app{
-position:relative;
-width:100%;
-max-width:480px;
-height:100vh;
-margin:0 auto;
-
-background:url("bg.png") center center / cover no-repeat;
-
-overflow:hidden;
+position:relative;width:100%;max-width:480px;
+height:100vh;margin:0 auto;
+background:url("bg.png") center top/cover no-repeat;
+overflow:hidden
 }
-
 
 /* COINS */
 .coin{
@@ -110,18 +104,6 @@ padding:10px;border-radius:50%
 
 <body>
 <div class="app">
- #soundToggle.muted::after{
-  content:"";
-  position:absolute;
-  top:6px;
-  left:6px;
-  width:32px;
-  height:2px;
-  background:red;
-  transform:rotate(-45deg);
-  border-radius:2px;
-}
- 
 
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
@@ -300,28 +282,7 @@ clickSound.volume=0.9;bgMusic.volume=0.25;
 let sound=true,unlocked=false;
 document.addEventListener("pointerdown",()=>{if(!unlocked){unlocked=true;bgMusic.play().catch(()=>{});}});
 function playClick(){if(!sound)return;clickSound.currentTime=0;clickSound.play().catch(()=>{});}
-let soundEnabled = true;
-
-function toggleSound(){
-  const bg = document.getElementById("bgMusic");
-  const click = document.getElementById("clickSound");
-  const btn = document.getElementById("soundToggle");
-
-  soundEnabled = !soundEnabled;
-
-  if(soundEnabled){
-    bg.muted = false;
-    click.muted = false;
-    btn.classList.remove("muted");
-    btn.innerHTML = "🔊";
-  }else{
-    bg.muted = true;
-    click.muted = true;
-    btn.classList.add("muted");
-    btn.innerHTML = "🔇";
-  }
-}
-
+function toggleSound(){sound=!sound;sound?bgMusic.play():bgMusic.pause();}
 
 /* COINS */
 const app=document.querySelector(".app");
@@ -389,37 +350,6 @@ function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
-
-/* === SMOOTH BACKGROUND FLOAT (NO GYRO) === */
-
-let bgX = 50;
-let bgY = 50;
-
-let targetX = 52;
-let targetY = 48;
-
-let time = 0;
-
-function animateBackgroundFloat(){
-  time += 0.0025; // скорость движения
-
-  // целевые точки по синусу (медленно и красиво)
-  targetX = 50 + Math.sin(time) * 4;   // влево-вправо
-  targetY = 50 + Math.cos(time * 0.8) * 3; // вверх-вниз
-
-  // ПЛАВНОЕ догоняние (никаких дерганий)
-  bgX += (targetX - bgX) * 0.02;
-  bgY += (targetY - bgY) * 0.02;
-
-  app.style.backgroundPosition = `${bgX}% ${bgY}%`;
-
-  requestAnimationFrame(animateBackgroundFloat);
-}
-
-animateBackgroundFloat();
-
-
-  
 </script>
 </div>
 </body>
