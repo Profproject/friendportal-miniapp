@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+/* FIX: allow buttons to receive clicks inside modal */
+.modal-content {
+  pointer-events: auto;
+}
+
+.modal-content button {
+  pointer-events: auto;
+}
+
+/* Optional: prevent modal background from blocking buttons */
+.modal {
+  pointer-events: auto;
+}
+</style>
+  
 <head>
 <meta charset="UTF-8">
 <title>FriendPortal</title>
@@ -309,6 +325,11 @@ function openWithdraw(){withdrawModal.style.display="flex"}
 function closeWithdraw(){withdrawModal.style.display="none"}
 function openAds(){adsModal.style.display="flex"}
 function closeAds(){adsModal.style.display="none"}
+document.querySelectorAll(".modal-content").forEach(el => {
+  el.addEventListener("pointerdown", e => e.stopPropagation());
+  el.addEventListener("click", e => e.stopPropagation());
+});
+  
 
 async function sendWithdraw(){
 const r=await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
