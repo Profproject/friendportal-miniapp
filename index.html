@@ -296,16 +296,53 @@ function openAds(){adsModal.style.display="flex"}
 function closeAds(){adsModal.style.display="none"}
 
 function sendWithdraw(){
-fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},
-body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
-alert("✅ Request sent");
-closeWithdraw();
+async function sendWithdraw(){
+  const r = await fetch(API + "/withdraw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: user_id,
+      address: wAddress.value,
+      memo: wMemo.value
+    })
+  });
+
+  const d = await r.json();
+
+  if (d.error === "not_activated") {
+    alert("❌ You must activate access (1 TON) before withdraw");
+    return;
+  }
+
+  if (d.status === "ok") {
+    alert("✅ Request sent");
+    closeWithdraw();
+  } else {
+    alert("❌ Withdraw error");
+  }
 }
 
+
 function buyAd(amount){
-fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},
-body:JSON.stringify({user_id,amount,link:adLink.value})})
-.then(()=>alert("✅ Request sent"));
+  fetch(API + "/ad", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: user_id,
+      amount: amount,
+      link: adLink.value
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (!d.pay_url) {
+      alert("❌ Payment error");
+      return;
+    }
+
+    Telegram.WebApp.openLink(d.pay_url);
+  })
+  .catch(() => alert("❌ Payment error"));
 }
 </script>
 </div>
