@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>function sendWithdraw
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -341,40 +341,20 @@ fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body
 }
 
 async function sendWithdraw(){
-
-  const address = document.getElementById("withdrawAddress").value;
-  const memo = document.getElementById("withdrawMemo")?.value || "";
-
-  if (!address) {
-    alert("Enter wallet address");
-    return;
-  }
-
-  const r = await fetch(API + "/withdraw", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  await fetch(API+"/withdraw", {
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      user_id: user_id,
-      address: address,
-      memo: memo
+      user_id,
+      address,
+      memo
     })
   });
 
-  const res = await r.json();
-
-  if (res.error === "not_activated") {
-    alert("Activate account first (1 TON)");
-    return;
-  }
-
-  if (res.status === "ok") {
-    alert("Withdraw request sent");
-    closeWithdraw();
-    return;
-  }
-
-  alert("Error");
+  alert("Withdraw request sent");
+  closeWithdraw();
 }
+
 
 
 function buyAd(amount,link){
