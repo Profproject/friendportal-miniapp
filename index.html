@@ -78,6 +78,17 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
+.btn-danger{
+  margin-top:16px;
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(180deg,#ff5a5a,#d93636);
+  color:#fff;
+  font-size:16px;
+}
+  
 </style>
 </head>
 
@@ -171,6 +182,19 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 <button onclick="playClick();closeWithdraw()">Close</button>
 </div>
 </div>
+
+<!-- BALANCE -->
+<div class="modal" id="balanceModal">
+  <div class="modal-content">
+    <h2>💰 Balance</h2>
+
+    <p id="balanceAmount">Balance: -- TON</p>
+    <p id="balanceActivated">Activated: --</p>
+
+    <button class="btn-danger" onclick="closeBalance()">Close</button>
+  </div>
+</div>
+  
 
 <!-- ADS -->
 <div class="modal" id="adsModal">
@@ -321,10 +345,27 @@ tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
 }
 
 async function getBalance(){
-const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
+  const r = await fetch(API+"/balance",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id})
+  });
+function closeBalance(){
+  document.getElementById("balanceModal").style.display = "none";
 }
+  
+
+  const d = await r.json();
+
+  document.getElementById("balanceAmount").textContent =
+    `💰 Balance: ${d.balance} TON`;
+
+  document.getElementById("balanceActivated").textContent =
+    `🔓 Activated: ${d.activated}`;
+
+  document.getElementById("balanceModal").style.display = "flex";
+}
+
 
 async function getStats(){
 statsModal.style.display="flex";
@@ -364,6 +405,7 @@ fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:
 .then(r=>r.json())
 .then(d=>Telegram.WebApp.openLink(d.pay_url));
 }
+  
 </script>
 </div>
 </body>
