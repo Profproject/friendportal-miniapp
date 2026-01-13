@@ -78,17 +78,6 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
-.btn-danger{
-  margin-top:16px;
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  background:linear-gradient(180deg,#ff5a5a,#d93636);
-  color:#fff;
-  font-size:16px;
-}
-  
 </style>
 </head>
 
@@ -183,19 +172,6 @@ Early advertisers benefit from <b>lower costs and higher exposure</b>.
 </div>
 </div>
 
-<!-- BALANCE -->
-<div class="modal" id="balanceModal">
-  <div class="modal-content">
-    <h2>💰 Balance</h2>
-
-    <p id="balanceAmount">Balance: -- TON</p>
-    <p id="balanceActivated">Activated: --</p>
-
-    <button type="button" class="btn-danger" onclick="closeBalance()">Close</button>
-  </div>
-</div>
-  
-
 <!-- ADS -->
 <div class="modal" id="adsModal">
 <div class="modal-content">
@@ -211,43 +187,19 @@ Your promotion will be displayed as a highlighted button at the top of the mini 
 <hr>
 
 <h3>🎯 25 TON — One-time Broadcast</h3>
-<p>
-Deliver your message instantly to the entire active FriendPortal audience.
-This option is perfect for product launches, announcements, limited offers
-and fast traffic boosts.
-<br><br>
-Your link will be sent as a native in-app broadcast, ensuring high visibility
-and genuine user attention — no spam, no bots.
-</p>
-
+<p>One-time message to all active users. Perfect for fast traffic.</p>
 <button onclick="playClick();buyAd(25)">Pay 25 TON</button>
 
 <hr>
 
 <h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
-<p>
-Secure a highlighted top placement inside the FriendPortal mini app for 7 days.
-Your project will be displayed as a prominent button visible to all users
-during their daily activity.
-<br><br>
-This package is ideal for sustained exposure, brand awareness and steady
-traffic from a highly engaged crypto-native audience.
-</p>
-
+<p>Top button placement inside the mini app for 7 days.</p>
 <button onclick="playClick();buyAd(75)">Pay 75 TON</button>
 
 <hr>
 
 <h3>👑 250 TON — VIP TOP (30 Days)</h3>
-<p>
-Gain maximum visibility with VIP top placement for a full 30 days.
-Your project receives priority positioning inside the mini app,
-ensuring continuous exposure to all active users.
-<br><br>
-This premium package is designed for serious projects, long-term growth,
-brand authority and consistent high-quality traffic.
-</p>
-
+<p>Premium top placement for 30 days with maximum visibility.</p>
 <button onclick="playClick();buyAd(250)">Pay 250 TON</button>
 
 <button onclick="playClick();closeAds()">Close</button>
@@ -345,27 +297,10 @@ tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
 }
 
 async function getBalance(){
-  const r = await fetch(API+"/balance",{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id})
-  });
-function closeBalance(){
-  document.getElementById("balanceModal").style.display = "none";
+const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
+const d=await r.json();
+alert(`💰 Balance: ${d.balance} TON\n🔓 Activated: ${d.activated}`);
 }
-  
-
-  const d = await r.json();
-
-  document.getElementById("balanceAmount").textContent =
-    `💰 Balance: ${d.balance} TON`;
-
-  document.getElementById("balanceActivated").textContent =
-    `🔓 Activated: ${d.activated}`;
-
-  document.getElementById("balanceModal").style.display = "flex";
-}
-
 
 async function getStats(){
 statsModal.style.display="flex";
@@ -403,15 +338,8 @@ closeWithdraw();
 function buyAd(amount){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link:adLink.value})})
 .then(r=>r.json())
-.then(d=>{
-  if(!d.pay_url){
-    alert("Payment link error");
-    return;
-  }
-  Telegram.WebApp.openTelegramLink(d.pay_url);
-});
-
-  
+.then(d=>Telegram.WebApp.openLink(d.pay_url));
+}
 </script>
 </div>
 </body>
