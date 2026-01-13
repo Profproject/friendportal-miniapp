@@ -1,4 +1,4 @@
-<!DOCTYPE html>function sendWithdraw
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -94,10 +94,25 @@ margin-top:10px
 
 /* SOUND */
 #soundToggle{
-position:absolute;bottom:12px;right:12px;
-z-index:30;font-size:22px;
-background:rgba(0,0,0,.6);
-padding:10px;border-radius:50%
+position:absolute;
+bottom:14px;
+right:14px;
+z-index:30;
+font-size:28px;
+background:rgba(0,0,0,.65);
+padding:14px;
+border-radius:50%;
+}
+#soundToggle.muted::after{
+content:"";
+position:absolute;
+top:10px;
+left:10px;
+width:36px;
+height:3px;
+background:red;
+transform:rotate(-45deg);
+border-radius:2px;
 }
 </style>
 </head>
@@ -127,91 +142,6 @@ padding:10px;border-radius:50%
 <div class="btn-img left" onclick="press(this);openAds()"><img src="for.png"></div>
 </div>
 
-<!-- HOW IT WORKS -->
-<div class="modal" id="howModal">
-<div class="modal-content">
-<h2>🚀 FriendPortal Ecosystem</h2>
-
-<p>
-<b>FriendPortal</b> is a premium referral & advertising ecosystem built on TON,
-designed for <b>real users, organic growth and long-term exposure</b>.
-</p>
-
-<hr>
-
-<h3>👥 For Users</h3>
-<ul>
-<li>Invite new users and grow your referral network</li>
-<li>Earn TON rewards from <b>two referral levels</b></li>
-<li>Instant balance updates and fast withdrawals</li>
-</ul>
-
-<p><b>Referral Rewards</b></p>
-<ul>
-<li>🥇 Level 1 — <b>0.5 TON</b></li>
-<li>🥈 Level 2 — <b>0.25 TON</b></li>
-</ul>
-
-<hr>
-
-<h3>📣 For Advertisers</h3>
-<p>
-FriendPortal provides <b>direct access to an active crypto-native audience</b>
-inside a Telegram Mini App environment.
-</p>
-<ul>
-<li>🚀 Real users only — no bots</li>
-<li>🎯 High engagement & premium visibility</li>
-<li>📈 Constant organic traffic growth</li>
-</ul>
-
-<p><b>Advertising Packages</b></p>
-<ul>
-<li>🎯 <b>25 TON</b> — One-time broadcast</li>
-<li>⭐️ <b>75 TON</b> — Top placement for 7 days</li>
-<li>👑 <b>250 TON</b> — VIP top placement for 30 days</li>
-</ul>
-
-<hr>
-
-<h3>🛠 Support & Development</h3>
-<p>
-For advertising inquiries or custom Telegram Mini App development,
-please contact our support team.
-</p>
-<p>
-We design and develop <b>Telegram Mini Apps of any complexity</b>,
-with modern UI, animations and scalable backend solutions.
-</p>
-<p>
-👉 <a href="https://t.me/FPSupportOnline" target="_blank" style="color:#4e6cff">
-<b>@FPSupportOnline</b>
-</a>
-</p>
-
-<button class="btn-close" onclick="closeHow()">Close</button>
-</div>
-</div>
-
-<!-- BALANCE -->
-<div class="modal" id="balanceModal">
-<div class="modal-content">
-<h2>💰 Balance Overview</h2>
-
-<div style="padding:14px;border-radius:14px;background:rgba(255,255,255,.05)">
-<p>💎 <b>Available balance</b></p>
-<h3 id="balAmount">—</h3>
-</div>
-
-<div style="margin-top:12px;padding:14px;border-radius:14px;background:rgba(255,255,255,.05)">
-<p>🔓 <b>Activation status</b></p>
-<h3 id="balActive">—</h3>
-</div>
-
-<button class="btn-close" onclick="closeBalance()">Close</button>
-</div>
-</div>
-
 <!-- WITHDRAW -->
 <div class="modal" id="withdrawModal">
 <div class="modal-content">
@@ -227,143 +157,88 @@ your funds may be permanently lost.
 </div>
 </div>
 
-<!-- ADS -->
-<div class="modal" id="adsModal">
-<div class="modal-content">
-<h2>📣 Advertising Packages</h2>
-
-<h3>🎯 25 TON — One-time Broadcast</h3>
-<p>
-Instant broadcast sent to all active users.
-Perfect for launches, announcements and fast traffic.
-</p>
-<input id="ad25" placeholder="Link to promote">
-<button onclick="buyAd(25,ad25.value)">Pay 25 TON</button>
-
-<hr>
-
-<h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
-<p>
-Highlighted top placement inside the mini app for 7 days.
-Ideal for steady exposure and brand awareness.
-</p>
-<input id="ad75" placeholder="Link to promote">
-<button onclick="buyAd(75,ad75.value)">Pay 75 TON</button>
-
-<hr>
-
-<h3>👑 250 TON — VIP TOP (30 Days)</h3>
-<p>
-Maximum visibility and priority placement for 30 days.
-Designed for serious projects and long-term growth.
-</p>
-<input id="ad250" placeholder="Link to promote">
-<button onclick="buyAd(250,ad250.value)">Pay 250 TON</button>
-
-<button class="btn-close" onclick="closeAds()">Close</button>
-</div>
-</div>
-
-<!-- STATS -->
-<div class="modal" id="statsModal">
-<div class="modal-content" id="statsContent"></div>
-</div>
-
 <script>
 const API="https://loyce-taxitic-elenora.ngrok-free.dev";
 const BOT="FriendPortal_bot";
 const tg=Telegram.WebApp;tg.expand();
 const user_id=tg.initDataUnsafe?.user?.id;
 
+let userActivated = false;
+
 /* SOUND */
 const clickSound=document.getElementById("clickSound");
 const bgMusic=document.getElementById("bgMusic");
+const soundBtn=document.getElementById("soundToggle");
 clickSound.volume=0.9;bgMusic.volume=0.25;
 let sound=true,unlocked=false;
-document.addEventListener("pointerdown",()=>{if(!unlocked){unlocked=true;bgMusic.play().catch(()=>{});}});
-function playClick(){if(!sound)return;clickSound.currentTime=0;clickSound.play().catch(()=>{});}
-function toggleSound(){sound=!sound;sound?bgMusic.play():bgMusic.pause();}
 
-/* COINS */
-const app=document.querySelector(".app");
-const coins=document.querySelectorAll(".coin");
-const size=70,rad=35;
-let W=app.clientWidth,H=app.clientHeight;
-const d=[...coins].map(()=>({x:Math.random()*(W-size)+rad,y:Math.random()*(H-size)+rad,vx:1+Math.random(),vy:1+Math.random()}));
-(function anim(){
-W=app.clientWidth;H=app.clientHeight;
-coins.forEach((c,i)=>{
-let o=d[i];o.x+=o.vx;o.y+=o.vy;
-if(o.x-rad<=0||o.x+rad>=W)o.vx*=-1;
-if(o.y-rad<=0||o.y+rad>=H)o.vy*=-1;
-c.style.transform=`translate(${o.x-rad}px,${o.y-rad}px)`;
+document.addEventListener("pointerdown",()=>{
+if(!unlocked){
+unlocked=true;
+bgMusic.play().catch(()=>{});
+}
 });
-requestAnimationFrame(anim);
-})();
+
+function playClick(){
+if(!sound)return;
+clickSound.currentTime=0;
+clickSound.play().catch(()=>{});
+}
+
+function toggleSound(){
+sound=!sound;
+if(sound){
+bgMusic.play();
+soundBtn.classList.remove("muted");
+}else{
+bgMusic.pause();
+soundBtn.classList.add("muted");
+}
+}
 
 /* ACTIONS */
-function press(el){playClick();el.classList.add("pressed");setTimeout(()=>el.classList.remove("pressed"),120);}
-function invite(){
-const link=`https://t.me/${BOT}?startapp=${user_id}`;
-tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
+function press(el){
+playClick();
+el.classList.add("pressed");
+setTimeout(()=>el.classList.remove("pressed"),120);
 }
-function openHow(){howModal.style.display="flex"}
-function closeHow(){howModal.style.display="none"}
-function openWithdraw(){withdrawModal.style.display="flex"}
-function closeWithdraw(){withdrawModal.style.display="none"}
-function openAds(){adsModal.style.display="flex"}
-function closeAds(){adsModal.style.display="none"}
-function closeBalance(){balanceModal.style.display="none"}
 
 async function openBalance(){
-const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
+const r=await fetch(API+"/balance",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({user_id})
+});
 const d=await r.json();
+userActivated = d.activated;
 balAmount.textContent=d.balance+" TON";
-balActive.textContent=d.activated;
+balActive.textContent=d.activated ? "Activated" : "Not activated";
 balanceModal.style.display="flex";
 }
 
-async function getStats(){
-statsModal.style.display="flex";
-const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`
-<h2>📊 Statistics Overview</h2>
-<p>👥 Level 1 referrals: <b>${d.level1}</b></p>
-<p>👥 Level 2 referrals: <b>${d.level2}</b></p>
-<p>💎 Total earned: <b>${d.earned} TON</b></p>
-<button class="btn-close" onclick="statsModal.style.display='none'">Close</button>`;
-}
-
-function payActivate(){
-fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
-.then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
-}
-
 async function sendWithdraw(){
-  if(!userActivated){
-  alert("❌ Activate access first (1 TON)");
-  return;
-}
-  await fetch(API+"/withdraw", {
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      user_id,
-      address,
-      memo
-    })
-  });
-
-  alert("Withdraw request sent");
-  closeWithdraw();
+if(!userActivated){
+alert("❌ Activate access first (1 TON)");
+return;
 }
 
+const address=document.getElementById("wAddress").value;
+const memo=document.getElementById("wMemo").value;
 
+const r = await fetch(API+"/withdraw",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({user_id,address,memo})
+});
 
-function buyAd(amount,link){
-fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
-.then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
+const d = await r.json();
+if(d.error){
+alert("❌ Withdraw denied");
+return;
+}
+
+alert("Withdraw request sent");
+closeWithdraw();
 }
 </script>
 </div>
