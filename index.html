@@ -59,6 +59,7 @@ background:linear-gradient(180deg,#111,#1b1b1b);
 border-radius:22px;padding:22px;color:#fff
 }
 .modal-content h2{color:#ffd87a}
+.modal-content h3{margin-top:16px}
 .modal-content input{
 width:100%;padding:12px;border-radius:12px;border:none;margin-top:10px
 }
@@ -77,14 +78,6 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
-.modal {
-  pointer-events: none;
-}
-
-.modal[style*="display: flex"] {
-  pointer-events: auto;
-}
-  
 </style>
 </head>
 
@@ -104,13 +97,13 @@ padding:10px;border-radius:50%
 
 <!-- BUTTONS -->
 <div class="buttons">
-<div class="btn-img left" onpointerdown="press(this)" onclick="invite()"><img src="inv.png"></div>
-<div class="btn-img right" onpointerdown="press(this)" onclick="getBalance()"><img src="bal.png"></div>
-<div class="btn-img left" onpointerdown="press(this)" onclick="openWithdraw()"><img src="wit.png"></div>
-<div class="btn-img right" onpointerdown="press(this)" onclick="getStats()"><img src="sta.png"></div>
-<div class="btn-img left" onpointerdown="press(this)" onclick="openHow()"><img src="how.png"></div>
-<div class="btn-img right" onpointerdown="press(this)" onclick="payActivate()"><img src="act.png"></div>
-<div class="btn-img left" onpointerdown="press(this)" onclick="openAds()"><img src="for.png"></div>
+<div class="btn-img left" onclick="invite()"><img src="inv.png"></div>
+<div class="btn-img right" onclick="getBalance()"><img src="bal.png"></div>
+<div class="btn-img left" onclick="openWithdraw()"><img src="wit.png"></div>
+<div class="btn-img right" onclick="getStats()"><img src="sta.png"></div>
+<div class="btn-img left" onclick="openHow()"><img src="how.png"></div>
+<div class="btn-img right" onclick="payActivate()"><img src="act.png"></div>
+<div class="btn-img left" onclick="openAds()"><img src="for.png"></div>
 </div>
 
 <!-- HOW -->
@@ -119,58 +112,52 @@ padding:10px;border-radius:50%
 <h2>🚀 FriendPortal Ecosystem</h2>
 
 <p>
-<b>FriendPortal</b> is a fast-growing referral & advertising ecosystem built on TON,
-designed for <b>scalable traffic, real users and long-term visibility</b>.
+<b>FriendPortal</b> is a premium referral & advertising ecosystem built on TON,
+designed for <b>real users, organic growth and long-term exposure</b>.
 </p>
 
 <hr>
 
 <h3>👥 For Users</h3>
 <ul>
-<li>Invite new users and grow your network</li>
-<li>Earn TON rewards from <b>2 referral levels</b></li>
-<li>Simple activation unlocks full access</li>
+<li>Invite new users and build your referral network</li>
+<li>Earn TON rewards from <b>two referral levels</b></li>
+<li>Instant balance updates & withdrawals</li>
 </ul>
 
-<p><b>Rewards structure</b></p>
+<p><b>Rewards</b></p>
 <ul>
-<li>🥇 Level 1 — <b>0.5 TON</b> per activation</li>
-<li>🥈 Level 2 — <b>0.25 TON</b> per activation</li>
+<li>🥇 Level 1 — <b>0.5 TON</b></li>
+<li>🥈 Level 2 — <b>0.25 TON</b></li>
 </ul>
 
 <hr>
 
 <h3>📣 For Advertisers</h3>
 <p>
-FriendPortal gives advertisers <b>direct access to an active crypto-oriented audience</b>
-inside a Telegram Mini App.
+FriendPortal provides <b>direct access to an active crypto-native audience</b>
+inside a Telegram Mini App environment.
 </p>
 
 <ul>
-<li>🚀 Real users, not bots</li>
-<li>🎯 High engagement & retention</li>
-<li>📊 Continuous organic traffic growth</li>
+<li>🚀 Real users only (no bots)</li>
+<li>🎯 High engagement & visibility</li>
+<li>📈 Constant organic traffic growth</li>
 </ul>
 
-<p><b>Advertising options</b></p>
+<p><b>Advertising packages</b></p>
 <ul>
 <li>🎯 <b>25 TON</b> — One-time broadcast to all active users</li>
-<li>⭐ <b>75 TON</b> — Top placement for <b>7 days</b> (maximum visibility)</li>
+<li>⭐️ <b>75 TON</b> — Top placement for <b>7 days</b></li>
 <li>👑 <b>250 TON</b> — VIP top placement for <b>30 days</b></li>
 </ul>
 
-<p>
-All ads are reviewed manually to ensure quality and relevance.
-</p>
-
-<hr>
-
-<p style="opacity:0.85">
-🌍 FriendPortal is continuously expanding — early advertisers benefit from
-<strong>lower costs and higher exposure</strong>.
+<p style="opacity:.85">
+Early advertisers benefit from <b>lower costs and higher exposure</b>.
 </p>
 
 <button onclick="closeHow()">Close</button>
+</div>
 </div>
 
 <!-- WITHDRAW -->
@@ -190,37 +177,23 @@ All ads are reviewed manually to ensure quality and relevance.
 <div class="modal-content">
 <h2>📣 Advertising</h2>
 <input id="adLink" placeholder="Your link">
-<div style="margin-top:14px">
 
-  <h3>🎯 25 TON — One-time Broadcast</h3>
-  <p>
-    📢 Your link will be sent to <b>all users</b><br>
-    ⏱ One-time promotion<br>
-    👥 Reach: <b>50,000+ users</b>
-  </p>
-  <button onclick="buyAd(25)">Pay 25 TON</button>
+<h3>🎯 25 TON — One-time Broadcast</h3>
+<p>Send your link to all active users (50,000+ reach)</p>
+<button onclick="buyAd(25)">Pay 25 TON</button>
 
-  <hr style="margin:18px 0;opacity:.2">
+<hr>
 
-  <h3>⭐ 75 TON — TOP Promotion (7 Days)</h3>
-  <p>
-    📌 Your button pinned at the <b>top</b><br>
-    🗓 Duration: <b>7 days</b><br>
-    🚀 Maximum visibility
-  </p>
-  <button onclick="buyAd(75)">Pay 75 TON</button>
+<h3>⭐️ 75 TON — TOP Promotion (7 Days)</h3>
+<p>Top placement with maximum visibility</p>
+<button onclick="buyAd(75)">Pay 75 TON</button>
 
-  <hr style="margin:18px 0;opacity:.2">
+<hr>
 
-  <h3>👑 250 TON — VIP TOP (30 Days)</h3>
-  <p>
-    🔝 VIP button at the very top<br>
-    🗓 Duration: <b>30 days</b><br>
-    💎 Maximum traffic & exposure
-  </p>
-  <button onclick="buyAd(250)">Pay 250 TON</button>
+<h3>👑 250 TON — VIP TOP (30 Days)</h3>
+<p>Premium placement for maximum traffic</p>
+<button onclick="buyAd(250)">Pay 250 TON</button>
 
-</div>
 <button onclick="closeAds()">Close</button>
 </div>
 </div>
@@ -251,11 +224,6 @@ function toggleSound(){
 sound=!sound;
 document.getElementById("soundToggle").textContent=sound?"🔊":"🔇";
 sound?bgMusic.play():bgMusic.pause()
-}
-function press(el){
-if(sound&&unlocked){clickSound.currentTime=0;clickSound.play()}
-el.classList.add("pressed");
-setTimeout(()=>el.classList.remove("pressed"),120);
 }
 
 /* COINS */
@@ -295,121 +263,32 @@ statsContent.innerHTML=`<h2>📊 Statistics</h2>
 <button onclick="statsModal.style.display='none'">Close</button>`;
 }
 
-function payActivate() {
-  fetch(API + "/pay", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: user_id,
-      amount: 1
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (!d.pay_url) {
-      alert("Pay URL not received");
-      return;
-    }
-
-    // ✅ Telegram Mini App
-    if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.openLink(d.pay_url);
-    } 
-    // ✅ обычный браузер
-    else {
-      window.location.href = d.pay_url;
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Payment error");
-  });
+function payActivate(){
+fetch(API+"/pay",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount:1})})
+.then(r=>r.json())
+.then(d=>Telegram.WebApp.openLink(d.pay_url))
+.catch(()=>alert("Payment error"));
 }
 
-
-function openHow(){
-  howModal.style.display = "flex";
-  howModal.style.pointerEvents = "auto";
-  document.body.style.overflow = "hidden";
-}
-function closeHow(){
-  howModal.style.display = "none";
-  howModal.style.pointerEvents = "none";
-  document.body.style.overflow = "auto";
-}
+function openHow(){howModal.style.display="flex"}
+function closeHow(){howModal.style.display="none"}
 function openWithdraw(){withdrawModal.style.display="flex"}
 function closeWithdraw(){withdrawModal.style.display="none"}
 function openAds(){adsModal.style.display="flex"}
 function closeAds(){adsModal.style.display="none"}
 
 async function sendWithdraw(){
-  try {
-    const r = await fetch(API + "/withdraw", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: user_id,
-        address: wAddress.value,
-        memo: wMemo.value
-      })
-    });
-
-    const d = await r.json();
-
-    if (d.error === "not_activated") {
-      alert("❌ You must activate access (1 TON) before withdraw");
-      return;
-    }
-
-    if (d.status === "ok") {
-      alert("✅ Request sent");
-      closeWithdraw();
-    } else {
-      alert("❌ Withdraw error");
-    }
-  } catch (e) {
-    console.error(e);
-    alert("❌ Withdraw error");
-  }
+const r=await fetch(API+"/withdraw",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,address:wAddress.value,memo:wMemo.value})});
+const d=await r.json();
+if(d.error==="not_activated"){alert("❌ Activate access first");return;}
+alert("✅ Request sent");closeWithdraw();
 }
 
 function buyAd(amount){
-  fetch(API + "/ad", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: user_id,
-      amount: amount,
-      link: adLink.value
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (!d.pay_url) {
-      alert("❌ Payment error");
-      return;
-    }
-
-    if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.openLink(d.pay_url);
-    } else {
-      window.location.href = d.pay_url;
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("❌ Payment error");
-  });
-}
-function press(el){
-  if (howModal.style.display === "flex") return;
-
-  if(sound && unlocked){
-    clickSound.currentTime = 0;
-    clickSound.play();
-  }
-  el.classList.add("pressed");
-  setTimeout(()=>el.classList.remove("pressed"),120);
+fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link:adLink.value})})
+.then(r=>r.json())
+.then(d=>Telegram.WebApp.openLink(d.pay_url))
+.catch(()=>alert("Payment error"));
 }
 </script>
 </div>
