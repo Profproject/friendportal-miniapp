@@ -99,11 +99,22 @@ z-index:30;font-size:22px;
 background:rgba(0,0,0,.6);
 padding:10px;border-radius:50%
 }
+#headerAd{
+  position:absolute;
+  top:64px; /* ниже Telegram-шапки */
+  left:0;
+  width:100%;
+  height:80px;
+  z-index:25;
+  pointer-events:none;
+}  
 </style>
 </head>
 
 <body>
 <div class="app">
+<!-- TOP BANNER AD -->
+<div id="headerAd"></div>
 
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
@@ -367,7 +378,17 @@ function buyAd(amount,link){
 fetch(API+"/ad",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id,amount,link})})
 .then(r=>r.json()).then(d=>Telegram.WebApp.openTelegramLink(d.pay_url));
 }
+ads.ad_show({
+  adBlockUuid: "c02e76cc-3998-41f4-bf4f-918c25c42796"
+});  
 </script>
 </div>
+<script src="https://inapp.telega.io/sdk/v1/sdk.js"></script>
+<script>
+  const ads = window.TelegaIn.AdsController.create_miniapp({
+    token: '0b915dcd-577c-4e52-a1d3-926e467039b5'
+  });
+</script>
+  
 </body>
 </html>
