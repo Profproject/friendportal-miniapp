@@ -294,26 +294,21 @@ Designed for serious projects and long-term growth.
 </div>
 
 <script>
-<script>
 const tg = window.Telegram.WebApp;
+tg.expand();
 tg.ready();
 
-const user_id = tg.initDataUnsafe?.user?.id || null;
+const API = "https://friendportal-backend.onrender.com";
+const BOT = "FriendPortal_bot";
+
+const user_id = tg.initDataUnsafe?.user?.id ?? null;
 const ref_id = tg.initDataUnsafe?.start_param
   ? Number(tg.initDataUnsafe.start_param)
   : null;
 
 console.log("USER_ID:", user_id);
 console.log("REF_ID:", ref_id);
-</script>  
   
-const API = "https://friendportal-backend.onrender.com";
-const BOT="FriendPortal_bot";
-const tg=Telegram.WebApp;tg.expand();tg.ready();  
-const user_id=tg.initDataUnsafe?.user?.id;
-const ref_id = tg.initDataUnsafe?.start_param
-  ? parseInt(tg.initDataUnsafe.start_param)
-  : null;  
 
 /* SOUND */
 const clickSound=document.getElementById("clickSound");
