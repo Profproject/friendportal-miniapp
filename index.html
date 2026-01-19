@@ -298,6 +298,9 @@ const API = "https://friendportal-backend.onrender.com";
 const BOT="FriendPortal_bot";
 const tg=Telegram.WebApp;tg.expand();tg.ready();  
 const user_id=tg.initDataUnsafe?.user?.id;
+const ref_id = tg.initDataUnsafe?.start_param
+  ? parseInt(tg.initDataUnsafe.start_param)
+  : null;  
 
 /* SOUND */
 const clickSound=document.getElementById("clickSound");
@@ -340,7 +343,11 @@ function closeAds(){adsModal.style.display="none"}
 function closeBalance(){balanceModal.style.display="none"}
 
 async function openBalance(){
-const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
+const r=await fetch(API+"/balance",{method:"POST",headers:{'Content-Type':'application/json'},body: JSON.stringify({
+  user_id: user_id,
+  ref_id: ref_id
+})
+});
 const d=await r.json();
 balAmount.textContent=d.balance+" TON";
 balActive.textContent=d.activated;
