@@ -347,16 +347,29 @@ balActive.textContent=d.activated;
 balanceModal.style.display="flex";
 }
 
-async function getStats(){
-statsModal.style.display="flex";
-const r=await fetch(API+"/stats",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id})});
-const d=await r.json();
-statsContent.innerHTML=`
-<h2>📊 Statistics Overview</h2>
-<p>👥 Level 1 referrals: <b>${d.level1}</b></p>
-<p>👥 Level 2 referrals: <b>${d.level2}</b></p>
-<p>💎 Total earned: <b>${d.earned} TON</b></p>
-<button class="btn-close" onclick="statsModal.style.display='none'">Close</button>`;
+async function getStats() {
+  statsModal.style.display = "flex";
+
+  const r = await fetch(API + "/stats", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id })
+  });
+
+  const d = await r.json();
+
+  statsContent.innerHTML = `
+    <h2>📊 Statistics Overview</h2>
+
+    <p>👆 Link visits: <b>${d.visits}</b></p>
+    <p>🥇 Level 1 activations: <b>${d.level1}</b></p>
+    <p>🥈 Level 2 activations: <b>${d.level2}</b></p>
+    <p>💎 Total earned: <b>${d.earned} TON</b></p>
+
+    <button class="btn-close" onclick="statsModal.style.display='none'">
+      Close
+    </button>
+  `;
 }
 
 function payActivate(){
